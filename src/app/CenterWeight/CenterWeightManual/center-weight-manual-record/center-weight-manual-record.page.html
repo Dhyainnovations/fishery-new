@@ -1,0 +1,236 @@
+<ion-content class="background">
+
+  <div class="ion-padding">
+    <ion-refresher slot="fixed" (ionRefresh)="dosomething($event)">
+      <ion-refresher-content pullingIcon="arrow-dropdown" refreshingSpiner="circles" refreshingText="Refreshing...">
+      </ion-refresher-content>
+    </ion-refresher>
+  </div>
+
+  <div class="row">
+   
+
+    <div *ngIf="onlineAlart" class="col-12 ion-text-right mt-2">
+      <lottie-player src="https://assets5.lottiefiles.com/packages/lf20_dsp2yB.json" background="transparent"
+        speed="1.5" style="width:25%; margin-left: 80%; border-radius: 55%;" loop autoplay></lottie-player>
+      <!-- <p style="background-color: #6863CC;border-radius:10px;color:#fff;width: 50px;  margin-left: 50%;">Online</p> -->
+    </div>
+
+    <div *ngIf="offlineAlart" class="col-12 ion-text-right ">
+      <!-- <p style="background-color: #6863CC;border-radius:10px;color:#fff;width: 50px;  margin-left: 50%;">Offline</p> -->
+      <img style="width:25%; margin-left: 80%; border-radius: 55%;" src="assets/offline.gif" alt="">
+    </div>
+
+  
+
+  </div>
+
+  <div class="row ">
+
+    <div style="margin-top:-45px" class="col-12 ion-text-center">
+      <b style="font-size: 18px;">WEIGHTER RECORDS</b>
+    </div>
+
+    <!-----Display Date----->
+
+    <div class="col-6 display-date mx-4 mt-4">
+      <b style="font-size: 13px;">Date: </b>
+      <p> <b>{{currentDateTime | date:'dd-MM-yyyy'}}</b> </p>
+    </div>
+
+
+
+
+    <div style="margin-top: -18%;" class=" col-7 dropdown toggle ">
+      <input id="t1" type="checkbox">
+      <label for="t1">{{user}}</label>
+      <ul>
+        <!-- <li><a (click)="setting()">Settings</a></li> -->
+        <li><a (click)="logout()">Logout</a></li>
+      </ul>
+    </div>
+
+  </div>
+
+  <div class="row">
+    <div class="col-12 ion-text-center">
+      <button (click)="navigateToNextPage()" class="navigate-btn  mt-5"><b>Start Weighing</b></button>
+    </div>
+
+    <div class="col-12 ion-text-center mt-3">
+      <p>Today's Total Weight = <span>{{totalweight}}KG</span></p>
+    </div>
+
+
+   
+
+    <!-----location-wise weight Table----->
+    <h6 class="mx-2">Location-Wise:</h6>
+    <table class="table">
+      <thead style="background-color:#6863CC;" class="text-white">
+        <tr>
+          <th scope="col-3">S.No</th>
+          <th scope="col-2">Location</th>
+          <th scope="col-2">Total Weight <span style="font-size: 8px;">(Kgs)</span></th>
+        </tr>
+      </thead>
+      <tbody *ngFor="let record of tableRecodrs   let i=index; ">
+        <tr>
+          <td>{{i+1}} </td>
+          <td>{{record.location}}</td>
+          <td>{{record.location_total_weight}}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="row">
+      <div *ngIf="isVisible" class=" col-12 ion-text-center mt-3 ">
+        <h4 class="ion-text-center mx-3">No Records</h4>
+        <lottie-player src="https://assets8.lottiefiles.com/datafiles/vhvOcuUkH41HdrL/data.json"
+          background="transparent" speed="1.5" style="width:65%;margin:auto" loop autoplay></lottie-player>
+
+      </div>
+
+    </div>
+  </div>
+
+   <!-----stock Table----->
+   <h6 class="mx-2">Stock:</h6>
+   <table class="table">
+     <thead style="background-color:#6863CC;" class="text-white">
+       <tr>
+         <th scope="col-3">Type</th>
+         <th scope="col-2">Location</th>
+         <th scope="col-2">Category</th>
+         <th scope="col-2">Quality</th>
+         <th scope="col-2">Quantity</th>
+       </tr>
+     </thead>
+     <tbody *ngFor="let record of tableRecodrs   let i=index; ">
+       <tr>
+         <td>{{i+1}} </td>
+         <td>{{record.location}}</td>
+         <td>{{record.location_total_weight}}</td>
+       </tr>
+     </tbody>
+   </table>
+
+    <!-----market Table----->
+    <h6 class="mx-2">Market:</h6>
+    <table class="table">
+      <thead style="background-color:#6863CC;" class="text-white">
+        <tr>
+          <th scope="col-3">Location</th>
+          <th scope="col-2">Place</th>
+          <th scope="col-2">Category </th>
+          <th scope="col-2">Quality </th>
+          <th scope="col-2">Quantity </th>
+        </tr>
+      </thead>
+      <tbody *ngFor="let record of tableRecodrs   let i=index; ">
+        <tr>
+          <td>{{i+1}} </td>
+          <td>{{record.location}}</td>
+          <td>{{record.location_total_weight}}</td>
+          <td>{{record.location}}</td>
+          <td>{{record.location_total_weight}}</td>
+        </tr>
+      </tbody>
+    </table>
+
+     <!-----merchent Table----->
+     <h6 class="mx-2">Merchant:</h6>
+     <table class="table">
+       <thead style="background-color:#6863CC;" class="text-white">
+         <tr>
+          <th scope="col-3">Shop</th>
+          <th scope="col-2">Place</th>
+          <th scope="col-2">Category </th>
+          <th scope="col-2">Quality </th>
+          <th scope="col-2">Quantity </th>
+         </tr>
+       </thead>
+       <tbody *ngFor="let record of tableRecodrs   let i=index; ">
+         <tr>
+           <td>{{i+1}} </td>
+           <td>{{record.location}}</td>
+           <td>{{record.location_total_weight}}</td>
+           <td>{{record.location}}</td>
+           <td>{{record.location_total_weight}}</td>
+         </tr>
+       </tbody>
+     </table>
+
+
+
+  <div class="row mt-4">
+    <div class="col-6">
+      <p style="color: #6863CC;margin-left: 5px;"><b>From Date:</b></p>
+      <p style="color: #6863CC;margin-left: 5px;" ><b>To Date:</b></p>
+     
+    </div>
+
+    <div class="col-6" style="margin-left: -40px;">
+      <div >
+        <input  (change)="fromDate(fromdate)" [(ngModel)]="fromdate"  type="date">
+      </div>
+    <div class="mt-3">
+      <input  (change)="toDate(todate)" [(ngModel)]="todate"  type="date">
+    </div>
+    </div>
+
+    <div class="col-12 ion-text-center">
+
+   
+      <ion-button (click)="dateBasedRecord()"  class="submit-button" color="transparent" expand="block"
+      style="background-color: #6863CC;width: 75%;margin: auto;" [disabled]="!fromdate || !todate " >
+      <b>SUBMIT</b>
+    </ion-button>
+    </div>
+  </div>
+
+
+
+
+  <!-----card----->
+
+  <h4 *ngIf="lastEntryisVisible" class="mx-3">Last Entry:</h4>
+
+  <div style="font-size: 12px;">
+    <div class="row mb-5">
+      <div class="col-12">
+        <div class="card mt-3" *ngFor="let record of cardRecords">
+          <div class="row">
+            <div class="col-5">
+              <b style="color: #6863CC;"> <span>Date:{{record.updatedAt| date:'dd-MM-yyyy'}} </span><br> Time </b> :
+              {{record.time}} <br>
+              <b style="color: #6863CC;">Weight </b> : {{record.quantity}}Kg<br>
+              <b style="color: #6863CC;">Type</b> : {{record.type}}
+            </div>
+
+            <div class="col-5">
+              <b style="color: #6863CC;">Location</b> : {{record.place}}<br>
+              <b style="color: #6863CC;">Category</b> : {{record.category}}<br>
+
+            </div>
+            <div class="col-2 ion-text-left mt-2">
+
+              <div (click)="delete(record.boxid)" [value]="record.boxid" class="dot">
+                <svg [disabled]="checkoffline " style="margin: 10px;" xmlns="http://www.w3.org/2000/svg" width="16"
+                  height="18" fill="#fff" class="bi bi-trash3" viewBox="0 0 16 16">
+                  <path fill-rule="evenodd"
+                    d="M6.5 1a.5.5 0 0 0-.5.5v1h4v-1a.5.5 0 0 0-.5-.5h-3ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1H3.042l.846 10.58a1 1 0 0 0 .997.92h6.23a1 1 0 0 0 .997-.92l.846-10.58Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z" />
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+  
+
+</ion-content>
