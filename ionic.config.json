@@ -1,0 +1,8 @@
+{
+  "name": "seller-app",
+  "integrations": {
+    "capacitor": {},
+    "cordova": {}
+  },
+  "type": "angular"
+}

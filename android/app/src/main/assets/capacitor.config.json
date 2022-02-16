@@ -1,0 +1,6 @@
+{
+	"appId": "com.hrsuser.app",
+	"appName": "userapp",
+	"webDir": "www",
+	"bundledWebRuntime": false
+}

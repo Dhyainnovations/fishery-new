@@ -1,0 +1,128 @@
+<ion-menu swipeGesture="false"   side="start" type="push" contentId="main">
+  <ion-toolbar>
+    <div class="row mt-5">
+      <div class="col-4 mt-2">
+        <ion-menu-button style="display: table-row;" >
+          <ion-icon style="margin-left: 20px;" class="close"  name="close"></ion-icon>
+        </ion-menu-button>
+      </div>
+      <div class="col-8 ion-text-center" style="margin-left: -90px;">
+        <span class="dot ion-text-center">
+          <img  height="110px" width="110px" style="text-align: center;" src="assets/logo.jpeg" alt="">
+        </span>                
+      </div>
+    </div>
+  </ion-toolbar>
+
+<ion-content >
+  
+  <ion-list id="sideMenuList"   >
+    <div class="row ">
+      <div class="col-5">
+          <ion-item>
+            <img  height="50px"  width="50px" src="assets/icon/home.PNG" alt="">
+          </ion-item>
+      </div>
+      <div class="col-4" style="margin-left: -15px;">
+        <ion-menu-button style="display: table-row;" >
+          <p [class]="activeItem == 'home' ? 'active list': 'list' "  (click)="home()">Home</p> 
+        </ion-menu-button>
+        
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-5">
+          <ion-item>
+            <img  height="50px"  width="50px" src="assets/icon/myproducts.png" alt="">
+          </ion-item>
+      </div>
+      <div class="col-4" style="margin-left: -15px;">
+        <ion-menu-button style="display: table-row;" >
+          <p [class]="activeItem == 'myproducts' ? 'active list': 'list' "  (click)="myproducts()">My Products</p> 
+        </ion-menu-button>
+       
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-5">
+          <ion-item>
+            <img  height="50px"  width="50px" src="assets/icon/promotion.png" alt="">
+          </ion-item>
+      </div>
+      <div class="col-4" style="margin-left: -15px;">
+        <ion-menu-button style="display: table-row;" >
+          <p [class]="activeItem == 'promotion' ? 'active list': 'list' "  (click)="promotion()">Promotion</p>
+        </ion-menu-button>
+         
+      </div>
+    </div>
+      
+    <div class="row">
+      <div class="col-5">
+          <ion-item>
+            <img  height="50px"  width="50px" src="assets/icon/offers.png" alt="">
+          </ion-item>
+      </div>
+      <div class="col-4" style="margin-left: -15px;">
+        <ion-menu-button style="display: table-row;" >
+          <p [class]="activeItem == 'offers' ? 'active list': 'list' "(click)="Offers()">Offers</p>
+        </ion-menu-button>
+        
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-5">
+          <ion-item>
+            <img  height="50px"  width="50px" src="assets/icon/myprofile.png" alt="">
+          </ion-item>
+      </div>
+      <div class="col-4" style="margin-left: -15px;">
+        <ion-menu-button style="display: table-row;" >
+          <p [class]="activeItem == 'myprofile' ? 'active list': 'list' "  (click)="myprofile()">My Profile</p> 
+        </ion-menu-button>
+       
+      </div>
+    </div>
+
+      
+    <div class="row">
+      <div class="col-5">
+          <ion-item>
+            <img  height="50px"  width="50px" src="assets/icon/support.png" alt="">
+          </ion-item>
+      </div>
+      <div class="col-4" style="margin-left: -15px;">
+        <ion-menu-button style="display: table-row;" >
+          <p [class]="activeItem == 'support' ? 'active list': 'list' "  (click)="support()">Support</p> 
+        </ion-menu-button>
+       
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-5">
+          <ion-item>
+            <img height="50px" width="50px" src="assets/icon/logout.png" alt="">
+            
+          </ion-item>
+      </div>
+      <div class="col-4" style="margin-left: -15px;">
+        <ion-menu-button style="display: table-row;" >
+          <p [class]="activeItem == 'logout' ? 'active list': 'list' " style="cursor: pointer;" (click)="logout()" class="list">Log out </p>
+        </ion-menu-button>
+       
+      </div>
+    </div>
+    
+  
+    
+  </ion-list>
+
+  
+</ion-content>
+</ion-menu>
+
+<ion-router-outlet  id="main"></ion-router-outlet>
