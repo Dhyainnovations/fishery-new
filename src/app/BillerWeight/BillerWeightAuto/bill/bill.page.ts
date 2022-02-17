@@ -56,15 +56,10 @@ export class BillPage implements OnInit {
       console.log(response);
       if (response.success == "true") {
         this.bluetoothSerial.connect("00:12:12:12:33:33").subscribe(this.onSuccess, this.onError);
-        this.bluetoothSerial.write("Printer Successfully Connected" );
-
-        var print = document.getElementById('printData').innerHTML;
-        this.bluetoothSerial.write(print);
-
-        this.bluetoothSerial.disconnect();
+       
       }
 
-
+      this.bluetoothSerial.connect("00:12:12:12:33:33").subscribe(this.onSuccess, this.onError);
     }, (error: any) => {
       console.log(error);
     }
@@ -75,6 +70,12 @@ export class BillPage implements OnInit {
 
   onSuccess() {
     alert("Successfully Printed");
+    this.bluetoothSerial.write("Printer Successfully Connected" );
+
+    var print = document.getElementById('printData').innerHTML;
+    this.bluetoothSerial.write(print);
+
+    this.bluetoothSerial.disconnect();
   }
 
   onError(error) {
