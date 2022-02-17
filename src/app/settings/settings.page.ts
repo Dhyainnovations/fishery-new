@@ -182,6 +182,7 @@ export class SettingsPage implements OnInit {
   connectedId: any = "";
   success = (data) => {
     this.bluetoothSerial.write("Printer Successfully Connected" + this.connectedId);
+    localStorage.setItem('printerBluetoothId', this.connectedId);
     this.bluetoothSerial.disconnect();
   }
   fail = (error) => {

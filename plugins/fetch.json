@@ -49,22 +49,8 @@
     "is_top_level": true,
     "variables": {}
   },
-  "cordova-plugin-googlemaps": {
-    "source": {
-      "type": "registry",
-      "id": "cordova-plugin-googlemaps@^2.7.1"
-    },
-    "is_top_level": true,
-    "variables": {}
-  },
-  "cordova-plugin-nativegeocoder": {
-    "source": {
-      "type": "registry",
-      "id": "cordova-plugin-nativegeocoder@^3.4.1"
-    },
-    "is_top_level": true,
-    "variables": {}
-  },
+ 
+ 
   "cordova-plugin-add-swift-support": {
     "source": {
       "type": "registry",
@@ -72,24 +58,6 @@
     },
     "is_top_level": false,
     "variables": {}
-  },
-  "cordova-plugin-geolocation": {
-    "source": {
-      "type": "registry",
-      "id": "cordova-plugin-geolocation@4.1.0"
-    },
-    "is_top_level": true,
-    "variables": {}
-  },
-  "cordova-plugin-facebook4": {
-    "source": {
-      "type": "registry",
-      "id": "cordova-plugin-facebook4@^6.4.0"
-    },
-    "is_top_level": true,
-    "variables": {
-      "APP_ID": "698205631161937",
-      "APP_NAME": "userapp"
-    }
   }
+
 }

@@ -1,6 +1,6 @@
 {
-	"appId": "com.hrsseller.app",
-	"appName": "Seller App",
+	"appId": "com.fishery.app",
+	"appName": "fishery",
 	"webDir": "www",
 	"bundledWebRuntime": false
 }

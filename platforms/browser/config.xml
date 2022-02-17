@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.hrsseller.app" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>24Hrs Seller</name>
-    <description>An exclusive login for sellers of 24hrs application</description>
+<widget id="com.fishery.app" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>Fishery</name>
+    <description>An exclusive application for fisheries management. </description>
     <author email="info@dhya.in" href="http://dhya.in/">Dhya Innovations DevOps Team</author>
     <content src="index.html" />
     <access origin="*" />
