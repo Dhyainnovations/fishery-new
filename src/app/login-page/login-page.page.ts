@@ -214,7 +214,7 @@ export class LoginPagePage implements OnInit {
       }
 
       if (this.Localpermission == "AUTO") {
-        this.router.navigate(['/biller-weight-manual-record'])
+        this.router.navigate(['/biller-auto-record'])
       }
     }
 

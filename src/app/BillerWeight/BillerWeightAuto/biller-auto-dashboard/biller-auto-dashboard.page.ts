@@ -168,6 +168,10 @@ export class BillerAutoDashboardPage implements OnInit {
       }
     );
   }
+  navigateToSettings() {
+    this.router.navigate(['/settings'])
+  }
+
 
 
   user: any = "";

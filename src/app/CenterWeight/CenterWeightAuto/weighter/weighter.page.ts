@@ -42,11 +42,11 @@ export class WeighterPage implements OnInit {
 
     this.myDate = this.datepipe.transform(this.myDate, 'yyyy-MM-dd');
 
-console.log(this.myDate);
+    console.log(this.myDate);
   }
 
 
-  dateTime(){
+  dateTime() {
     this.currentDateTime = this.datepipe.transform((new Date), 'yyyy-MM-dd hh:mm:ss');
   }
 
@@ -88,31 +88,31 @@ console.log(this.myDate);
   onlineAlart: any = true;
   offlineAlart: any = false
 
-  recivedWeightValue:any ;
+  recivedWeightValue: any;
 
-  activeItem:any;
+  activeItem: any;
 
   backToPrivios() {
     this.router.navigate(['/center-weight-auto-record'])
   }
 
 
-  center(val){
+  center(val) {
     console.log(val);
-    
+
     this.activeItem = "center"
   }
-  
-  localsale(val){
+
+  localsale(val) {
     this.activeItem = "localsale"
     console.log(val);
   }
 
-  market(val){
+  market(val) {
     this.activeItem = "market"
     console.log(val);
   }
-  merchant(val){
+  merchant(val) {
     this.activeItem = "merchant"
     console.log(val);
   }
@@ -265,11 +265,24 @@ console.log(this.myDate);
   }
 
   SelectLocation(data) {
+
     const formdata = new FormData();
     formdata.append("place", data.place);
-    this.place = data.place;
+    let recivedVal = data.place;
+    var splitted = recivedVal.split(" - ", 2);
+    this.place = splitted[0];
+
+    if (splitted[1] == undefined) {
+      this.location = '';
+    } else {
+      this.location = splitted[1];
+    }
+    console.log(this.place);
+    console.log(this.location);
+
   }
 
+  location: any;
   StoreTypeBasedOnCategory = [];
   StoreTypeData = [];
   SelectCategory(data) {
@@ -387,6 +400,11 @@ console.log(this.myDate);
     this.locationlist = (JSON.parse((GetLocation)));
   }
 
+  navigateToSettings() {
+    this.router.navigate(['/settings'])
+  }
+
+
   dosomething(event) {
     setTimeout(() => {
       event.target.complete();
@@ -472,7 +490,7 @@ console.log(this.myDate);
       });
     });
   }
-  
+
   onDataReceive(val) {
     var data = JSON.stringify(val)
     this.recivedWeightValue = val;

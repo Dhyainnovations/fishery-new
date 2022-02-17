@@ -30,6 +30,8 @@ export class SettingsPage implements OnInit {
       });
     });
     this.CheckBluetoothIsConnected();
+    this.Locallogintype = localStorage.getItem("logintype",)
+    this.Localpermission = localStorage.getItem("permission",)
   }
 
   ngOnInit() {
@@ -40,10 +42,52 @@ export class SettingsPage implements OnInit {
   checkonline: any;
   offlineAlart: any = false;
   checkoffline: any;
-
+  Locallogintype: any;
+  Localpermission: any;
 
   backToPrivios() {
-    this.router.navigate(['/biller-auto-record'])
+    //-------center login check----------//
+
+    if (this.Locallogintype == "ROLE_WSHO") {
+
+      //---------- Auto or Manual Checking -----------//
+
+      if (this.Localpermission == "MANUAL") {
+        this.router.navigate(['/center-weight-manual-record'])
+      }
+
+      if (this.Localpermission == "AUTO") {
+        this.router.navigate(['/center-weight-auto-record'])
+      }
+
+    }
+
+
+
+    //-------biller login check----------//
+
+    if (this.Locallogintype == "ROLE_LOCALSALE") {
+
+      //---------- Auto or Manual Checking -----------//
+
+      if (this.Localpermission == "MANUAL") {
+        this.router.navigate(['/biller-weight-manual-record'])
+      }
+
+      if (this.Localpermission == "AUTO") {
+        this.router.navigate(['/biller-auto-record'])
+      }
+    }
+
+    //-------admin login check----------//
+
+    if (this.Locallogintype == "ROLE_ADMIN") {
+      this.router.navigate(['/admin-dashboard'])
+    }
+
+
+
+
   }
 
 
@@ -137,7 +181,7 @@ export class SettingsPage implements OnInit {
 
   connectedId: any = "";
   success = (data) => {
-    this.bluetoothSerial.write("Printer Successfully Connected" +  this.connectedId );
+    this.bluetoothSerial.write("Printer Successfully Connected" + this.connectedId);
     this.bluetoothSerial.disconnect();
   }
   fail = (error) => {
@@ -178,5 +222,12 @@ export class SettingsPage implements OnInit {
     localStorage.removeItem("logintype",)
     localStorage.removeItem("permission",)
     this.router.navigate(['/loginpage'])
+  }
+
+
+  ToggleBluetooth() {
+    if (this.connectedId.length <= 0) {
+
+    }
   }
 }

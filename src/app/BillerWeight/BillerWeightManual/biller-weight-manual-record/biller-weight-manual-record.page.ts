@@ -107,6 +107,10 @@ export class BillerWeightManualRecordPage implements OnInit {
 
   displayCardDetails = [];
 
+  navigateToSettings() {
+    this.router.navigate(['/settings'])
+  }
+
   list_manual_bill() {
     this.http.get('/list_manual_bill',).subscribe((response: any) => {
       this.lastEntryisVisible = true

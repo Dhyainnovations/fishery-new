@@ -25,10 +25,10 @@ export class CenterWeightAutoRecordPage implements OnInit {
         this.checkoffline = true;
         this.offlineAlart = true
         this.onlineAlart = false;
-       
+
       });
       window.addEventListener('online', () => {
-        
+
         this.onlineAlart = true;
         this.offlineAlart = false
         this.checkonline = true;
@@ -43,7 +43,7 @@ export class CenterWeightAutoRecordPage implements OnInit {
     this.todate = this.myDate
   }
 
-  
+
 
 
   ngOnInit() {
@@ -53,10 +53,15 @@ export class CenterWeightAutoRecordPage implements OnInit {
 
   }
 
-  myDate:any;
+  navigateToSettings() {
+    this.router.navigate(['/settings'])
+  }
+
+
+  myDate: any;
 
   user: any;
-  bluetoothSts:any ;
+  bluetoothSts: any;
   currentDateTime: any
   totalweight: any = '';
   tableRecodrs: any = []
@@ -87,7 +92,7 @@ export class CenterWeightAutoRecordPage implements OnInit {
   }
 
   dateBasedRecord() {
-    this.router.navigate(['/weighter-report'],{ queryParams: { fromdate: this.fromdate, todate: this.todate } })
+    this.router.navigate(['/weighter-report'], { queryParams: { fromdate: this.fromdate, todate: this.todate } })
     localStorage.setItem("fromDate", this.fromdate)
     localStorage.setItem("toDate", this.todate)
 
@@ -151,14 +156,14 @@ export class CenterWeightAutoRecordPage implements OnInit {
   }
 
 
-  
+
 
   navigateToNextPage() {
-    
-    if(this.bluetoothSts == true){
+
+    if (this.bluetoothSts == true) {
       this.router.navigate(['/centerweight-auto-weighter'])
     }
-    if(this.bluetoothSts == null || this.bluetoothSts == false){
+    if (this.bluetoothSts == null || this.bluetoothSts == false) {
       this.router.navigate(['/centerweight-auto-dashboard'])
     }
   }
@@ -233,5 +238,5 @@ export class CenterWeightAutoRecordPage implements OnInit {
     localStorage.removeItem("permission",)
     this.router.navigate(['/loginpage'])
   }
- 
+
 }

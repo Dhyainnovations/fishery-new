@@ -148,7 +148,9 @@ export class BillerAutoRecordPage implements OnInit {
   navigateToNextPage() {
     this.router.navigate(['/BillerAutodashboard'])
   }
-
+  navigateToSettings() {
+    this.router.navigate(['/settings'])
+  }
 
   delete(id) {
     console.log(id);

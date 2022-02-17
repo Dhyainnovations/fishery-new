@@ -32,7 +32,7 @@
       <input id="t1" type="checkbox">
       <label for="t1">{{user}}</label>
       <ul>
-        <!-- <li><a (click)="setting()">Settings</a></li> -->
+        <li><a (click)="navigateToSettings()">Settings</a></li>
         <li><a (click)="logout()">Logout</a></li>
       </ul>
     </div>
@@ -40,11 +40,11 @@
     <div class="col-12 ion-text-center mt-1">
       <p><u>
           Today's Total Weight
-        </u> <br> {{totalweight | number}}KG</p>
+        </u> <br><b> {{totalweight | number}}KG</b></p>
     </div>
 
     <div class="col-12 ion-text-center mt-1">
-      <p><u>Today's Total collected amount</u> <br> Rs.{{totalCost}}
+      <p><u>Today's Total collected amount</u> <br> <b>Rs.{{totalCost}}</b>
       </p>
     </div>
 

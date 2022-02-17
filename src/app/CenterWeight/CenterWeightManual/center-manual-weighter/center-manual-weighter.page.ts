@@ -128,6 +128,11 @@ export class CenterManualWeighterPage implements OnInit {
 
   }
 
+  navigateToSettings() {
+    this.router.navigate(['/settings'])
+  }
+
+
   mergesdLocationList: any = []
   market(val) {
     this.activeItem = "market"
@@ -299,14 +304,22 @@ export class CenterManualWeighterPage implements OnInit {
     this.type = data.type;
   }
 
-  SelectLocation(place) {
-    console.log(place);
+  SelectLocation(data) {
 
-    this.location = location
-
-    // const formdata = new FormData();
-    // formdata.append("place", data.place);
-    // this.place = data.place;
+    const formdata = new FormData();
+    formdata.append("place", data.place);
+    let recivedVal = data.place;
+    var splitted = recivedVal.split(" - ",2 );
+    this.place = splitted[0];
+    
+    if( splitted[1] == undefined){
+      this.location = '';
+    }else{
+      this.location = splitted[1];
+    }
+    console.log(this.place);
+    console.log(this.location);
+    
   }
 
   StoreTypeBasedOnCategory = [];

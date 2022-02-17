@@ -4,7 +4,7 @@
 
     <div style="margin-top: -105px;" class="row">
       <div class="col-6 mt-4 ">
-        <ion-icon style="margin-left:20px;width: 45px; height:25px;color:#fff" (click)="backToPrivios()"
+        <ion-icon style="margin-left:20px;width: 45px; height:25px;color: #655fcb" (click)="backToPrivios()"
           name="arrow-back">
         </ion-icon>
       </div>
@@ -40,14 +40,14 @@
 
     </div>
     <!-----Sub-Title----->
-    <h4 class="text-center connectivity mt-4"><b>CONNECTIVITY</b></h4>
+    <h4 class="text-center connectivity mt-4"><b>PRINTER CONNECTIVITY</b></h4>
     <div class="row text-center mt-4">
       <div class="col-8">
 
         <!-----Toggle----->
         <h5 class="text-center bluetooth-status"><b>Printer Connection</b></h5>
       </div>
-      <div class="col-1 mt-2" >
+      <div class="col-1 mt-2">
         <ion-toggle slot="end" color="tertiary" class="toggle-bluetooth" (click)="enablebluetooth()"
           checked="{{bluetoothtoggle}}">
         </ion-toggle>
@@ -63,9 +63,10 @@
       </span>
     </ion-item>
     <ion-spinner name="crescent" *ngIf="gettingDevices" style="margin-left: 50%;"></ion-spinner>
-    <p>Connected Id : {{this.connectedId}}</p>
+
     <div class="button-wrapper p-4">
       <div class="container">
+        <p>Connected Id : {{this.connectedId}}</p>
         <div class="row">
           <button (click)="disconnect()" class="submit-button px-2 py-2" color="transparent"
             style="font-size: 13px;background-color: #655fcb;">

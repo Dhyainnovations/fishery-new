@@ -44,7 +44,7 @@
         <input id="t1" type="checkbox">
         <label for="t1">{{user}}</label>
         <ul>
-          <!-- <li><a (click)="setting()">Settings</a></li> -->
+          <li><a (click)="navigateToSettings()">Settings</a></li>
           <li><a (click)="logout()">Logout</a></li>
         </ul>
       </div>
@@ -111,12 +111,12 @@
 
 
 
-      <div class="row mt-1">
+      <div class="row mt-3">
         <!-----FLocation----->
         <div class="col-12 ion-text-center">
           <form (change)="SelectLocation(Selectlocation.value)" #Selectlocation="ngForm">
             <p class="select-category" style="font-size: 13px;"><b><u>Select Location: </u></b></p>
-            <select class="selectDropdown" [(ngModel)]="place" placeholder="place" name="place" style="width: 93%;">
+            <select class="selectDropdown" ngModel placeholder="place" name="place" style="width: 96%;">
               <option value="" disabled selected hidden>Location</option>
               <option *ngFor="let location of locationlist" [value]="location.place">{{location.place}}</option>
             </select>

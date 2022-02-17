@@ -253,7 +253,7 @@ export class BillerAutoWeighterPage implements OnInit {
       isDeleted: "0",
       purchaseddate: this.currentDateTime,
       cost: this.cost,
-      totalcost : this.cost + this.weight
+      totalcost: this.cost + this.weight
     }
 
     console.log(data);
@@ -320,6 +320,9 @@ export class BillerAutoWeighterPage implements OnInit {
 
     }
 
+  }
+  navigateToSettings() {
+    this.router.navigate(['/settings'])
   }
 
 

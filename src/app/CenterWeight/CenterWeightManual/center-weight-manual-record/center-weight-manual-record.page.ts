@@ -75,7 +75,11 @@ export class CenterWeightManualRecordPage implements OnInit {
   lastEntryisVisible: any = false
 
 
+  navigateToSettings() {
+    this.router.navigate(['/settings'])
+  }
 
+  
   fromDate(val) {
     console.log(val);
     this.fromdate = val

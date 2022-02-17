@@ -94,6 +94,7 @@ export class WeighterReportPage implements OnInit {
     );
   }
 
+  
   //------------report records -------------//
   records() {
     const data = {
