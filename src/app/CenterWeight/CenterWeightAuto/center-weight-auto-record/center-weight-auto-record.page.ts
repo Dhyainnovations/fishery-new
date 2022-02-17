@@ -20,6 +20,8 @@ export class CenterWeightAutoRecordPage implements OnInit {
       this.totalWeight()
       this.locationBasedWeightRecords()
       this.records()
+      this.marketTableRecords()
+      this.merchantTableRecords()
 
       window.addEventListener('offline', () => {
         this.checkoffline = true;
@@ -229,6 +231,52 @@ export class CenterWeightAutoRecordPage implements OnInit {
     );
   }
 
+
+ marketTableRec:any = []
+  marketTableRecords() {
+    this.http.get('/list_table_market',).subscribe((response: any) => {
+      this.marketTableRec = response.records;
+      if (this.marketTableRec == "No manual weight found.") {
+        this.marketTableRec = [];
+        // this.isVisible = true
+        this.lastEntryisVisible = false
+      } else {
+
+        // this.isVisible = false
+        this.lastEntryisVisible = true
+      }
+    }, (error: any) => {
+      console.log(error);
+      this.marketTableRec = [];
+      // this.isVisible = true
+      // this.lastEntryisVisible = false
+
+    }
+    );
+  }
+
+  merchantTableRec:any = []
+  merchantTableRecords() {
+    this.http.get('/list_table_merchant',).subscribe((response: any) => {
+      this.merchantTableRec = response.records;
+      if (this.merchantTableRec == "No manual weight found.") {
+        this.merchantTableRec = [];
+        // this.isVisible = true
+        // this.lastEntryisVisible = false
+      } else {
+
+        // this.isVisible = false
+        // this.lastEntryisVisible = true
+      }
+    }, (error: any) => {
+      console.log(error);
+      this.merchantTableRec = [];
+      // this.isVisible = true
+      // this.lastEntryisVisible = false
+
+    }
+    );
+  }
 
 
   logout() {

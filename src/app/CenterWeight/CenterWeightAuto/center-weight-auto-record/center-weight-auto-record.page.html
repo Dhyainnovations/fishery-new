@@ -7,45 +7,39 @@
     </ion-refresher>
   </div>
 
-  <div class="row">
+  <div class="row mb-2">
    
+    <div class="col-9">
+      <h6 style="color: #6863CC;margin-left: 35%;" class=" mt-4" ><b>AUTO-WEIGHTER</b></h6>
+    </div> 
 
-    <div *ngIf="onlineAlart" class="col-12 ion-text-right mt-2">
+    <div *ngIf="onlineAlart" class="col-3 ion-text-right ">
       <lottie-player src="https://assets5.lottiefiles.com/packages/lf20_dsp2yB.json" background="transparent"
-        speed="1.5" style="width:25%; margin-left: 80%; border-radius: 55%;" loop autoplay></lottie-player>
+        speed="1.5" style="width:90%; margin-left:20%; border-radius: 55%;" loop autoplay></lottie-player>
       <!-- <p style="background-color: #6863CC;border-radius:10px;color:#fff;width: 50px;  margin-left: 50%;">Online</p> -->
     </div>
 
-    <div *ngIf="offlineAlart" class="col-12 ion-text-right ">
+    <div *ngIf="offlineAlart" class="col-3 ion-text-right ">
       <!-- <p style="background-color: #6863CC;border-radius:10px;color:#fff;width: 50px;  margin-left: 50%;">Offline</p> -->
-      <img style="width:25%; margin-left: 80%; border-radius: 55%;" src="assets/offline.gif" alt="">
+      <img style="width:90%; margin-left:20%; border-radius: 55%;" src="assets/offline.gif" alt="">
     </div>
 
   
 
   </div>
 
-  <div class="row ">
-
-    <div style="margin-top:-45px" class="col-12 ion-text-center">
-      <b style="font-size: 18px;">WEIGHTER RECORDS</b>
-    </div>
-
+    <div class="row ">
     <!-----Display Date----->
 
-    <div class="col-6 display-date mx-4 mt-4">
-      <b style="font-size: 13px;">Date: </b>
-      <p> <b>{{currentDateTime | date:'dd-MM-yyyy'}}</b> </p>
+    <div class="date-card col-6 display-date mx-5 ">
+      <p style="margin: 7px;" > <b>{{currentDateTime | date:'dd-MM-yyyy'}}</b> </p>
     </div>
 
-
-
-
-    <div style="margin-top: -18%;" class=" col-7 dropdown toggle ">
+    <div style="margin-top: -12%;"  class=" col-6 dropdown toggle ">
       <input id="t2" type="checkbox">
       <label for="t2">{{user}}</label>
       <ul>
-        <li><a (click)="navigateToSettings()">Settings</a></li>
+        <!-- <li><a (click)="setting()">Settings</a></li> -->
         <li><a (click)="logout()">Logout</a></li>
       </ul>
     </div>
@@ -54,11 +48,13 @@
 
   <div class="row">
     <div class="col-12 ion-text-center">
-      <button (click)="navigateToNextPage()" class="navigate-btn  mt-5"><b>Start Weighing</b></button>
+      <button (click)="navigateToNextPage()" class="navigate-btn mt-3"><b>Start Weighing</b></button>
     </div>
 
-    <div class="col-12 ion-text-center mt-3">
-      <p>Today's Total Weight = <span>{{totalweight}}KG</span></p>
+     <div class="col-12 ion-text-center">
+      <div class="weight-display" style="font-size: 16px;margin:7%;">
+        <p> Today's Total Weight  <b><br> {{totalweight}}</b> Kgs</p>
+      </div>
     </div>
 
 
@@ -112,6 +108,8 @@
          <td>{{i+1}} </td>
          <td>{{record.location}}</td>
          <td>{{record.location_total_weight}}</td>
+          <td>{{record.location}}</td>
+         <td>{{record.location_total_weight}}</td>
        </tr>
      </tbody>
    </table>
@@ -128,13 +126,13 @@
           <th scope="col-2">Quantity </th>
         </tr>
       </thead>
-      <tbody *ngFor="let record of tableRecodrs   let i=index; ">
+      <tbody *ngFor="let record of marketTableRec   let i=index; ">
         <tr>
-          <td>{{i+1}} </td>
-          <td>{{record.location}}</td>
-          <td>{{record.location_total_weight}}</td>
-          <td>{{record.location}}</td>
-          <td>{{record.location_total_weight}}</td>
+            <td>{{record.location}}</td>
+          <td>{{record.place}}</td>
+          <td>{{record.category}}</td>
+          <td>{{record.quality}}</td>
+          <td>{{record.quantity}}</td>
         </tr>
       </tbody>
     </table>
@@ -151,13 +149,13 @@
           <th scope="col-2">Quantity </th>
          </tr>
        </thead>
-       <tbody *ngFor="let record of tableRecodrs   let i=index; ">
+       <tbody *ngFor="let record of merchantTableRec   let i=index; ">
          <tr>
-           <td>{{i+1}} </td>
-           <td>{{record.location}}</td>
-           <td>{{record.location_total_weight}}</td>
-           <td>{{record.location}}</td>
-           <td>{{record.location_total_weight}}</td>
+         <td>{{record.place}}</td>
+           <td>{{record.shop}}</td>
+           <td>{{record.category}}</td>
+           <td>{{record.quality}}</td>
+           <td>{{record.quantity}}</td>
          </tr>
        </tbody>
      </table>

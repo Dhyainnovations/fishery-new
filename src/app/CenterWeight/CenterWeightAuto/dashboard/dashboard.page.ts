@@ -35,8 +35,9 @@ export class DashboardPage implements OnInit {
 
       });
     });
+       this.user = localStorage.getItem("Fishery-username",)
   }
-
+  user:any;
   disableSts: any = false;
   checkoffline: any;
   checkonline: any;

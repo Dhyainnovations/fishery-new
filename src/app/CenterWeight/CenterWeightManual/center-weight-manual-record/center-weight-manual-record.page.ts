@@ -21,6 +21,8 @@ export class CenterWeightManualRecordPage implements OnInit {
       this.totalWeight()
       this.locationBasedWeightRecords()
       this.records()
+      this.marketTableRecords()
+      this.merchantTableRecords()
 
       window.addEventListener('offline', () => {
         this.checkoffline = true;
@@ -155,23 +157,47 @@ export class CenterWeightManualRecordPage implements OnInit {
     );
   }
 
+  marketTableRec:any = []
   marketTableRecords() {
-    this.http.get('/list_manual_weight',).subscribe((response: any) => {
-      this.cardRecords = response.records;
-      if (this.cardRecords == "No manual weight found.") {
-        this.cardRecords = [];
-        this.isVisible = true
+    this.http.get('/list_table_market',).subscribe((response: any) => {
+      this.marketTableRec = response.records;
+      if (this.marketTableRec == "No manual weight found.") {
+        this.marketTableRec = [];
+        // this.isVisible = true
         this.lastEntryisVisible = false
       } else {
 
-        this.isVisible = false
+        // this.isVisible = false
         this.lastEntryisVisible = true
       }
     }, (error: any) => {
       console.log(error);
-      this.cardRecords = [];
-      this.isVisible = true
-      this.lastEntryisVisible = false
+      this.marketTableRec = [];
+      // this.isVisible = true
+      // this.lastEntryisVisible = false
+
+    }
+    );
+  }
+
+  merchantTableRec:any = []
+  merchantTableRecords() {
+    this.http.get('/list_table_merchant',).subscribe((response: any) => {
+      this.merchantTableRec = response.records;
+      if (this.merchantTableRec == "No manual weight found.") {
+        this.merchantTableRec = [];
+        // this.isVisible = true
+        // this.lastEntryisVisible = false
+      } else {
+
+        // this.isVisible = false
+        // this.lastEntryisVisible = true
+      }
+    }, (error: any) => {
+      console.log(error);
+      this.merchantTableRec = [];
+      // this.isVisible = true
+      // this.lastEntryisVisible = false
 
     }
     );
