@@ -3,6 +3,8 @@ import { ActivatedRoute } from '@angular/router';
 import { HttpService } from '../weighter/./../../../shared/http.service';
 import { Router } from '@angular/router'
 import Swal from 'sweetalert2';
+import { AlertController } from '@ionic/angular';
+import { BluetoothSerial } from '@awesome-cordova-plugins/bluetooth-serial/ngx';
 //import { Printer, PrintOptions } from '@awesome-cordova-plugins/printer/ngx';
 @Component({
   selector: 'app-bill',
@@ -11,7 +13,7 @@ import Swal from 'sweetalert2';
 })
 export class BillPage implements OnInit {
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute, private http: HttpService, route: ActivatedRoute) {
+  constructor(private router: Router, private activatedRoute: ActivatedRoute, private http: HttpService, route: ActivatedRoute, private alertController: AlertController, private bluetoothSerial: BluetoothSerial,) {
     route.params.subscribe(val => {
       this.GetBillDataFromLocalStorage();
 
@@ -52,20 +54,17 @@ export class BillPage implements OnInit {
 
     this.http.post('/manual_bill', data).subscribe((response: any) => {
       console.log(response);
-      // if (response.success == "true") {
-      //   this.printer.isAvailable().then(this.onSuccess, this.onError);
+      if (response.success == "true") {
+        this.bluetoothSerial.connect("00:12:12:12:33:33").subscribe(this.onSuccess, this.onError);
+        this.bluetoothSerial.write("Printer Successfully Connected" );
 
-      //   let options: PrintOptions = {
-      //     name: 'MyDocument',
-      //     duplex: true,
-      //     orientation: 'landscape',
-      //     monochrome: true
-      //   }
-      //   let content = document.getElementById('print-section').innerHTML;
-      //   this.printer.print(content, options).then(this.onSuccess, this.onError);
+        var print = document.getElementById('printData').innerHTML;
+        this.bluetoothSerial.write(print);
+
+        this.bluetoothSerial.disconnect();
+      }
 
 
-      // }
     }, (error: any) => {
       console.log(error);
     }
@@ -160,5 +159,27 @@ export class BillPage implements OnInit {
     );
   }
 
+  async disconnect() {
+    const alert = await this.alertController.create({
+      header: 'Disconnect?',
+      message: 'Do you want to Disconnect?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
+          }
+        },
+        {
+          text: 'Disconnect',
+          handler: () => {
+            this.bluetoothSerial.disconnect();
+          }
+        }
+      ]
+    });
+    await alert.present();
+  }
 
 }
