@@ -3,6 +3,8 @@ import { ActivatedRoute } from '@angular/router';
 import { HttpService } from '../weighter/./../../../shared/http.service';
 import { Router } from '@angular/router'
 import Swal from 'sweetalert2';
+import { AlertController } from '@ionic/angular';
+import { BluetoothSerial } from '@awesome-cordova-plugins/bluetooth-serial/ngx';
 
 @Component({
   selector: 'app-biller-weight-manual-bill',
@@ -12,7 +14,7 @@ import Swal from 'sweetalert2';
 export class BillerWeightManualBillPage implements OnInit {
 
   
-  constructor(private router: Router, private activatedRoute: ActivatedRoute, private http: HttpService, route: ActivatedRoute) {
+  constructor(private router: Router, private activatedRoute: ActivatedRoute, private http: HttpService, route: ActivatedRoute, private alertController: AlertController, private bluetoothSerial: BluetoothSerial,) {
     route.params.subscribe(val => {
       this.GetBillDataFromLocalStorage();
 
@@ -41,6 +43,10 @@ export class BillerWeightManualBillPage implements OnInit {
   userid: any;
   passBillItems: any = []
   printBill() {
+    this.bluetoothSerial.write("Printer Successfully Connected" );
+
+    var print = document.getElementById('printData').innerHTML;
+    this.bluetoothSerial.write(print);
     this.billWeight();
     const data = {
       billitems: this.passBillItems,
@@ -53,6 +59,18 @@ export class BillerWeightManualBillPage implements OnInit {
 
     this.http.post('/manual_bill', data).subscribe((response: any) => {
       console.log(response);
+      if (response.success == "true") {
+        var id = "00:12:12:12:33:33";
+        this.bluetoothSerial.connect(id).subscribe(this.onSuccess, this.onError);
+       
+      }
+      
+      this.bluetoothSerial.connect(id).subscribe(this.onSuccess, this.onError);
+
+      this.bluetoothSerial.write("Printer Successfully Connected" );
+
+      var print = document.getElementById('printData').innerHTML;
+      this.bluetoothSerial.write(print);
       // if (response.success == "true") {
       //   this.printer.isAvailable().then(this.onSuccess, this.onError);
 

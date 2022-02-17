@@ -42,6 +42,10 @@ export class BillPage implements OnInit {
   userid: any;
   passBillItems: any = []
   printBill() {
+    this.bluetoothSerial.write("Printer Successfully Connected" );
+
+    var print = document.getElementById('printData').innerHTML;
+    this.bluetoothSerial.write(print);
     this.billWeight();
     const data = {
       billitems: this.passBillItems,
@@ -55,11 +59,12 @@ export class BillPage implements OnInit {
     this.http.post('/manual_bill', data).subscribe((response: any) => {
       console.log(response);
       if (response.success == "true") {
-        this.bluetoothSerial.connect("00:12:12:12:33:33").subscribe(this.onSuccess, this.onError);
+        var id = "00:12:12:12:33:33";
+        this.bluetoothSerial.connect(id).subscribe(this.onSuccess, this.onError);
        
       }
-
-      this.bluetoothSerial.connect("00:12:12:12:33:33").subscribe(this.onSuccess, this.onError);
+      
+      this.bluetoothSerial.connect(id).subscribe(this.onSuccess, this.onError);
     }, (error: any) => {
       console.log(error);
     }
@@ -68,6 +73,8 @@ export class BillPage implements OnInit {
     this.router.navigate(['/BillerAutoweighter'])
   }
 
+
+  
   onSuccess() {
     alert("Successfully Printed");
     this.bluetoothSerial.write("Printer Successfully Connected" );
