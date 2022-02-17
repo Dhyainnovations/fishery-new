@@ -1,0 +1,200 @@
+<ion-content>
+  <img src="assets/bacground.png">
+
+  <div style="margin-top: -105px;" class="row">
+    <div class="col-6 mt-4 ">
+      <ion-icon style="margin-left:20px;width: 45px; height:25px;color:#918ed1" (click)="backToPrivios()"
+        name="arrow-back">
+      </ion-icon>
+    </div>
+
+    <div *ngIf="onlineAlart" class="col-6 ion-text-right mt-2">
+      <lottie-player src="https://assets5.lottiefiles.com/packages/lf20_dsp2yB.json" background="transparent"
+        speed="1.5" style="width:50%; margin-left: 50%;" loop autoplay></lottie-player>
+      <!-- <p style="background-color: #6863CC;border-radius:10px;color:#fff;width: 50px;  margin-left: 50%;">Online</p> -->
+    </div>
+
+    <div *ngIf="offlineAlart" class="col-6 ion-text-right ">
+      <!-- <p style="background-color: #6863CC;border-radius:10px;color:#fff;width: 50px;  margin-left: 50%;">Offline</p> -->
+      <img style="width:50%; margin-left: 50%; border-radius: 55%;" src="assets/offline.gif" alt="">
+    </div>
+
+  </div>
+  <!-----Title----->
+
+  <div class="row">
+
+    <div style="margin-top:-50px" class="col-12 ion-text-center">
+      <b style="font-size: 25px;">BILLER</b>
+    </div>
+
+    <div class=" col-6 dropdown toggle mt-3">
+      <input id="t3" type="checkbox">
+      <label for="t3">{{user}}</label>
+      <ul>
+        <!-- <li><a (click)="setting()">Settings</a></li> -->
+        <li><a (click)="logout()">Logout</a></li>
+      </ul>
+    </div>
+
+  </div>
+
+
+  <!-----Display Weight----->
+  <p class="text-center">{{recivedWeightValue}}</p>
+
+  <!-- <p> weight is <b>267.70</b> kgs</p> -->
+
+
+  <div class="container weighter-details-wrapper">
+    <div class="row">
+      <!-----Display Date----->
+      <div class="col-6 display-date">
+        <b style="font-size: 13px;">Date: </b>
+        <b>{{currentDate | date:'dd-MM-yyyy'}}</b>
+      </div>
+
+      <div class="col-6 display-date">
+
+        <form (change)="SelectCounter(Selectcounter.value)" #Selectcounter="ngForm">
+
+          <div class="row">
+            <div class="col-12">
+              <p class="select-category"><b><u>Select Counter: </u></b></p>
+              <select [(ngModel)]="counter" placeholder="counter" name="counter"
+                style="width: 100%;font-size: 13px;padding: 2px;">
+                <option value="" disabled selected hidden>Price</option>
+                <option [value]="1">1</option>
+                <option [value]="2">2</option>
+                <option value="3">3</option>
+              </select>
+            </div>
+          </div>
+
+
+        </form>
+
+      </div>
+
+
+      <!-----Fish Category----->
+      <div class="col-6 mt-3">
+        <form (change)="SelectCategory(Selectcategory.value)" #Selectcategory="ngForm">
+          <p class="select-category" style="font-size: 13px;"><b><u>Select Category:</u></b></p>
+          <select [(ngModel)]="category" placeholder="category" name="category">
+            <option value="" disabled selected>Category</option>
+            <option *ngFor="let category of categorylist" [value]="category.category">{{category.category}}</option>
+          </select>
+        </form>
+      </div>
+
+
+
+      <!-----Fish quality----->
+      <div class="col-6 mt-3">
+        <form (change)="SelectType(Selecttype.value)" #Selecttype="ngForm">
+          <p class="select-category" style="font-size: 13px;"><b><u>Select Quality: </u></b></p>
+          <select [(ngModel)]="type" placeholder="type" name="type" style="width: 96%;">
+            <option value="" disabled selected>Fish Type</option>
+            <option *ngFor="let quality of qualityList" [value]="quality.type">{{quality.type}}</option>
+          </select>
+        </form>
+      </div>
+
+
+
+
+    </div>
+    <div class="button-wrapper p-4">
+      <div class="container">
+        <div class="row">
+          <button (click)="addItem()" class="submit-button px-4 py-2 " color="transparent"
+            style="font-size: 13px;color: white;" [disabled]=" recivedWeightValue <='0' || !counter || !category || !type || !onlineAlart">
+            ADD ITEM
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <table class="table">
+    <thead>
+      <tr style="background-color: #6863CC;color: white;">
+        <th scope="col">Quality</th>
+        <th scope="col">Weight</th>
+        <th scope="col">Cost/Kg</th>
+        <th scope="col">Total Cost</th>
+        <th scope="col">Delete</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let record of SetBillerAddItem">
+        <td style="margin: 15px;">{{record.quality}}</td>
+        <td style="margin: 5px;">{{record.weight}}Kg</td>
+        <td style="margin: 5px;"> Rs.{{record.cost}}</td>
+        <td style="margin: 5px;">Rs.{{record.totalcost}}</td>
+        <td><svg (click)="delete(record.id)" [value]="record.id" xmlns="http://www.w3.org/2000/svg" width="14"
+            height="16" fill="#6863CC" class="bi bi-trash3" viewBox="0 0 16 16">
+            <path fill-rule="evenodd"
+              d="M6.5 1a.5.5 0 0 0-.5.5v1h4v-1a.5.5 0 0 0-.5-.5h-3ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1H3.042l.846 10.58a1 1 0 0 0 .997.92h6.23a1 1 0 0 0 .997-.92l.846-10.58Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z" />
+          </svg></td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <div class="button-wrapper p-4">
+    <div class="container">
+      <div class="row">
+        <button (click)="generateBill()" class="submit-button px-2 py-2" color="transparent" style="font-size: 13px;"
+          [disabled]="CheckGenerateBillButton">
+          GENERATE BILL
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+
+  <!-- <div style="font-size: 12px;">
+    <div class="row">
+      <div class="col-12">
+        <div class="card mt-3" *ngFor="let record of SetBillerAddItem">
+          <div class="row">
+            <div class="col-5">
+              <b style="color: #6863CC;"> Date </b> : {{record.purchaseddate | date: 'dd/MM/yyyy'}}<br>
+              <b style="color: #6863CC;"> Time:</b>{{record.purchaseddate | date: 'h:mm a'}}<br>
+              <b style="color: #6863CC;">Type</b> : {{record.quality}} <br>
+            </div>
+
+            <div class="col-5">
+              <b style="color: #6863CC;">Weight </b> : {{record.weight}}Kg <br>
+              <b style="color: #6863CC;">Price </b> : Rs.{{record.cost}} <br>
+              <b style="color: #6863CC;">Category</b> : {{record.category}}<br>
+
+            </div>
+            <div class="col-2">
+              <div class="dot mt-3">
+                <svg (click)="delete(record.id)" [value]="record.id" style="margin: 10px;"
+                  xmlns="http://www.w3.org/2000/svg" width="16" height="18" fill="#fff" class="bi bi-trash3"
+                  viewBox="0 0 16 16">
+                  <path fill-rule="evenodd"
+                    d="M6.5 1a.5.5 0 0 0-.5.5v1h4v-1a.5.5 0 0 0-.5-.5h-3ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1H3.042l.846 10.58a1 1 0 0 0 .997.92h6.23a1 1 0 0 0 .997-.92l.846-10.58Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z" />
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div> -->
+
+
+</ion-content>

@@ -1,4 +1,4 @@
-import { Component, OnInit ,OnDestroy, AfterViewInit} from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpService } from '../shared/http.service';
 import Swal from 'sweetalert2';
@@ -12,9 +12,19 @@ import { MenuController, Platform, ToastController } from '@ionic/angular';
 })
 export class LoginPagePage implements OnInit {
 
-  constructor(private platform: Platform,private router: Router, private activatedRoute: ActivatedRoute, private http: HttpService, route: ActivatedRoute,) {
+  constructor(private platform: Platform, private router: Router, private activatedRoute: ActivatedRoute, private http: HttpService, route: ActivatedRoute,) {
     route.params.subscribe(val => {
+      this.Locallogintype = localStorage.getItem("logintype",)
+      this.Localpermission = localStorage.getItem("permission",)
+      setTimeout(() => {
+        if (this.Locallogintype) {
+          this.checkToNavigate()
+        }
+        else if (this.Locallogintype == null) {
+          this.router.navigate(['/loginpage'])
+        }
 
+      }, 2500)
 
     });
 
@@ -23,7 +33,7 @@ export class LoginPagePage implements OnInit {
   ngOnInit() {
 
   }
-  
+
 
   username: any;
   password: any;
@@ -132,57 +142,11 @@ export class LoginPagePage implements OnInit {
             var SetTypeBasedOnCategory = (JSON.stringify(response.records));
             localStorage.setItem('SetTypeBasedOnCategory', SetTypeBasedOnCategory);
             console.log(response);
-            
-
           }, (error: any) => {
             console.log(error);
           }
           );
-
-
-           //-------center login check----------//
-
-          if (this.Locallogintype == "ROLE_WSHO") {
-
-            //---------- Auto or Manual Checking -----------//
-
-            if (this.Localpermission == "MANUAL") {
-              this.router.navigate(['/center-weight-manual-record'])
-            }
-
-            if (this.Localpermission == "AUTO") {
-              this.router.navigate(['/center-weight-auto-record'])
-            }
-
-          }
-
-
-
-           //-------biller login check----------//
-
-          if (this.Locallogintype == "ROLE_LOCALSALE") {
-
-            //---------- Auto or Manual Checking -----------//
-
-            if (this.Localpermission == "MANUAL") {
-              this.router.navigate(['/biller-weight-manual-record'])
-            }
-            if (this.Localpermission == "AUTO") {
-              this.router.navigate(['/biller-auto-record'])
-            }
-          }
-
-          //-------admin login check----------//
-
-          if (this.Locallogintype == "ROLE_ADMIN") {
-            this.router.navigate(['/admin-dashboard'])
-          }
-
-
-
-
-
-
+          this.checkToNavigate();
         }
 
 
@@ -218,4 +182,53 @@ export class LoginPagePage implements OnInit {
     });
   }
   ngOnDestroy() { };
+
+
+  checkToNavigate() {
+    //-------center login check----------//
+
+    if (this.Locallogintype == "ROLE_WSHO") {
+
+      //---------- Auto or Manual Checking -----------//
+
+      if (this.Localpermission == "MANUAL") {
+        this.router.navigate(['/center-weight-manual-record'])
+      }
+
+      if (this.Localpermission == "AUTO") {
+        this.router.navigate(['/center-weight-auto-record'])
+      }
+
+    }
+
+
+
+    //-------biller login check----------//
+
+    if (this.Locallogintype == "ROLE_LOCALSALE") {
+
+      //---------- Auto or Manual Checking -----------//
+
+      if (this.Localpermission == "MANUAL") {
+        this.router.navigate(['/biller-weight-manual-record'])
+      }
+
+      if (this.Localpermission == "AUTO") {
+        this.router.navigate(['/biller-weight-manual-record'])
+      }
+    }
+
+    //-------admin login check----------//
+
+    if (this.Locallogintype == "ROLE_ADMIN") {
+      this.router.navigate(['/admin-dashboard'])
+    }
+
+
+
+
+
+
+  }
+
 }

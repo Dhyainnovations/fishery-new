@@ -1,4 +1,35 @@
+.navigate-btn{
+    background-color: #655fcb !important;
+    color:#fff;
+    width: 70%;
+    height:35px;
+}
 
+table {
+    border-spacing: 0px;
+    table-layout: fixed;
+    text-align: center;
+}
+
+td, th {
+    border: 0.10px solid rgba(0, 0, 0, 0.281);
+    word-break: break-all;
+    font-size: 13px;;
+}
+
+.card{
+    padding: 5px;
+    border:1px solid #fff;
+    box-shadow:3px 3px 16px 4px #ccc;
+    margin-left: 8px !important;
+    margin-right:6px !important;
+    margin: auto;
+    width: 95%;
+    background-color: #fff !important;
+    border-radius: 2px;
+  }
+
+  
 section {
     margin-top: 30px;
     background: #E3F9F9;
@@ -91,3 +122,5 @@ section {
     padding-top: 15px;
     }
     
+
+  

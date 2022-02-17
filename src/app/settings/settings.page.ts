@@ -4,56 +4,47 @@ import { BluetoothSerial } from '@awesome-cordova-plugins/bluetooth-serial/ngx';
 import { AlertController } from '@ionic/angular';
 import { ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { HttpService } from '../weighter/./../../../shared/http.service';
-import Swal from 'sweetalert2';
-import { NavController } from '@ionic/angular';
-import { DatePipe } from '@angular/common';
-import { Network } from '@awesome-cordova-plugins/network/ngx';
 
 @Component({
-  selector: 'app-dashboard',
-  templateUrl: './dashboard.page.html',
-  styleUrls: ['./dashboard.page.scss'],
+  selector: 'app-settings',
+  templateUrl: './settings.page.html',
+  styleUrls: ['./settings.page.scss'],
 })
-export class DashboardPage implements OnInit {
+export class SettingsPage implements OnInit {
 
-  constructor(private router: Router, private bluetoothSerial: BluetoothSerial, private alertController: AlertController, private cdr: ChangeDetectorRef, private network: Network, public datepipe: DatePipe, public navCtrl: NavController, private route: ActivatedRoute, private http: HttpService,) {
+
+  constructor(private router: Router, private bluetoothSerial: BluetoothSerial, private alertController: AlertController, private cdr: ChangeDetectorRef, route: ActivatedRoute,) {
     route.params.subscribe(val => {
 
-
+      this.user = localStorage.getItem("Fishery-username",)
+      console.log(this.user);
       window.addEventListener('offline', () => {
         this.checkoffline = true;
         this.offlineAlart = true
         this.onlineAlart = false;
-
       });
       window.addEventListener('online', () => {
-
         this.onlineAlart = true;
         this.offlineAlart = false
         this.checkonline = true;
-
       });
     });
+    this.CheckBluetoothIsConnected();
   }
-
-  disableSts: any = false;
-  checkoffline: any;
-  checkonline: any;
-  buttonDisabled: boolean;
-  onlineAlart: any = true;
-  offlineAlart: any = false
 
   ngOnInit() {
   }
-  bluetoothconnected: any = false;
-  bluetoothnotconnected: any = true;
 
-  // ChangeBluetoothConnection() {
-  //   this.bluetoothconnected = !this.bluetoothconnected;
-  //   this.bluetoothnotconnected = !this.bluetoothnotconnected;
-  //   this.router.navigate(['/centerweight-auto-weighter'])
-  // }
+
+  onlineAlart: any = true;
+  checkonline: any;
+  offlineAlart: any = false;
+  checkoffline: any;
+
+
+  backToPrivios() {
+    this.router.navigate(['/biller-auto-record'])
+  }
 
 
   //ScanBluetoothDevice
@@ -94,8 +85,6 @@ export class DashboardPage implements OnInit {
       });
   }
 
-
-
   async disconnect() {
     const alert = await this.alertController.create({
       header: 'Disconnect?',
@@ -120,6 +109,7 @@ export class DashboardPage implements OnInit {
   }
 
 
+
   async selectDevice(id: any) {
 
     const alert = await this.alertController.create({
@@ -137,6 +127,7 @@ export class DashboardPage implements OnInit {
           text: 'Connect',
           handler: () => {
             this.bluetoothSerial.connect(id).subscribe(this.success, this.fail);
+            this.connectedId = id;
           }
         }
       ]
@@ -144,27 +135,13 @@ export class DashboardPage implements OnInit {
     await alert.present();
   }
 
-  backToPrivios() {
-    this.router.navigate(['/center-weight-auto-record']);
-
-  }
-
+  connectedId: any = "";
   success = (data) => {
-    alert("Successfully Connected");
-    this.bluetoothconnected = true;
-    this.bluetoothnotconnected = false;
-    localStorage.setItem("bluetoothStatus", this.bluetoothconnected)
-    this.router.navigate(['/centerweight-auto-weighter']);
+    this.bluetoothSerial.write("Printer Successfully Connected" +  this.connectedId );
+    this.bluetoothSerial.disconnect();
   }
   fail = (error) => {
     alert(error);
-    this.bluetoothnotconnected = true;
-    this.bluetoothconnected = false;
-  }
-
-
-  next() {
-    this.router.navigate(['/centerweight-auto-weighter']);
   }
 
 
@@ -192,6 +169,8 @@ export class DashboardPage implements OnInit {
     );
   }
 
+
+  user: any = "";
 
   logout() {
     localStorage.removeItem("orgid",)
