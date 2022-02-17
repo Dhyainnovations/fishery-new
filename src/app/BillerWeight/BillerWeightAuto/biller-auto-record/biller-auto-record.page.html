@@ -10,34 +10,60 @@
   </div>
   <div class="row">
 
-    <div *ngIf="onlineAlart" class="col-12 ion-text-right mt-2">
+      <div class="col-8">
+      <h6 style="color: #6863CC;margin-left: 65%;" class=" mt-4" ><b>BILLER</b></h6>
+    </div> 
+
+    <div *ngIf="onlineAlart" class="col-12 ion-text-right " style="margin-top:-25%">
       <lottie-player src="https://assets5.lottiefiles.com/packages/lf20_dsp2yB.json" background="transparent"
-        speed="1.5" style="width:25%; margin-left: 70%;" loop autoplay></lottie-player>
+        speed="1.5" style="width:20%; margin-left: 80%;" loop autoplay></lottie-player>
       <!-- <p style="background-color: #6863CC;border-radius:10px;color:#fff;width: 50px;  margin-left: 50%;">Online</p> -->
     </div>
 
-    <div *ngIf="offlineAlart" class="col-12 ion-text-right ">
+    <div *ngIf="offlineAlart" class="col-12 ion-text-right " style="margin-top:-25%">
       <!-- <p style="background-color: #6863CC;border-radius:10px;color:#fff;width: 50px;  margin-left: 50%;">Offline</p> -->
-      <img style="width:25%; margin-left: 70%; border-radius: 55%;" src="assets/offline.gif" alt="">
+      <img style="width:20%; margin-left: 80%; border-radius: 55%;" src="assets/offline.gif" alt="">
     </div>
 
   </div>
 
-  
 
-  <div class="row" style="margin-top: -45px;">
-    <div class="col-12 ion-text-center">
-      <button (click)="navigateToNextPage()" class="navigate-btn  mt-5"><b>Start Billing</b></button>
+     <div class="row ">
+    <!-----Display Date----->
+
+    <div class="date-card col-6 display-date mx-5 ">
+      <p style="margin: 7px;" > <b>{{currentDateTime | date:'dd-MM-yyyy'}}</b> </p>
     </div>
-    <div class="col-6"></div>
-    <div class=" col-6 dropdown toggle mt-3">
-      <input id="t1" type="checkbox">
-      <label for="t1">{{user}}</label>
+
+    <div style="margin-top: -12%;"  class=" col-6 dropdown toggle ">
+      <input id="t2" type="checkbox">
+      <label for="t2">{{user}}</label>
       <ul>
-        <li><a (click)="navigateToSettings()">Settings</a></li>
+       <li><a (click)="navigateToSettings()">Settings</a></li>
         <li><a (click)="logout()">Logout</a></li>
       </ul>
     </div>
+
+  </div>
+
+  <div class="row" style="margin-top: -35px;">
+    <div class="col-12 ion-text-center">
+      <button (click)="navigateToNextPage()" class="navigate-btn  mt-5"><b>Start Billing</b></button>
+    </div>
+
+
+    <div class="col-12 ion-text-center">
+      <div class="weight-display" style="font-size: 16px;margin:7%;margin-top:3%">
+        <p> Today's Total Weight  <b><br> {{totalweight}}</b> Kgs</p>
+      </div>
+    </div>
+
+     <div class="col-12 ion-text-center">
+      <div class="weight-display" style="font-size: 16px;margin:7%;margin-top:-3%">
+        <p> Today's Total Weight  <b><br> Rs.{{totalCost}}</b> /-</p>
+      </div>
+    </div>
+
 
     <div class="col-12 ion-text-center mt-3">
       <p><u>Today's Total Weight</u> <br> <b>{{totalweight | number}}KG</b></p>

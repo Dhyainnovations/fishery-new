@@ -172,6 +172,7 @@ export class SettingsPage implements OnInit {
           handler: () => {
             this.bluetoothSerial.connect(id).subscribe(this.success, this.fail);
             this.connectedId = id;
+            localStorage.setItem('printerBluetoothId', this.connectedId);
           }
         }
       ]
@@ -182,7 +183,6 @@ export class SettingsPage implements OnInit {
   connectedId: any = "";
   success = (data) => {
     this.bluetoothSerial.write("Printer Successfully Connected" + this.connectedId);
-    localStorage.setItem('printerBluetoothId', this.connectedId);
     this.bluetoothSerial.disconnect();
   }
   fail = (error) => {
