@@ -131,7 +131,7 @@ export class BillPage implements OnInit {
       billitems: this.passBillItems,
       totalamount: this.totalsum,
       counter: this.counter,
-      userid: this.userid,
+      userid: this.name,
       isDeleted: "0",
       purchaseddate: this.purchaseddate,
     }

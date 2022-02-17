@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-  <string name="app_name">24Hrs_Seller</string>
-  <string name="title_activity_main">24Hrs_Seller</string>
-  <string name="package_name">com.hrsseller.app</string>
-  <string name="custom_url_scheme">com.hrsseller.app</string>
+  <string name="app_name">Fishery</string>
+  <string name="title_activity_main">Fishery</string>
+  <string name="package_name">Fishery</string>
+  <string name="custom_url_scheme">Fishery</string>
   <string name="ionic_app_id">d1979c9d</string>
-  <string name="ionic_channel_name">hrseller</string>
+  <string name="ionic_channel_name">Fishery</string>
   <string name="ionic_update_method">background</string>
   <string name="ionic_max_versions">2</string>
   <string name="ionic_min_background_duration">30</string>

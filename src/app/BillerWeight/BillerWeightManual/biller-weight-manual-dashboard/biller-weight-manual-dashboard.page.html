@@ -1,7 +1,7 @@
 <ion-content class="background">
 
 
-  <div style="margin-top: 0px;" class="row">
+  <div style="margin-top: 0px;" class="row mt-3">
     <div class="col-6 mt-4 ">
       <ion-icon style="margin-left:20px;width: 45px; height:25px;color:#fff" (click)="backToPrivios()"
         name="arrow-back">
@@ -10,13 +10,13 @@
 
     <div *ngIf="onlineAlart" class="col-6 ion-text-right mt-2">
       <lottie-player src="https://assets5.lottiefiles.com/packages/lf20_dsp2yB.json" background="transparent"
-        speed="1.5" style="width:50%; margin-left: 50%;" loop autoplay></lottie-player>
+        speed="1.5" style="width:35%; margin-left: 50%;" loop autoplay></lottie-player>
       <!-- <p style="background-color: #6863CC;border-radius:10px;color:#fff;width: 50px;  margin-left: 50%;">Online</p> -->
     </div>
 
     <div *ngIf="offlineAlart" class="col-6 ion-text-right ">
       <!-- <p style="background-color: #6863CC;border-radius:10px;color:#fff;width: 50px;  margin-left: 50%;">Offline</p> -->
-      <img style="width:50%; margin-left: 50%; border-radius: 55%;" src="assets/offline.gif" alt="">
+      <img style="width:35%; margin-left: 50%; border-radius: 55%;" src="assets/offline.gif" alt="">
     </div>
 
   </div>
@@ -26,27 +26,23 @@
       <b style="font-size: 25px;">BILLER</b>
     </div>
 
+       <div class="row ">
     <!-----Display Date----->
-    <div class="col-6 display-date mx-4 mt-5">
-      <b style="font-size: 13px;">Date: </b>
-      <p> <b>{{currentDateTime | date:'dd-MM-yyyy'}}</b> </p>
+
+    <div class="date-card col-6 display-date mx-5 ">
+      <p style="margin: 7px;" > <b>{{currentDateTime | date:'dd-MM-yyyy'}}</b> </p>
     </div>
 
-    <!----- login dropdown----->
-    <div style="margin-top: -15%;" class=" col-6 dropdown toggle">
-      <input id="t2" type="checkbox">
-      <label for="t2">{{user}}</label>
+    <div style="margin-top: -12%;"  class=" col-6 dropdown toggle ">
+      <input id="t1" type="checkbox">
+      <label for="t1">{{user}}</label>
       <ul>
-    
-        <li><a (click)="navigateToSettings()">Settings</a></li>
+       <li><a (click)="navigateToSettings()">Settings</a></li>
         <li><a (click)="logout()">Logout</a></li>
-
       </ul>
-
- 
-
-
     </div>
+
+  </div>
 
   </div>
 
@@ -67,24 +63,22 @@
     <div class="row">
 
 
-      <div class="col-6 display-date">
+      <div class="col-12 display-date">
 
         <form (change)="SelectCounter(Selectcounter.value)" #Selectcounter="ngForm">
 
           <div class="row">
-            <div class="col-12">
               <p class="select-category"><b><u>Select Counter: </u></b></p>
 
               <!-----  select counter----->
 
               <select class="selectDropdown" [(ngModel)]="counter" placeholder="counter" name="counter"
-                style="width: 100%;font-size: 13px;padding: 2px;">
+                style="width: 70%;font-size: 13px;padding: 2px;margin: auto;">
                 <option value="" disabled selected hidden>Price</option>
                 <option [value]="1">1</option>
                 <option [value]="2">2</option>
                 <option value="3">3</option>
               </select>
-            </div>
           </div>
 
 
@@ -108,7 +102,7 @@
 
 
       <!-----Fish quality----->
-      <div class="col-6 mt-2">
+      <div class="col-6 ">
         <form (change)="SelectType(Selecttype.value)" #Selecttype="ngForm">
           <p class="select-category" style="font-size: 13px;"><b><u>Select Quality: </u></b></p>
           <select class="selectDropdown" [(ngModel)]="type" placeholder="type" name="type" style="width: 100%;">
@@ -118,7 +112,7 @@
         </form>
       </div>
 
-      <div style="margin-top: 13%;" class=" col-6">
+      <div  class=" col-12 mt-2">
         <button (click)="addItem()" class="submit-button px-4 py-2 " color="transparent"
           style="font-size: 13px;color: white;width: 100%;" [disabled]="!weight || !counter || !category || !type ">
           ADD ITEM
@@ -168,46 +162,6 @@
       </div>
     </div>
   </div>
-
-
-
-
-
-
-
-  <!-- <div style="font-size: 12px;">
-    <div class="row">
-      <div class="col-12">
-        <div class="card mt-3" *ngFor="let record of SetBillerAddItem">
-          <div class="row">
-            <div class="col-5">
-              <b style="color: #6863CC;"> Date </b> : {{record.purchaseddate | date: 'dd/MM/yyyy'}}<br>
-              <b style="color: #6863CC;"> Time:</b>{{record.purchaseddate | date: 'h:mm a'}}<br>
-              <b style="color: #6863CC;">Type</b> : {{record.quality}} <br>
-            </div>
-
-            <div class="col-5">
-              <b style="color: #6863CC;">Weight </b> : {{record.weight}}Kg <br>
-              <b style="color: #6863CC;">Price </b> : Rs.{{record.cost}} <br>
-              <b style="color: #6863CC;">Category</b> : {{record.category}}<br>
-
-            </div>
-            <div class="col-2">
-              <div class="dot mt-3">
-                <svg (click)="delete(record.id)" [value]="record.id" style="margin: 10px;"
-                  xmlns="http://www.w3.org/2000/svg" width="16" height="18" fill="#fff" class="bi bi-trash3"
-                  viewBox="0 0 16 16">
-                  <path fill-rule="evenodd"
-                    d="M6.5 1a.5.5 0 0 0-.5.5v1h4v-1a.5.5 0 0 0-.5-.5h-3ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1H3.042l.846 10.58a1 1 0 0 0 .997.92h6.23a1 1 0 0 0 .997-.92l.846-10.58Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z" />
-                </svg>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </div> -->
 
 
 </ion-content>

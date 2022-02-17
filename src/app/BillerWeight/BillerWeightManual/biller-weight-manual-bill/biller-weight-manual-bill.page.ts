@@ -32,6 +32,7 @@ export class BillerWeightManualBillPage implements OnInit {
   ngOnInit() {
     this.name = localStorage.getItem("Fishery-username",)
     this.location = localStorage.getItem("orgid",)
+    
   }
   currentDate = new Date();
 
@@ -144,7 +145,7 @@ export class BillerWeightManualBillPage implements OnInit {
       billitems: this.passBillItems,
       totalamount: this.totalsum,
       counter: this.counter,
-      userid: this.userid,
+      userid: this.name,
       isDeleted: "0",
       purchaseddate: this.updateTime,
     }

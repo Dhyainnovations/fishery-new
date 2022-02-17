@@ -5,6 +5,8 @@ import { Router } from '@angular/router'
 import Swal from 'sweetalert2';
 import { NavController } from '@ionic/angular';
 import { Network } from '@awesome-cordova-plugins/network/ngx';
+import { DatePipe } from '@angular/common';
+
 
 @Component({
   selector: 'app-biller-weight-manual-record',
@@ -13,7 +15,7 @@ import { Network } from '@awesome-cordova-plugins/network/ngx';
 })
 export class BillerWeightManualRecordPage implements OnInit {
 
-  constructor(private network: Network, public navCtrl: NavController, private router: Router, private activatedRoute: ActivatedRoute, private http: HttpService, route: ActivatedRoute) {
+  constructor(private network: Network, public datepipe: DatePipe, public navCtrl: NavController, private router: Router, private activatedRoute: ActivatedRoute, private http: HttpService, route: ActivatedRoute) {
     route.params.subscribe(val => {
       this.totalWeight()
       this.totalAmount()
@@ -34,7 +36,7 @@ export class BillerWeightManualRecordPage implements OnInit {
         this.checkonline = true;
 
       });
-
+      this.currentDateTime = this.datepipe.transform((new Date), 'yyyy-MM-dd hh:mm:ss');
       this.todayBillList()
     });
   }
@@ -43,6 +45,7 @@ export class BillerWeightManualRecordPage implements OnInit {
 
   }
   user: any;
+  currentDateTime:any;
   checkoffline: any;
   checkonline: any;
   buttonDisabled: boolean;

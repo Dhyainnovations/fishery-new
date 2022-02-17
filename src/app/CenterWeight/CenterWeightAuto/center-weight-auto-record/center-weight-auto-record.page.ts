@@ -204,6 +204,8 @@ export class CenterWeightAutoRecordPage implements OnInit {
 
         this.records()
         this.totalWeight()
+        this.marketTableRecords()
+        this.merchantTableRecords()
 
       } else {
         const Toast = Swal.mixin({

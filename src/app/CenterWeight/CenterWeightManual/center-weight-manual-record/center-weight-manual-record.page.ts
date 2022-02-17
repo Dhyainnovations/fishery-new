@@ -1,4 +1,4 @@
-import { Component, OnInit,OnDestroy, AfterViewInit} from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpService } from '../weighter/./../../../shared/http.service';
 import { Router } from '@angular/router'
@@ -15,7 +15,7 @@ import { MenuController, Platform, ToastController } from '@ionic/angular';
 })
 export class CenterWeightManualRecordPage implements OnInit {
 
-  constructor(private platform: Platform,private network: Network, public datepipe: DatePipe, public navCtrl: NavController, private router: Router, private activatedRoute: ActivatedRoute, private http: HttpService, route: ActivatedRoute) {
+  constructor(private platform: Platform, private network: Network, public datepipe: DatePipe, public navCtrl: NavController, private router: Router, private activatedRoute: ActivatedRoute, private http: HttpService, route: ActivatedRoute) {
     route.params.subscribe(val => {
       this.currentDateTime = this.datepipe.transform((new Date), 'yyyy-MM-dd hh:mm:ss');
       this.totalWeight()
@@ -40,16 +40,16 @@ export class CenterWeightManualRecordPage implements OnInit {
 
       this.myDate = new Date();
 
-    this.myDate = this.datepipe.transform(this.myDate, 'yyyy-MM-dd');
-    this.fromdate = this.myDate;
-    this.todate = this.myDate
-    
+      this.myDate = this.datepipe.transform(this.myDate, 'yyyy-MM-dd');
+      this.fromdate = this.myDate;
+      this.todate = this.myDate
+
     });
 
-    
+
   }
 
-  myDate:any
+  myDate: any
 
   fromdate: any;
   todate: any;
@@ -67,7 +67,7 @@ export class CenterWeightManualRecordPage implements OnInit {
     this.locationBasedWeightRecords()
   }
 
-  user:any
+  user: any
   currentDateTime: any
   totalweight: any = '';
   tableRecodrs: any = []
@@ -81,7 +81,7 @@ export class CenterWeightManualRecordPage implements OnInit {
     this.router.navigate(['/settings'])
   }
 
-  
+
   fromDate(val) {
     console.log(val);
     this.fromdate = val
@@ -94,7 +94,7 @@ export class CenterWeightManualRecordPage implements OnInit {
   }
 
   dateBasedRecord() {
-    this.router.navigate(['/weighter-report'],{ queryParams: { fromdate: this.fromdate, todate: this.todate } })
+    this.router.navigate(['/weighter-report'], { queryParams: { fromdate: this.fromdate, todate: this.todate } })
     localStorage.setItem("fromDate", this.fromdate)
     localStorage.setItem("toDate", this.todate)
 
@@ -157,7 +157,7 @@ export class CenterWeightManualRecordPage implements OnInit {
     );
   }
 
-  marketTableRec:any = []
+  marketTableRec: any = []
   marketTableRecords() {
     this.http.get('/list_table_market',).subscribe((response: any) => {
       this.marketTableRec = response.records;
@@ -180,7 +180,7 @@ export class CenterWeightManualRecordPage implements OnInit {
     );
   }
 
-  merchantTableRec:any = []
+  merchantTableRec: any = []
   merchantTableRecords() {
     this.http.get('/list_table_merchant',).subscribe((response: any) => {
       this.merchantTableRec = response.records;
@@ -242,6 +242,8 @@ export class CenterWeightManualRecordPage implements OnInit {
 
         this.records()
         this.totalWeight()
+        this.marketTableRecords()
+        this.merchantTableRecords()
 
       } else {
         const Toast = Swal.mixin({
