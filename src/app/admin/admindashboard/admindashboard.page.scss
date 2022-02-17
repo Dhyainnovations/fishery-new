@@ -89,3 +89,11 @@ section {
     .dropdown.hover:hover li:first-child, .dropdown.toggle > input:checked ~ ul li:first-child {
     padding-top: 15px;
     }
+
+    .date-card{
+        background-color: #655fcb !important;
+        color:#fff;
+        height:39px;
+        width: 35%;
+        font-size: 13px;
+    }

@@ -99,7 +99,7 @@ export class WeighterPage implements OnInit {
 
   center(val) {
     console.log(val);
-
+    alert(val)
     this.activeItem = "center"
   }
 

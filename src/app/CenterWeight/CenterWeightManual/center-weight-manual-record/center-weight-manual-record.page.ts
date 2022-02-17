@@ -155,6 +155,28 @@ export class CenterWeightManualRecordPage implements OnInit {
     );
   }
 
+  marketTableRecords() {
+    this.http.get('/list_manual_weight',).subscribe((response: any) => {
+      this.cardRecords = response.records;
+      if (this.cardRecords == "No manual weight found.") {
+        this.cardRecords = [];
+        this.isVisible = true
+        this.lastEntryisVisible = false
+      } else {
+
+        this.isVisible = false
+        this.lastEntryisVisible = true
+      }
+    }, (error: any) => {
+      console.log(error);
+      this.cardRecords = [];
+      this.isVisible = true
+      this.lastEntryisVisible = false
+
+    }
+    );
+  }
+
 
   navigateToNextPage() {
     this.router.navigate(['/centerweight-manual-weighter'])

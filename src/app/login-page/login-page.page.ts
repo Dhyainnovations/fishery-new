@@ -221,7 +221,7 @@ export class LoginPagePage implements OnInit {
     //-------admin login check----------//
 
     if (this.Locallogintype == "ROLE_ADMIN") {
-      this.router.navigate(['/admin-dashboard'])
+      this.router.navigate(['/admindashboard'])
     }
 
 

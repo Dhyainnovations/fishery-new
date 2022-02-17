@@ -98,7 +98,7 @@ export class BillerReportPage implements OnInit {
 
     if (this.locLoginType == "ROLE_ADMIN"){
       
-      this.router.navigate(['/admin-dashboard'])
+      this.router.navigate(['/admindashboard'])
     }
 
     if (this.locLoginType == "ROLE_WSHO"){

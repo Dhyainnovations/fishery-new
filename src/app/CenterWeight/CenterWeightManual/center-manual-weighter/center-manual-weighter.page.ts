@@ -33,12 +33,15 @@ export class CenterManualWeighterPage implements OnInit {
         this.offlineApiCall();
 
       });
+
+      this.activeItem = ""
+      this.type = "center";
+  
+      this.myDate = new Date();
+      this.myDate = this.datepipe.transform(this.myDate, 'yyyy-MM-dd');
     });
 
-    this.activeItem = "center"
-
-    this.myDate = new Date();
-    this.myDate = this.datepipe.transform(this.myDate, 'yyyy-MM-dd');
+    
 
   }
 
@@ -81,6 +84,7 @@ export class CenterManualWeighterPage implements OnInit {
   place: any;
   location: any;
   weight: any;
+  fishQuality: any;
   mdy: any;
   categorylist: any = []
   locationlist: any = []
@@ -100,6 +104,8 @@ export class CenterManualWeighterPage implements OnInit {
 
   center(val) {
     this.activeItem = "center"
+    this.type = val;
+    console.log(this.type);
 
     this.http.get('/list_center_place',).subscribe((response: any) => {
       this.locationlist = response.records;
@@ -115,6 +121,9 @@ export class CenterManualWeighterPage implements OnInit {
   }
 
   localsale(val) {
+
+    this.type = val;
+    console.log(this.type);
     this.activeItem = "localsale"
     console.log(val);
     this.http.get('/list_localsale_place',).subscribe((response: any) => {
@@ -128,13 +137,13 @@ export class CenterManualWeighterPage implements OnInit {
 
   }
 
-  navigateToSettings() {
-    this.router.navigate(['/settings'])
-  }
+  
 
-
+  cardType: any;
   mergesdLocationList: any = []
   market(val) {
+    this.type = val;
+    console.log(this.type);
     this.activeItem = "market"
     console.log(val);
     this.http.get('/list_market',).subscribe((response: any) => {
@@ -148,7 +157,9 @@ export class CenterManualWeighterPage implements OnInit {
 
   }
   merchant(val) {
+    this.type = val;
     this.activeItem = "merchant"
+    console.log(this.type);
     console.log(val);
     this.http.get('/list_merchant',).subscribe((response: any) => {
       this.locationlist = response.records;
@@ -238,8 +249,8 @@ export class CenterManualWeighterPage implements OnInit {
     console.log(this.updateTime);
 
     const data = {
-      quality: this.type,
-      type: "center",
+      quality: this.fishQuality,
+      type: this.type,
       category: this.category,
       place: this.place,
       location: this.location,
@@ -250,8 +261,6 @@ export class CenterManualWeighterPage implements OnInit {
     }
 
     console.log(data);
-
-
 
 
     //----------If Offline----------//
@@ -309,17 +318,17 @@ export class CenterManualWeighterPage implements OnInit {
     const formdata = new FormData();
     formdata.append("place", data.place);
     let recivedVal = data.place;
-    var splitted = recivedVal.split(" - ",2 );
+    var splitted = recivedVal.split(" - ", 2);
     this.place = splitted[0];
-    
-    if( splitted[1] == undefined){
+
+    if (splitted[1] == undefined) {
       this.location = '';
-    }else{
+    } else {
       this.location = splitted[1];
     }
     console.log(this.place);
     console.log(this.location);
-    
+
   }
 
   StoreTypeBasedOnCategory = [];

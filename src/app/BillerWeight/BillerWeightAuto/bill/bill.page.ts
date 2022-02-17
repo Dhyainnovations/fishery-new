@@ -5,6 +5,8 @@ import { Router } from '@angular/router'
 import Swal from 'sweetalert2';
 import { AlertController } from '@ionic/angular';
 import { BluetoothSerial } from '@awesome-cordova-plugins/bluetooth-serial/ngx';
+import { commands } from '../../../providers/printcommand/printcommand';
+import { vsprintf } from 'sprintf-js'
 //import { Printer, PrintOptions } from '@awesome-cordova-plugins/printer/ngx';
 @Component({
   selector: 'app-bill',
@@ -16,7 +18,7 @@ export class BillPage implements OnInit {
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private http: HttpService, route: ActivatedRoute, private alertController: AlertController, private bluetoothSerial: BluetoothSerial,) {
     route.params.subscribe(val => {
       this.GetBillDataFromLocalStorage();
-
+      this.printerBluetoothId = localStorage.getItem("printerBluetoothId",);
     });
 
   }
@@ -26,7 +28,7 @@ export class BillPage implements OnInit {
     this.location = localStorage.getItem("orgid",)
   }
   currentDate = new Date();
-
+  printerBluetoothId: any;
   name: any;
   location: any;
   price: any = [];
@@ -36,16 +38,94 @@ export class BillPage implements OnInit {
   }
 
 
-
+  jsonData = [];
   purchaseddate: any;
   counter: any;
   userid: any;
   passBillItems: any = []
-  printBill() {
-    this.bluetoothSerial.write("Printer Successfully Connected" );
 
-    var print = document.getElementById('printData').innerHTML;
-    this.bluetoothSerial.write(print);
+  printText(receipt) {
+    this.bluetoothSerial.write(receipt);
+  }
+
+  printBill() {
+    this.bluetoothSerial.connect(this.printerBluetoothId).subscribe(this.onSuccess, this.onError);
+    //Data to be printed presented in jsonData format.....\
+    const items = item => ({
+      quality: item.quality,
+      weight: item.weight,
+      price: item.price,
+      total: item.totalcost,
+    })
+    let product = this.jsonData.map(items)
+
+    //Calculate the total price of the items in an object
+    let totalPrice = this.totalsum
+
+    let company = "Sakthi & Co"
+    let counter = this.billWeightData.counter
+    //let amoutntReceived = 400
+    //let change = amoutntReceived - totalPrice
+
+    let receipt = ""
+    receipt += commands.TEXT_FORMAT.TXT_WIDTH[1]
+    receipt += "\x1b\x45\x01 \x00" + company + "\x1b\x45\x00"
+    receipt += '\n'
+    receipt += commands.TEXT_FORMAT.TXT_NORMAL
+    receipt += commands.HORIZONTAL_LINE.HR_58MM
+    receipt += '\n'
+    receipt += commands.TEXT_FORMAT.TXT_NORMAL
+    receipt += '\x1B' + '\x61' + '\x30'// left align
+    receipt += vsprintf("%-17s %3s %10s\n", ["Counter", "", counter])
+    receipt += commands.TEXT_FORMAT.TXT_ALIGN_RT
+    receipt += commands.TEXT_FORMAT.TXT_FONT_A
+    receipt += commands.HORIZONTAL_LINE.HR2_58MM
+    receipt += '\n'
+    receipt += commands.TEXT_FORMAT.TXT_ALIGN_LT
+    receipt += vsprintf("%-17s %3s %10s \n", ["Item", "", "Quantity", "", "Per/kg", "", "Total"])
+    for (var pro in product) {
+      if (product.hasOwnProperty(pro)) {
+        var item = product[pro]
+        var itemquality = item.quality
+        var itemweight = item.weight
+        var itemprice = item.price
+        var itemtotal = item.total
+
+        receipt += vsprintf("%-17s %3s %10.2f\n", [this.formatTextWrap(itemquality, 16), "", itemweight, "", itemprice, "", itemtotal])
+        receipt += '\n'
+      }
+    }
+    receipt += commands.TEXT_FORMAT.TXT_ALIGN_LT
+    receipt += commands.TEXT_FORMAT.TXT_FONT_A
+    receipt += commands.HORIZONTAL_LINE.HR2_58MM
+    receipt += vsprintf("%-17s %3s %10.2f\n", ["Total", "", totalPrice])
+
+    // receipt += commands.TEXT_FORMAT.TXT_ALIGN_RT
+    // receipt += '\n'
+    // receipt += commands.TEXT_FORMAT.TXT_ALIGN_LT
+    // receipt += vsprintf("%-17s %3s %10.2f\r\n", ["Amount Received", "", amoutntReceived])
+    // receipt += commands.TEXT_FORMAT.TXT_ALIGN_RT
+    // receipt += '\n'
+    // receipt += commands.TEXT_FORMAT.TXT_ALIGN_LT
+    // receipt += vsprintf("%-17s %3s %10.2f\n", ["Change", "", change])
+
+
+
+    receipt += commands.TEXT_FORMAT.TXT_ALIGN_RT
+
+    receipt += '\n'
+    receipt += commands.TEXT_FORMAT.TXT_FONT_A
+    receipt += commands.HORIZONTAL_LINE.HR2_58MM
+    receipt += '\n'
+    receipt += commands.TEXT_FORMAT.TXT_FONT_B
+    receipt += '\x1b\x61\x01' + 'Thank you, visit again!' + '\x0a\x0a\x0a\x0a' //The unicode symbols are for centering the text
+    receipt += '\n'
+    this.printText(receipt)
+
+
+
+    console.log(this.jsonData);
+
     this.billWeight();
     const data = {
       billitems: this.passBillItems,
@@ -61,9 +141,9 @@ export class BillPage implements OnInit {
       if (response.success == "true") {
         var id = "00:12:12:12:33:33";
         this.bluetoothSerial.connect(id).subscribe(this.onSuccess, this.onError);
-       
+
       }
-      
+
       this.bluetoothSerial.connect(id).subscribe(this.onSuccess, this.onError);
     }, (error: any) => {
       console.log(error);
@@ -74,10 +154,10 @@ export class BillPage implements OnInit {
   }
 
 
-  
+
   onSuccess() {
     alert("Successfully Printed");
-    this.bluetoothSerial.write("Printer Successfully Connected" );
+    this.bluetoothSerial.write("Printer Successfully Connected");
 
     var print = document.getElementById('printData').innerHTML;
     this.bluetoothSerial.write(print);
@@ -125,6 +205,17 @@ export class BillPage implements OnInit {
         weight: localweight,
       }
 
+
+
+      const printData = [{
+        quality: localquality,
+        weight: localweight,
+        price: localprice,
+        totalcost: localprice * localweight,
+      }]
+
+
+
       this.billWeightData = {
         id: localid,
         price: localprice,
@@ -149,11 +240,14 @@ export class BillPage implements OnInit {
       this.userid = SendData.id;
       this.purchaseddate = SendData.purchaseddate;
       this.counter = SendData.counter;
+      this.jsonData.push(printData);
       this.passBillItems.push(SendPushData);
       this.GetBillDataFromLocalStorageData.push(SendData);
       console.log(this.GetBillDataFromLocalStorageData);
     }
   }
+
+
 
 
   billWeightData: any = {}
@@ -189,5 +283,25 @@ export class BillPage implements OnInit {
     });
     await alert.present();
   }
+
+
+
+    //PrintFunction
+    formatTextWrap(text, maxLineLength) {
+      const words = text.replace(/[\r\n]+/g, ' ').split(' ');
+      let lineLength = 0;
+  
+      // use functional reduce, instead of for loop 
+      return words.reduce((result, word) => {
+        if (lineLength + word.length >= maxLineLength) {
+          lineLength = word.length;
+          return result + `\n${word}`; // don't add spaces upfront
+        } else {
+          lineLength += word.length + (result ? 1 : 0);
+          return result ? result + ` ${word}` : `${word}`; // add space only when needed
+        }
+      }, '');
+    }
+
 
 }

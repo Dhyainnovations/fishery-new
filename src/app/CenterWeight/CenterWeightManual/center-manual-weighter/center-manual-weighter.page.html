@@ -9,43 +9,41 @@
 
   <!-------- online offline alert----------->
   <div class="row">
-    <div class="col-6 mt-4 ">
+    <div class="col-3 mt-4 ">
       <ion-icon style="margin-left:20px;width: 45px; height:25px;color:#fff" (click)="backToPrivios()"
         name="arrow-back">
       </ion-icon>
     </div>
 
-    <div *ngIf="onlineAlart" class="col-6 ion-text-right mt-2">
+    <div class="col-6 ion-text-center">
+      <h6 style="color: #6863CC;" class="mx-4 mt-4" ><b>WEIGHTER</b></h6>
+    </div>
+
+    <div *ngIf="onlineAlart" class="col-3 ion-text-right mt-2">
       <lottie-player src="https://assets5.lottiefiles.com/packages/lf20_dsp2yB.json" background="transparent"
-        speed="1.5" style="width:50%; margin-left: 50%;" loop autoplay></lottie-player>
+        speed="1.5" style="width:100%; margin-left: 10%;" loop autoplay></lottie-player>
       <!-- <p style="background-color: #6863CC;border-radius:10px;color:#fff;width: 50px;  margin-left: 50%;">Online</p> -->
     </div>
 
     <div *ngIf="offlineAlart" class="col-6 ion-text-right ">
       <!-- <p style="background-color: #6863CC;border-radius:10px;color:#fff;width: 50px;  margin-left: 50%;">Offline</p> -->
-      <img style="width:50%; margin-left: 50%; border-radius: 55%;" src="assets/offline.gif" alt="">
+      <img style="width:45%; margin-left: 50%; border-radius: 55%;" src="assets/offline.gif" alt="">
     </div>
 
   </div>
 
-  <!-----Title----->
   <div class="row ">
-    <div style="margin-top:-45px" class="col-12 ion-text-center">
-      <b style="font-size: 25px;">WEIGHTER</b>
-    </div>
-
     <!-----Display Date----->
-    <div class="col-6 display-date mx-4 mt-4">
-      <b style="font-size: 13px;">Date: </b>
-      <p> <b>{{currentDateTime | date:'dd-MM-yyyy'}}</b> </p>
+
+    <div class="date-card col-6 display-date mx-5 ">
+      <p style="margin: 7px;" > <b>{{currentDateTime | date:'dd-MM-yyyy'}}</b> </p>
     </div>
 
-    <!----- login dropdown----->
-    <div style="margin-top: -15%;" class=" col-6 dropdown toggle">
+    <div style="margin-top: -12%;"  class=" col-6 dropdown toggle ">
       <input id="t2" type="checkbox">
       <label for="t2">{{user}}</label>
       <ul>
-        <li><a (click)="navigateToSettings()">Settings</a></li>
+        <!-- <li><a (click)="setting()">Settings</a></li> -->
         <li><a (click)="logout()">Logout</a></li>
       </ul>
     </div>
@@ -82,7 +80,7 @@
       <div class="col-6">
         <form (change)="SelectType(Selecttype.value)" #Selecttype="ngForm">
           <p class="select-category" style="font-size: 13px;"><b><u>Select Quality: </u></b></p>
-          <select class="selectDropdown" [(ngModel)]="type" placeholder="type" name="type" style="width: 96%;">
+          <select class="selectDropdown" [(ngModel)]="fishQuality" placeholder="fishQuality" name="fishQuality" style="width: 96%;">
             <option value="" disabled selected>Fish Type</option>
             <option *ngFor="let type of StoreTypeData" [value]="type">{{type}}</option>
           </select>
@@ -142,19 +140,20 @@
 
   <div style="font-size: 12px;">
     <div class="row mb-4">
-      <div class="col-12">
-        <div class="card mt-3" *ngFor="let record of tableRecodrs">
-          <div class="row">
+      <div id="cardActive" class="col-12">
+        <div    [class]="record.type == 'center' ? 'active cardColor': 'cardColor' " class="card mt-3" *ngFor="let record of tableRecodrs">
+          <div  class="row">
             <div class="col-5">
-              <b style="color: #6863CC;">Date:{{record.updatedAt | date:'dd-MM-yyyy'}}</b><br>
-              <b style="color: #6863CC;">Category</b> : {{record.category}}<br>
-              <b style="color: #6863CC;">Weight </b> : {{record.quantity}}Kg <br>
+              <b style="color: #6863CC;" >Date:</b><span id="data">{{record.updatedAt | date:'dd-MM-yyyy'}}</span><br>
+              <b  style="color: #6863CC;" >Category</b><span id="data"> : {{record.category}}</span><br>
+              <b  style="color: #6863CC;" >Weight </b> <span id="data">: {{record.quantity}}Kg</span> <br>
             </div>
 
             <div class="col-5">
-              <b style="color: #6863CC;">Time</b> : {{record.time}}<br>
-              <b style="color: #6863CC;">Type</b> : {{record.quality}} <br>
-              <b style="color: #6863CC;">Location</b> : {{record.place}}<br>
+              <b  style="color: #6863CC;">Time</b> <span id="data">: {{record.time}}</span><br>
+              <b  style="color: #6863CC;">Quality</b> <span id="data">: {{record.quality}} </span><br>
+              <!-- <b  style="color: #6863CC;">Type</b> <span id="data">: {{record.type}}</span> <br> -->
+              <b  style="color: #6863CC;" >Location</b> : <span id="data">{{record.place}}</span><br>
 
 
             </div>

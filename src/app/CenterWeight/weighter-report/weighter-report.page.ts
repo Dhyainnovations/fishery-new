@@ -30,10 +30,12 @@ export class WeighterReportPage implements OnInit {
         this.checkonline = true;
 
       });
+
+      this.LoadReadData()
+      this.tableRecodrs = []
     });
 
-    this.LoadReadData()
-    this.tableRecodrs = []
+  
 
   }
 
@@ -55,7 +57,7 @@ export class WeighterReportPage implements OnInit {
   onlineAlart: any = true;
   offlineAlart: any = false
   tableRecodrs: any = []
-  totalQuantity;
+  totalQuantity:any;
 
   dosomething(event) {
     setTimeout(() => {
@@ -68,7 +70,7 @@ export class WeighterReportPage implements OnInit {
   backToPrivios() {
     //------------logintype checking -------------//
     if (this.locLoginType == "ROLE_ADMIN") {
-      this.router.navigate(['/admin-dashboard'])
+      this.router.navigate(['/admindashboard'])
     }
 
     if (this.locLoginType == "ROLE_WSHO") {
@@ -102,7 +104,7 @@ export class WeighterReportPage implements OnInit {
       to_date: this.locToDate
     }
 
-    this.http.post('/list_date_manual_weight', data).subscribe((response: any) => {
+    this.http.post('/list_center_date_manual_weight', data).subscribe((response: any) => {
       console.log(response);
       this.totalQuantity = response.total_quantity
       this.tableRecodrs = response.records;
