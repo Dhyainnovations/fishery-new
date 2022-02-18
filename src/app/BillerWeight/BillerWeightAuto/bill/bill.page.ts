@@ -102,7 +102,7 @@ export class BillPage implements OnInit {
         var itemperkg = item.price
         var itemtotal = item.totalcost
         receipt += vsprintf("%-17s %3s %10.2f\n", [this.formatTextWrap(itemquality, 16), "", itemtotal])
-        receipt += '\x1b\x61\x00' + "-" + " " + itemweight + " Kg"
+        receipt += '\x1b\x61\x00' + "-" + " " + itemweight + " Kgs"
         receipt += '\n'
         receipt += '\x1b\x61\x00' + "-" + " " + "Rs." + itemperkg + " /kg"
         receipt += '\n'
@@ -114,8 +114,6 @@ export class BillPage implements OnInit {
     // receipt += commands.TEXT_FORMAT.TXT_FONT_A
     // receipt += commands.HORIZONTAL_LINE.HR2_58MM
     // receipt += vsprintf("%-17s %3s %10.2f\n", ["Total Price", "", totalPrice])
-    receipt += '\n'
-    receipt += commands.HORIZONTAL_LINE.HR2_58MM
     receipt += '\n'
     receipt += commands.TEXT_FORMAT.TXT_NORMAL
     receipt += '\x1B' + '\x61' + '\x30'// left align
@@ -162,7 +160,7 @@ export class BillPage implements OnInit {
     }
     );
     localStorage.removeItem("SetBillerAddItem");
-    this.router.navigate(['/biller-auto-record'])
+    this.router.navigate(['/BillerManualdashboard'])
   }
 
 
@@ -177,7 +175,6 @@ export class BillPage implements OnInit {
   jsonData = [];
 
   onSuccess() {
-   
     const items = item => ({
       quality: item.quality,
       weight: item.weight,
@@ -225,7 +222,7 @@ export class BillPage implements OnInit {
         var itemperkg = item.price
         var itemtotal = item.totalcost
         receipt += vsprintf("%-17s %3s %10.2f\n", [this.formatTextWrap(itemquality, 16), "", itemtotal])
-        receipt += '\x1b\x61\x00' + "-" + " " + itemweight + " Kg"
+        receipt += '\x1b\x61\x00' + "-" + " " + itemweight + " Kgs"
         receipt += '\n'
         receipt += '\x1b\x61\x00' + "-" + " " + "Rs." + itemperkg + " /kg"
         receipt += '\n'
@@ -237,8 +234,6 @@ export class BillPage implements OnInit {
     // receipt += commands.TEXT_FORMAT.TXT_FONT_A
     // receipt += commands.HORIZONTAL_LINE.HR2_58MM
     // receipt += vsprintf("%-17s %3s %10.2f\n", ["Total Price", "", totalPrice])
-    receipt += '\n'
-    receipt += commands.HORIZONTAL_LINE.HR2_58MM
     receipt += '\n'
     receipt += commands.TEXT_FORMAT.TXT_NORMAL
     receipt += '\x1B' + '\x61' + '\x30'// left align

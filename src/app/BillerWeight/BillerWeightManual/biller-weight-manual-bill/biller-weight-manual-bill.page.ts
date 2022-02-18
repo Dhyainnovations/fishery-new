@@ -43,7 +43,7 @@ export class BillerWeightManualBillPage implements OnInit {
   price: any = [];
   totalsum: any = "";
   backToPrivious() {
-    this.router.navigate(['/biller-weight-manual-record'])
+    this.router.navigate(['/BillerManualdashboard'])
   }
 
 
@@ -105,7 +105,7 @@ export class BillerWeightManualBillPage implements OnInit {
         var itemperkg = item.price
         var itemtotal = item.totalcost
         receipt += vsprintf("%-17s %3s %10.2f\n", [this.formatTextWrap(itemquality, 16), "", itemtotal])
-        receipt += '\x1b\x61\x00' + "-" + " " + itemweight + " Kg"
+        receipt += '\x1b\x61\x00' + "-" + " " + itemweight + " Kgs"
         receipt += '\n'
         receipt += '\x1b\x61\x00' + "-" + " " + "Rs." + itemperkg + " /kg"
         receipt += '\n'
@@ -117,8 +117,6 @@ export class BillerWeightManualBillPage implements OnInit {
     // receipt += commands.TEXT_FORMAT.TXT_FONT_A
     // receipt += commands.HORIZONTAL_LINE.HR2_58MM
     // receipt += vsprintf("%-17s %3s %10.2f\n", ["Total Price", "", totalPrice])
-    receipt += '\n'
-    receipt += commands.HORIZONTAL_LINE.HR2_58MM
     receipt += '\n'
     receipt += commands.TEXT_FORMAT.TXT_NORMAL
     receipt += '\x1B' + '\x61' + '\x30'// left align
@@ -136,7 +134,6 @@ export class BillerWeightManualBillPage implements OnInit {
     receipt += '\x1b\x61\x01' + 'Thank you, visit again!' + '\x0a\x0a\x0a\x0a' //The unicode symbols are for centering the text
     receipt += "\x1b\x45\x01 \x00" // Full cut paper
     this.printText(receipt)
-    
     let hours = new Date().getHours();
     let minutes = new Date().getMinutes();
     let seconds = new Date().getSeconds();
@@ -166,12 +163,12 @@ export class BillerWeightManualBillPage implements OnInit {
     }
     );
     localStorage.removeItem("SetBillerAddItem");
-    this.router.navigate(['/BillerManualdashboard'])
+    this.router.navigate(['/biller-weight-manual-record'])
   }
 
 
   printText(receipt) {
-  
+   
     this.bluetoothSerial.write(receipt);
   }
 
@@ -181,9 +178,6 @@ export class BillerWeightManualBillPage implements OnInit {
   jsonData = [];
 
   onSuccess() {
-
-    //Data to be printed presented in jsonData format.....
-
     const items = item => ({
       quality: item.quality,
       weight: item.weight,
@@ -231,7 +225,7 @@ export class BillerWeightManualBillPage implements OnInit {
         var itemperkg = item.price
         var itemtotal = item.totalcost
         receipt += vsprintf("%-17s %3s %10.2f\n", [this.formatTextWrap(itemquality, 16), "", itemtotal])
-        receipt += '\x1b\x61\x00' + "-" + " " + itemweight + " Kg"
+        receipt += '\x1b\x61\x00' + "-" + " " + itemweight + " Kgs"
         receipt += '\n'
         receipt += '\x1b\x61\x00' + "-" + " " + "Rs." + itemperkg + " /kg"
         receipt += '\n'
@@ -243,8 +237,6 @@ export class BillerWeightManualBillPage implements OnInit {
     // receipt += commands.TEXT_FORMAT.TXT_FONT_A
     // receipt += commands.HORIZONTAL_LINE.HR2_58MM
     // receipt += vsprintf("%-17s %3s %10.2f\n", ["Total Price", "", totalPrice])
-    receipt += '\n'
-    receipt += commands.HORIZONTAL_LINE.HR2_58MM
     receipt += '\n'
     receipt += commands.TEXT_FORMAT.TXT_NORMAL
     receipt += '\x1B' + '\x61' + '\x30'// left align
