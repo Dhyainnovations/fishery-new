@@ -101,11 +101,11 @@
      </thead>
      <tbody *ngFor="let record of tableRecodrs   let i=index; ">
        <tr>
-         <td>{{i+1}} </td>
+         <td>{{record.type}}</td>
          <td>{{record.location}}</td>
-         <td>{{record.location_total_weight}}</td>
-         <td>{{record.location}}</td>
-         <td>{{record.location_total_weight}}</td>
+         <td>{{record.category}}</td>
+         <td>{{record.quality}}</td>
+         <td>{{record.quantity}}</td>
        </tr>
      </tbody>
    </table>
@@ -197,15 +197,16 @@
         <div class="card mt-3" *ngFor="let record of cardRecords">
           <div class="row">
             <div class="col-5">
-              <b style="color: #6863CC;"> <span>Date:{{record.updatedAt| date:'dd-MM-yyyy'}} </span><br> Time </b> :
-              {{record.time}} <br>
-              <b style="color: #6863CC;">Weight </b> : {{record.quantity}}Kg<br>
-              <b style="color: #6863CC;">Type</b> : {{record.type}}
+              <b style="color: #6863CC;" >Date:</b><span id="data">{{record.updatedAt | date:'dd-MM-yyyy'}}</span><br>
+              <b  style="color: #6863CC;" >Category</b><span id="data"> : {{record.category}}</span><br>
+              <b  style="color: #6863CC;" >Weight </b> <span id="data">: {{record.quantity}}Kg</span> <br>
             </div>
 
             <div class="col-5">
-              <b style="color: #6863CC;">Location</b> : {{record.place}}<br>
-              <b style="color: #6863CC;">Category</b> : {{record.category}}<br>
+              <b  style="color: #6863CC;">Time</b> <span id="data">: {{record.time}}</span><br>
+              <b  style="color: #6863CC;">Quality</b> <span id="data">: {{record.quality}} </span><br>
+              <b  style="color: #6863CC;" >Location</b> : <span id="data">{{record.place}}</span><br>
+
 
             </div>
             <div class="col-2 ion-text-left mt-2">

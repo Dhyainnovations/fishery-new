@@ -60,18 +60,10 @@
 
      <div class="col-12 ion-text-center">
       <div class="weight-display" style="font-size: 16px;margin:7%;margin-top:-3%">
-        <p> Today's Total Weight  <b><br> Rs.{{totalCost}}</b> /-</p>
+        <p> Today's collected amount  <b><br> Rs.{{totalCost}}</b> /-</p>
       </div>
     </div>
 
-
-    <div class="col-12 ion-text-center mt-3">
-      <p><u>Today's Total Weight</u> <br> <b>{{totalweight | number}}KG</b></p>
-    </div>
-
-    <div class="col-12 ion-text-center mt-3">
-      <p><u>Today's Total collected amount </u><br><b> Rs.{{totalCost}}</b></p>
-    </div>
 
 
 
@@ -85,19 +77,37 @@
 
       <thead style="background-color:#6863CC;" class="text-white">
         <tr>
-          <th scope="col-3">S.No</th>
+          <th scope="col-3">User Id</th>
           <th scope="col-2">Quality</th>
+          <th scope="col-2">Price/Kg</th>
           <th scope="col-2">Weight</th>
+          <th scope="col-2">Total price </th>
         </tr>
       </thead>
-      <tbody *ngFor="let record of manualBillList  let i=index; ">
+      <tbody *ngFor="let record of tableRec  let i=index; ">
         <tr>
-          <td>{{i+1}} </td>
-          <td>{{record.billitems[i].quality}}</td>
-          <td>{{record.billitems[i].weight}}</td>
+          <td>{{user}} </td>
+          <td>{{record.quality}} </td>
+          <td>{{record.pricekg}}</td>
+          <td>{{record.weight}} </td>
+          <td>{{record.totalamount}}</td>
         </tr>
+        
       </tbody>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td><span style="color: #6863CC;">Total:</span> <br> {{sumofWeight}} </td>
+        <td><span style="color: #6863CC;">Total:</span> <br> 254534153645 </td>
+      </tr>
     </table>
+    <!-- <div class="row">
+      <div class="col-2"></div>
+      <div style="font-size: 12px;" class="col-5"><span style="color: #6863CC;margin-left: 55px;">total:</span> <span style="font-size: 10px">1245</span></div>
+      <div   style="font-size: 12px;" class="col-5"><span style="color: #6863CC;margin-left: 8px;">total:</span> <span style="font-size: 10px">1245</span></div>
+     
+    </div> -->
 
     <div class="row">
       <div *ngIf="isVisible" class=" col-12 ion-text-center mt-3 ">

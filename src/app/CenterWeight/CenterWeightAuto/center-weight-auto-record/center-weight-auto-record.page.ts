@@ -22,7 +22,7 @@ export class CenterWeightAutoRecordPage implements OnInit {
       this.records()
       this.marketTableRecords()
       this.merchantTableRecords()
-
+      this.stockTableRecords()
       window.addEventListener('offline', () => {
         this.checkoffline = true;
         this.offlineAlart = true
@@ -233,6 +233,29 @@ export class CenterWeightAutoRecordPage implements OnInit {
     );
   }
 
+
+  stockTableRec: any = []
+  stockTableRecords() {
+    this.http.get('/list_table_stock',).subscribe((response: any) => {
+      this.stockTableRec = response.records;
+      if (this.stockTableRec == "No manual weight found.") {
+        this.stockTableRec = [];
+        // this.isVisible = true
+        // this.lastEntryisVisible = false
+      } else {
+
+        // this.isVisible = false
+        // this.lastEntryisVisible = true
+      }
+    }, (error: any) => {
+      console.log(error);
+      this.stockTableRec = [];
+      // this.isVisible = true
+      // this.lastEntryisVisible = false
+
+    }
+    );
+  }
 
  marketTableRec:any = []
   marketTableRecords() {

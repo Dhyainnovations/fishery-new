@@ -8,6 +8,8 @@ import { BluetoothSerial } from '@awesome-cordova-plugins/bluetooth-serial/ngx';
 import { DatePipe } from '@angular/common';
 import { commands } from '../../../providers/printcommand/printcommand'
 import { vsprintf } from 'sprintf-js'
+
+
 declare var bluetoothSerial: any
 @Component({
   selector: 'app-biller-weight-manual-bill',
@@ -32,7 +34,6 @@ export class BillerWeightManualBillPage implements OnInit {
   ngOnInit() {
     this.name = localStorage.getItem("Fishery-username",)
     this.location = localStorage.getItem("orgid",)
-    
   }
   currentDate = new Date();
 
@@ -54,15 +55,13 @@ export class BillerWeightManualBillPage implements OnInit {
   hr: any;
   updateTime: any;
   myDate: any;
-
   printBill() {
     this.bluetoothSerial.connect(this.printerBluetoothId).subscribe(this.onSuccess, this.onError);
-    //Data to be printed presented in jsonData format.....\
     const items = item => ({
       quality: item.quality,
       weight: item.weight,
       price: item.price,
-      total: item.totalcost,
+      totalcost: item.totalcost,
     })
     let product = this.jsonData.map(items)
 
@@ -71,6 +70,8 @@ export class BillerWeightManualBillPage implements OnInit {
 
     let company = "Sakthi & Co"
     let counter = this.billWeightData.counter
+    let biller = this.name
+    let time = this.purchaseddate;
     //let amoutntReceived = 400
     //let change = amoutntReceived - totalPrice
 
@@ -78,43 +79,48 @@ export class BillerWeightManualBillPage implements OnInit {
     receipt += commands.TEXT_FORMAT.TXT_WIDTH[1]
     receipt += "\x1b\x45\x01 \x00" + company + "\x1b\x45\x00"
     receipt += '\n'
+    receipt += "\x00" + time + "\x00"
+
+    receipt += '\n'
     receipt += commands.TEXT_FORMAT.TXT_NORMAL
     receipt += commands.HORIZONTAL_LINE.HR_58MM
     receipt += '\n'
     receipt += commands.TEXT_FORMAT.TXT_NORMAL
     receipt += '\x1B' + '\x61' + '\x30'// left align
     receipt += vsprintf("%-17s %3s %10s\n", ["Counter", "", counter])
+    receipt += vsprintf("%-17s %3s %10s\n", ["Biller", "", biller])
     receipt += commands.TEXT_FORMAT.TXT_ALIGN_RT
     receipt += commands.TEXT_FORMAT.TXT_FONT_A
     receipt += commands.HORIZONTAL_LINE.HR2_58MM
     receipt += '\n'
     receipt += commands.TEXT_FORMAT.TXT_ALIGN_LT
-    receipt += vsprintf("%-17s %3s %10s \n", ["Item", "", "Quantity", "", "Per/kg", "", "Total"])
+    receipt += '\x1b\x45\x01' + vsprintf("%-17s %3s %10s \n", ["Item", "", "Price"]) + "\x1b\x45\x01"
+
     for (var pro in product) {
       if (product.hasOwnProperty(pro)) {
         var item = product[pro]
         var itemquality = item.quality
         var itemweight = item.weight
-        var itemprice = item.price
-        var itemtotal = item.total
-
-        receipt += vsprintf("%-17s %3s %10.2f\n", [this.formatTextWrap(itemquality, 16), "", itemweight, "", itemprice, "", itemtotal])
+        var itemperkg = item.price
+        var itemtotal = item.totalcost
+        receipt += vsprintf("%-17s %3s %10.2f\n", [this.formatTextWrap(itemquality, 16), "", "Rs."+itemtotal+"/-"])
+        receipt += '\x1b\x61\x00' + "-" + " " + itemweight + " Kgs" +  '\x1b\x61\x00' 
         receipt += '\n'
-      }
-    }
-    receipt += commands.TEXT_FORMAT.TXT_ALIGN_LT
-    receipt += commands.TEXT_FORMAT.TXT_FONT_A
-    receipt += commands.HORIZONTAL_LINE.HR2_58MM
-    receipt += vsprintf("%-17s %3s %10.2f\n", ["Total", "", totalPrice])
+        receipt += '\x1b\x61\x00' + "-" + "Rs." + itemperkg + "/-" + " Per/Kg" +  '\x1b\x61\x00' 
+        receipt += '\n'
 
-    // receipt += commands.TEXT_FORMAT.TXT_ALIGN_RT
-    // receipt += '\n'
+      }
+      receipt += '\n'
+    }
     // receipt += commands.TEXT_FORMAT.TXT_ALIGN_LT
-    // receipt += vsprintf("%-17s %3s %10.2f\r\n", ["Amount Received", "", amoutntReceived])
-    // receipt += commands.TEXT_FORMAT.TXT_ALIGN_RT
-    // receipt += '\n'
-    // receipt += commands.TEXT_FORMAT.TXT_ALIGN_LT
-    // receipt += vsprintf("%-17s %3s %10.2f\n", ["Change", "", change])
+    // receipt += commands.TEXT_FORMAT.TXT_FONT_A
+    // receipt += commands.HORIZONTAL_LINE.HR2_58MM
+    // receipt += vsprintf("%-17s %3s %10.2f\n", ["Total Price", "", totalPrice])
+    receipt += '\n'
+    receipt += commands.HORIZONTAL_LINE.HR2_58MM
+    receipt += commands.TEXT_FORMAT.TXT_NORMAL   
+    receipt += '\x1B' + '\x61' + '\x30'// left align
+    receipt += '\x1b\x45\x01' + vsprintf("%-17s %3s %10s\n", ["Total Price", "", "Rs."+totalPrice+"/-"]) + '\x1b\x45\x01'
 
 
 
@@ -126,13 +132,8 @@ export class BillerWeightManualBillPage implements OnInit {
     receipt += '\n'
     receipt += commands.TEXT_FORMAT.TXT_FONT_B
     receipt += '\x1b\x61\x01' + 'Thank you, visit again!' + '\x0a\x0a\x0a\x0a' //The unicode symbols are for centering the text
-    receipt += '\n'
+    receipt += "\x1b\x45\x01 \x00" // Full cut paper
     this.printText(receipt)
-
-
-
-    console.log(this.jsonData);
-
     let hours = new Date().getHours();
     let minutes = new Date().getMinutes();
     let seconds = new Date().getSeconds();
@@ -145,7 +146,7 @@ export class BillerWeightManualBillPage implements OnInit {
       billitems: this.passBillItems,
       totalamount: this.totalsum,
       counter: this.counter,
-      userid: this.name,
+      userid: this.userid,
       isDeleted: "0",
       purchaseddate: this.updateTime,
     }
@@ -153,9 +154,6 @@ export class BillerWeightManualBillPage implements OnInit {
     this.http.post('/manual_bill', data).subscribe((response: any) => {
       console.log(response);
       if (response.success == "true") {
-
-        this.bluetoothSerial.connect(this.printerBluetoothId).subscribe(this.onSuccess, this.onError);
-
       }
 
       this.bluetoothSerial.write("Printer Successfully Connected");
@@ -165,11 +163,12 @@ export class BillerWeightManualBillPage implements OnInit {
     }
     );
     localStorage.removeItem("SetBillerAddItem");
-    this.router.navigate(['/biller-weight-manual-record'])
+    this.router.navigate(['/BillerManualdashboard'])
   }
 
 
   printText(receipt) {
+
     this.bluetoothSerial.write(receipt);
   }
 
@@ -180,6 +179,84 @@ export class BillerWeightManualBillPage implements OnInit {
 
   onSuccess() {
     alert("Successfully Printed");
+    //Data to be printed presented in jsonData format.....
+
+    // const items = item => ({
+    //   quality: item.quality,
+    //   weight: item.weight,
+    //   price: item.price,
+    //   totalcost: item.totalcost,
+    // })
+    // let product = this.jsonData.map(items)
+
+    // //Calculate the total price of the items in an object
+    // let totalPrice = this.totalsum
+
+    // let company = "Sakthi & Co"
+    // let counter = this.billWeightData.counter
+    // let biller = this.name
+    // let time = this.purchaseddate;
+    // //let amoutntReceived = 400
+    // //let change = amoutntReceived - totalPrice
+
+    // let receipt = ""
+    // receipt += commands.TEXT_FORMAT.TXT_WIDTH[1]
+    // receipt += "\x1b\x45\x01 \x00" + company + "\x1b\x45\x00"
+    // receipt += '\n'
+    // receipt += "\x00" + time + "\x00"
+
+    // receipt += '\n'
+    // receipt += commands.TEXT_FORMAT.TXT_NORMAL
+    // receipt += commands.HORIZONTAL_LINE.HR_58MM
+    // receipt += '\n'
+    // receipt += commands.TEXT_FORMAT.TXT_NORMAL
+    // receipt += '\x1B' + '\x61' + '\x30'// left align
+    // receipt += vsprintf("%-17s %3s %10s\n", ["Counter", "", counter])
+    // receipt += vsprintf("%-17s %3s %10s\n", ["Biller", "", biller])
+    // receipt += commands.TEXT_FORMAT.TXT_ALIGN_RT
+    // receipt += commands.TEXT_FORMAT.TXT_FONT_A
+    // receipt += commands.HORIZONTAL_LINE.HR2_58MM
+    // receipt += '\n'
+    // receipt += commands.TEXT_FORMAT.TXT_ALIGN_LT
+    // receipt += '\x1b\x45\x01' + vsprintf("%-17s %3s %10s \n", ["Item", "", "Price"])
+
+    // for (var pro in product) {
+    //   if (product.hasOwnProperty(pro)) {
+    //     var item = product[pro]
+    //     var itemquality = item.quality
+    //     var itemweight = item.weight
+    //     var itemperkg = item.price
+    //     var itemtotal = item.totalcost
+    //     receipt += vsprintf("%-17s %3s %10.2f\n", [this.formatTextWrap(itemquality, 16), "", itemtotal])
+    //     receipt += '\x1b\x61\x00' + "-" + " " + itemweight + " Kg"
+    //     receipt += '\n'
+    //     receipt += '\x1b\x61\x00' + "-" + " " + itemperkg + " Per/Kg"
+    //     receipt += '\n'
+
+    //   }
+    //   receipt += '\n'
+    // }
+    // // receipt += commands.TEXT_FORMAT.TXT_ALIGN_LT
+    // // receipt += commands.TEXT_FORMAT.TXT_FONT_A
+    // // receipt += commands.HORIZONTAL_LINE.HR2_58MM
+    // // receipt += vsprintf("%-17s %3s %10.2f\n", ["Total Price", "", totalPrice])
+    // receipt += '\n'
+    // receipt += commands.TEXT_FORMAT.TXT_NORMAL
+    // receipt += '\x1B' + '\x61' + '\x30'// left align
+    // receipt += '\x1b\x45\x01' + vsprintf("%-17s %3s %10s\n", ["Total Price", "", totalPrice])
+
+
+
+    // receipt += commands.TEXT_FORMAT.TXT_ALIGN_RT
+
+    // receipt += '\n'
+    // receipt += commands.TEXT_FORMAT.TXT_FONT_A
+    // receipt += commands.HORIZONTAL_LINE.HR2_58MM
+    // receipt += '\n'
+    // receipt += commands.TEXT_FORMAT.TXT_FONT_B
+    // receipt += '\x1b\x61\x01' + 'Thank you, visit again!' + '\x0a\x0a\x0a\x0a' //The unicode symbols are for centering the text
+    // receipt += "\x1b\x45\x01 \x00" // Full cut paper
+    // this.printText(receipt)
   }
 
   onError(error) {
@@ -204,12 +281,13 @@ export class BillerWeightManualBillPage implements OnInit {
       var localuserid = DecodeBillerData[i].userid;
       var localweight = DecodeBillerData[i].weight;
 
-      const printData = [{
+      const printData = {
         quality: localquality,
         weight: localweight,
         price: localprice,
         totalcost: localprice * localweight,
-      }]
+        purchaseddate: localpurchaseddate,
+      }
 
       const SendData = {
         category: localcategory,
@@ -255,10 +333,15 @@ export class BillerWeightManualBillPage implements OnInit {
       this.purchaseddate = SendData.purchaseddate;
       this.counter = SendData.counter;
       this.passBillItems.push(SendPushData);
+      console.log(this.passBillItems);
       this.jsonData.push(printData);
+      console.log(this.jsonData);
+
       this.GetBillDataFromLocalStorageData.push(SendData);
       console.log(this.GetBillDataFromLocalStorageData);
     }
+
+
   }
 
 

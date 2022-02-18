@@ -32,6 +32,7 @@ export class SettingsPage implements OnInit {
     this.CheckBluetoothIsConnected();
     this.Locallogintype = localStorage.getItem("logintype",)
     this.Localpermission = localStorage.getItem("permission",)
+    this.printerBluetoothId = localStorage.getItem("printerBluetoothId",);
   }
 
   ngOnInit() {
@@ -44,7 +45,7 @@ export class SettingsPage implements OnInit {
   checkoffline: any;
   Locallogintype: any;
   Localpermission: any;
-
+  printerBluetoothId: any;
   backToPrivios() {
     //-------center login check----------//
 

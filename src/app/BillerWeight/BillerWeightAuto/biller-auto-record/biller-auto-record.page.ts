@@ -14,12 +14,13 @@ import { DatePipe } from '@angular/common';
 })
 export class BillerAutoRecordPage implements OnInit {
 
-  constructor(private network: Network,public datepipe: DatePipe, public navCtrl: NavController, private router: Router, private activatedRoute: ActivatedRoute, private http: HttpService, route: ActivatedRoute) {
+  constructor(private network: Network, public datepipe: DatePipe, public navCtrl: NavController, private router: Router, private activatedRoute: ActivatedRoute, private http: HttpService, route: ActivatedRoute) {
     route.params.subscribe(val => {
       this.totalWeight()
       this.totalAmount()
       this.records();
       this.list_manual_bill();
+      this.tableRecords()
 
       this.user = localStorage.getItem("Fishery-username",)
       console.log(this.user);
@@ -37,7 +38,7 @@ export class BillerAutoRecordPage implements OnInit {
         this.checkonline = true;
 
       });
-       this.currentDateTime = this.datepipe.transform((new Date), 'yyyy-MM-dd hh:mm:ss');
+      this.currentDateTime = this.datepipe.transform((new Date), 'yyyy-MM-dd hh:mm:ss');
     });
   }
 
@@ -45,7 +46,7 @@ export class BillerAutoRecordPage implements OnInit {
 
   }
   user: any = " ";
-  currentDateTime:any;
+  currentDateTime: any;
   checkoffline: any;
   checkonline: any;
   buttonDisabled: boolean;
@@ -74,6 +75,7 @@ export class BillerAutoRecordPage implements OnInit {
       this.totalweight = response.records.total_weight;
       console.log(response);
 
+
       if (response.records.total_weight == null) {
         this.totalweight = 0;
       }
@@ -85,9 +87,10 @@ export class BillerAutoRecordPage implements OnInit {
     );
   }
 
+
   totalCost: any;
   totalAmount() {
-    this.http.get('/total_amount',).subscribe((response: any) => {
+    this.http.get('/bill_total_amount',).subscribe((response: any) => {
       this.totalCost = response.records.total_amount;
       console.log(response);
       if (response.records.total_amount == null) {
@@ -146,7 +149,39 @@ export class BillerAutoRecordPage implements OnInit {
     }
     );
   }
+  sum:any = 0;
+  sumofWeight:any;
+  tableRec = []
+  TotalTableWeight = []
+  tableRecords() {
 
+    const data = {
+      "from_date": "2022-02-01",
+      "to_date": "2022-02-17"
+    }
+    this.http.post('/list_localsale_date_manual_bill', data).subscribe((response: any) => {
+      this.tableRec = response.records;
+      console.log(response);
+      
+
+      for (var i = 0; i < response.records.length; i++) {
+        this.TotalTableWeight.push(response.records[i].weight)
+        console.log(response.records[i].weight);
+       this.sum = this.sum + response.records[i].weight
+       
+       console.log(this.sumofWeight);
+       
+      }
+
+      this.sumofWeight += this.sum;
+    
+
+
+    }, (error: any) => {
+      console.log(error);
+    }
+    );
+  }
 
   navigateToNextPage() {
     this.router.navigate(['/BillerAutodashboard'])

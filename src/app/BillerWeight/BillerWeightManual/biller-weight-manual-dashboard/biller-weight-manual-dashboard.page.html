@@ -26,23 +26,23 @@
       <b style="font-size: 25px;">BILLER</b>
     </div>
 
-       <div class="row ">
-    <!-----Display Date----->
+    <div class="row ">
+      <!-----Display Date----->
 
-    <div class="date-card col-6 display-date mx-5 ">
-      <p style="margin: 7px;" > <b>{{currentDateTime | date:'dd-MM-yyyy'}}</b> </p>
+      <div class="date-card col-6 display-date mx-5 ">
+        <p style="margin: 7px;"> <b>{{currentDateTime | date:'dd-MM-yyyy'}}</b> </p>
+      </div>
+
+      <div style="margin-top: -12%;" class=" col-6 dropdown toggle ">
+        <input id="t1" type="checkbox">
+        <label for="t1">{{user}}</label>
+        <ul>
+          <li><a (click)="navigateToSettings()">Settings</a></li>
+          <li><a (click)="logout()">Logout</a></li>
+        </ul>
+      </div>
+
     </div>
-
-    <div style="margin-top: -12%;"  class=" col-6 dropdown toggle ">
-      <input id="t1" type="checkbox">
-      <label for="t1">{{user}}</label>
-      <ul>
-       <li><a (click)="navigateToSettings()">Settings</a></li>
-        <li><a (click)="logout()">Logout</a></li>
-      </ul>
-    </div>
-
-  </div>
 
   </div>
 
@@ -68,10 +68,11 @@
         <form (change)="SelectCounter(Selectcounter.value)" #Selectcounter="ngForm">
 
           <div class="row">
+            <div class="col-4 offset-3">
               <p class="select-category"><b><u>Select Counter: </u></b></p>
-
-              <!-----  select counter----->
-
+            </div>
+            <!-----  select counter----->
+            <div class="col-3">
               <select class="selectDropdown" [(ngModel)]="counter" placeholder="counter" name="counter"
                 style="width: 70%;font-size: 13px;padding: 2px;margin: auto;">
                 <option value="" disabled selected hidden>Price</option>
@@ -79,6 +80,9 @@
                 <option [value]="2">2</option>
                 <option value="3">3</option>
               </select>
+            </div>
+
+
           </div>
 
 
@@ -112,7 +116,7 @@
         </form>
       </div>
 
-      <div  class=" col-12 mt-2">
+      <div class=" col-12 mt-2">
         <button (click)="addItem()" class="submit-button px-4 py-2 " color="transparent"
           style="font-size: 13px;color: white;width: 100%;" [disabled]="!weight || !counter || !category || !type ">
           ADD ITEM

@@ -47,10 +47,20 @@
         <!-----Toggle----->
         <h5 class="text-center bluetooth-status"><b>Printer Connection</b></h5>
       </div>
-      <div class="col-1 mt-2">
-        <ion-toggle slot="end" color="tertiary" class="toggle-bluetooth" (click)="enablebluetooth()"
-          >
-        </ion-toggle>
+      <div class="col-12 mt-2">
+        <div class="button-wrapper p-5">
+          <div class="container">
+            <div class="row">
+              <button (click)="enablebluetooth()" class="submit-button px-2 py-2" color="transparent"
+                style="font-size: 13px;" style="background-color: #655fcb;">
+                CONNECT
+              </button>
+            </div>
+          </div>
+        </div>
+        <!-- <ion-toggle slot="end" color="tertiary" class="toggle-bluetooth" (click)="enablebluetooth()"
+          checked="{{bluetoothtoggle}}">
+        </ion-toggle> -->
       </div>
     </div>
 
@@ -66,8 +76,8 @@
 
     <div class="button-wrapper p-4">
       <div class="container">
-        <p>Connected Id : {{this.connectedId}}</p>
-        <div class="row">
+        <p>Connected Id : {{printerBluetoothId}}</p>
+        <div class="row p-5">
           <button (click)="disconnect()" class="submit-button px-2 py-2" color="transparent"
             style="font-size: 13px;background-color: #655fcb;">
             DISCONNECT
