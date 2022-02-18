@@ -107,7 +107,7 @@ export class BillerWeightManualBillPage implements OnInit {
         receipt += vsprintf("%-17s %3s %10.2f\n", [this.formatTextWrap(itemquality, 16), "", itemtotal])
         receipt += '\x1b\x61\x00' + "-" + " " + itemweight + " Kg"
         receipt += '\n'
-        receipt += '\x1b\x61\x00' + "-" + "" + "Rs." + itemperkg + " /kg"
+        receipt += '\x1b\x61\x00' + "-" + " " + "Rs." + itemperkg + " /kg"
         receipt += '\n'
 
       }
@@ -132,7 +132,6 @@ export class BillerWeightManualBillPage implements OnInit {
     receipt += '\n'
     receipt += commands.TEXT_FORMAT.TXT_FONT_B
     receipt += '\x1b\x61\x01' + 'Thank you, visit again!' + '\x0a\x0a\x0a\x0a' //The unicode symbols are for centering the text
-    receipt += "\x1b\x45\x01 \x00" // Full cut paper
     this.printText(receipt)
     let hours = new Date().getHours();
     let minutes = new Date().getMinutes();
@@ -168,7 +167,7 @@ export class BillerWeightManualBillPage implements OnInit {
 
 
   printText(receipt) {
-    alert(receipt);
+   
     this.bluetoothSerial.write(receipt);
   }
 
@@ -178,7 +177,7 @@ export class BillerWeightManualBillPage implements OnInit {
   jsonData = [];
 
   onSuccess() {
-    alert("Successfully Printed");
+    
     //Data to be printed presented in jsonData format.....
 
     const items = item => ({
@@ -230,7 +229,7 @@ export class BillerWeightManualBillPage implements OnInit {
         receipt += vsprintf("%-17s %3s %10.2f\n", [this.formatTextWrap(itemquality, 16), "", itemtotal])
         receipt += '\x1b\x61\x00' + "-" + " " + itemweight + " Kg"
         receipt += '\n'
-        receipt += '\x1b\x61\x00' + "-" + "" + "Rs." + itemperkg + " /kg"
+        receipt += '\x1b\x61\x00' + "-" + " " + "Rs." + itemperkg + " /kg"
         receipt += '\n'
 
       }
@@ -255,7 +254,6 @@ export class BillerWeightManualBillPage implements OnInit {
     receipt += '\n'
     receipt += commands.TEXT_FORMAT.TXT_FONT_B
     receipt += '\x1b\x61\x01' + 'Thank you, visit again!' + '\x0a\x0a\x0a\x0a' //The unicode symbols are for centering the text
-    receipt += "\x1b\x45\x01 \x00" // Full cut paper
     this.printText(receipt)
   }
 
