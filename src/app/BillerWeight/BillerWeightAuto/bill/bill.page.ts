@@ -41,7 +41,7 @@ export class BillPage implements OnInit {
   price: any = [];
   totalsum: any = "";
   backToPrivious() {
-    this.router.navigate(['/biller-auto-record'])
+    this.router.navigate(['/BillerAutoweighter'])
   }
 
 
@@ -160,7 +160,7 @@ export class BillPage implements OnInit {
     }
     );
     localStorage.removeItem("SetBillerAddItem");
-    this.router.navigate(['/BillerManualdashboard'])
+    this.router.navigate(['/BillerAutoweighter'])
   }
 
 

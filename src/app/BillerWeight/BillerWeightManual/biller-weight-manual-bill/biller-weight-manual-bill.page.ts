@@ -163,7 +163,7 @@ export class BillerWeightManualBillPage implements OnInit {
     }
     );
     localStorage.removeItem("SetBillerAddItem");
-    this.router.navigate(['/biller-weight-manual-record'])
+    this.router.navigate(['/BillerManualdashboard'])
   }
 
 
