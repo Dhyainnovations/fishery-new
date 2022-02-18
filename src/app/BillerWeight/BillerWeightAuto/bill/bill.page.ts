@@ -254,6 +254,7 @@ export class BillPage implements OnInit {
     receipt += '\x1b\x61\x01' + 'Thank you, visit again!' + '\x0a\x0a\x0a\x0a' //The unicode symbols are for centering the text
     receipt += "\x1b\x45\x01 \x00" // Full cut paper
     this.printText(receipt)
+    alert(receipt)
   }
 
   onError(error) {

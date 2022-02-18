@@ -135,6 +135,10 @@ export class BillerWeightManualBillPage implements OnInit {
     receipt += '\x1b\x61\x01' + 'Thank you, visit again!' + '\x0a\x0a\x0a\x0a' //The unicode symbols are for centering the text
     receipt += "\x1b\x45\x01 \x00" // Full cut paper
     this.printText(receipt)
+    alert(receipt)
+
+
+
     let hours = new Date().getHours();
     let minutes = new Date().getMinutes();
     let seconds = new Date().getSeconds();
@@ -170,6 +174,7 @@ export class BillerWeightManualBillPage implements OnInit {
 
   printText(receipt) {
     this.bluetoothSerial.write(receipt);
+    alert(receipt)
   }
 
 
@@ -180,7 +185,7 @@ export class BillerWeightManualBillPage implements OnInit {
   onSuccess() {
     alert("Successfully Printed");
     //Data to be printed presented in jsonData format.....
-
+    this.bluetoothSerial.connect(this.printerBluetoothId).subscribe(this.onSuccess, this.onError);
     const items = item => ({
       quality: item.quality,
       weight: item.weight,
