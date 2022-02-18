@@ -92,7 +92,7 @@ export class BillPage implements OnInit {
     receipt += commands.HORIZONTAL_LINE.HR2_58MM
     receipt += '\n'
     receipt += commands.TEXT_FORMAT.TXT_ALIGN_LT
-    receipt += '\x1b\x45\x01' + vsprintf("%-17s %3s %10s \n", ["Item", "", "Subtotal(Rs.)"])
+    receipt += '\x1b\x45\x01' + vsprintf("%-17s %3s %10s \n", ["Item", "", "Price"])
 
     for (var pro in product) {
       if (product.hasOwnProperty(pro)) {
@@ -102,7 +102,7 @@ export class BillPage implements OnInit {
         var itemperkg = item.price
         var itemtotal = item.totalcost
         receipt += vsprintf("%-17s %3s %10.2f\n", [this.formatTextWrap(itemquality, 16), "", itemtotal])
-        receipt += '\x1b\x61\x00' + "-" + " " + itemweight + " Kg"
+        receipt += '\x1b\x61\x00' + "-" + " " + itemweight + " kgs"
         receipt += '\n'
         receipt += '\x1b\x61\x00' + "-" + " " + "Rs." + itemperkg + " /kg"
         receipt += '\n'
@@ -117,7 +117,7 @@ export class BillPage implements OnInit {
     receipt += '\n'
     receipt += commands.TEXT_FORMAT.TXT_NORMAL
     receipt += '\x1B' + '\x61' + '\x30'// left align
-    receipt += '\x1b\x45\x01' + vsprintf("%-17s %3s %10s\n", ["Total Amount", "", totalPrice])
+    receipt += '\x1b\x45\x01' + vsprintf("%-17s %3s %10s\n", ["Total Amount - (Rs.)", "", totalPrice])
 
 
 
@@ -129,8 +129,8 @@ export class BillPage implements OnInit {
     receipt += '\n'
     receipt += commands.TEXT_FORMAT.TXT_FONT_B
     receipt += '\x1b\x61\x01' + 'Thank you, visit again!' + '\x0a\x0a\x0a\x0a' //The unicode symbols are for centering the text
+    receipt += "\x1b\x45\x01 \x00" // Full cut paper
     this.printText(receipt)
-
 
 
     let hours = new Date().getHours();
@@ -162,7 +162,7 @@ export class BillPage implements OnInit {
     }
     );
     localStorage.removeItem("SetBillerAddItem");
-    this.router.navigate(['/biller-weight-manual-record'])
+    this.router.navigate(['/biller-auto-record'])
   }
 
 
@@ -215,7 +215,7 @@ export class BillPage implements OnInit {
     receipt += commands.HORIZONTAL_LINE.HR2_58MM
     receipt += '\n'
     receipt += commands.TEXT_FORMAT.TXT_ALIGN_LT
-    receipt += '\x1b\x45\x01' + vsprintf("%-17s %3s %10s \n", ["Item", "", "Subtotal(Rs.)"])
+    receipt += '\x1b\x45\x01' + vsprintf("%-17s %3s %10s \n", ["Item", "", "Price"])
 
     for (var pro in product) {
       if (product.hasOwnProperty(pro)) {
@@ -225,7 +225,7 @@ export class BillPage implements OnInit {
         var itemperkg = item.price
         var itemtotal = item.totalcost
         receipt += vsprintf("%-17s %3s %10.2f\n", [this.formatTextWrap(itemquality, 16), "", itemtotal])
-        receipt += '\x1b\x61\x00' + "-" + " " + itemweight + " Kg"
+        receipt += '\x1b\x61\x00' + "-" + " " + itemweight + " kgs"
         receipt += '\n'
         receipt += '\x1b\x61\x00' + "-" + " " + "Rs." + itemperkg + " /kg"
         receipt += '\n'
@@ -240,7 +240,7 @@ export class BillPage implements OnInit {
     receipt += '\n'
     receipt += commands.TEXT_FORMAT.TXT_NORMAL
     receipt += '\x1B' + '\x61' + '\x30'// left align
-    receipt += '\x1b\x45\x01' + vsprintf("%-17s %3s %10s\n", ["Total Amount", "", totalPrice])
+    receipt += '\x1b\x45\x01' + vsprintf("%-17s %3s %10s\n", ["Total Amount - (Rs.)", "", totalPrice])
 
 
 
@@ -252,6 +252,7 @@ export class BillPage implements OnInit {
     receipt += '\n'
     receipt += commands.TEXT_FORMAT.TXT_FONT_B
     receipt += '\x1b\x61\x01' + 'Thank you, visit again!' + '\x0a\x0a\x0a\x0a' //The unicode symbols are for centering the text
+    receipt += "\x1b\x45\x01 \x00" // Full cut paper
     this.printText(receipt)
   }
 
