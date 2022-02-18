@@ -125,4 +125,32 @@ td, th {
   }
   
 
+  #data{
+    font-size: 12px;
+    font-weight: 700;
+  }
   
+    #cardActive .active{
+      color: #655fcb;
+      background-color: #fff !important;
+      font-weight: 700;
+  
+      #data{
+        color: #535353,
+       
+        
+      }
+    }
+  
+    .cardColor{
+      background-color: rgba(250, 100, 100, 0.602)!important;
+      
+      color: rgb(219, 217, 217);
+      font-size: 15px;
+      margin: 18px -5px;
+  
+      #data{
+        color: #535353,
+      }
+  
+    }

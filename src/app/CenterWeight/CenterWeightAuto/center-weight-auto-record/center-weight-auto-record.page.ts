@@ -237,7 +237,7 @@ export class CenterWeightAutoRecordPage implements OnInit {
   stockTableRec: any = []
   stockTableRecords() {
     this.http.get('/list_table_stock',).subscribe((response: any) => {
-      this.stockTableRec = response.records;
+      this.stockTableRec = response;
       if (this.stockTableRec == "No manual weight found.") {
         this.stockTableRec = [];
         // this.isVisible = true

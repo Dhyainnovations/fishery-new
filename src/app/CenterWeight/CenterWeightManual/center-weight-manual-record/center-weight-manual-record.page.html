@@ -99,7 +99,7 @@
          <th scope="col-2">Quantity</th>
        </tr>
      </thead>
-     <tbody *ngFor="let record of tableRecodrs   let i=index; ">
+     <tbody *ngFor="let record of stockTableRec   let i=index; ">
        <tr>
          <td>{{record.type}}</td>
          <td>{{record.location}}</td>
@@ -193,8 +193,8 @@
 
   <div style="font-size: 12px;">
     <div class="row mb-5">
-      <div class="col-12">
-        <div class="card mt-3" *ngFor="let record of cardRecords">
+      <div  id="cardActive" class="col-12">
+        <div   [class]="record.type == 'center' ? 'active cardColor': 'cardColor' " class="card mt-3" *ngFor="let record of cardRecords">
           <div class="row">
             <div class="col-5">
               <b style="color: #6863CC;" >Date:</b><span id="data">{{record.updatedAt | date:'dd-MM-yyyy'}}</span><br>

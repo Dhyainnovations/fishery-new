@@ -149,8 +149,8 @@ export class BillerAutoRecordPage implements OnInit {
     }
     );
   }
-  sum:any = 0;
-  sumofWeight:any;
+  // sum:any = 0;
+  // sumofWeight:any;
   tableRec = []
   TotalTableWeight = []
   tableRecords() {
@@ -164,16 +164,16 @@ export class BillerAutoRecordPage implements OnInit {
       console.log(response);
       
 
-      for (var i = 0; i < response.records.length; i++) {
-        this.TotalTableWeight.push(response.records[i].weight)
-        console.log(response.records[i].weight);
-       this.sum = this.sum + response.records[i].weight
+      // for (var i = 0; i < response.records.length; i++) {
+      //   this.TotalTableWeight.push(response.records[i].weight)
+      //   console.log(response.records[i].weight);
+      //  this.sum = this.sum + response.records[i].weight
        
-       console.log(this.sumofWeight);
+      //  console.log(this.sumofWeight);
        
-      }
+      // }
 
-      this.sumofWeight += this.sum;
+      // this.sumofWeight += this.sum;
     
 
 
