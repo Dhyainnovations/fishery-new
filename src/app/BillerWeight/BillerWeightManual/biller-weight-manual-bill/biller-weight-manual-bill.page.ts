@@ -43,7 +43,7 @@ export class BillerWeightManualBillPage implements OnInit {
   price: any = [];
   totalsum: any = "";
   backToPrivious() {
-    this.router.navigate(['/biller-weight-manual-record'])
+    this.router.navigate(['/BillerManualdashboard'])
   }
 
 
@@ -55,6 +55,7 @@ export class BillerWeightManualBillPage implements OnInit {
   hr: any;
   updateTime: any;
   myDate: any;
+
   printBill() {
     this.bluetoothSerial.connect(this.printerBluetoothId).subscribe(this.onSuccess, this.onError);
     const items = item => ({
@@ -94,7 +95,7 @@ export class BillerWeightManualBillPage implements OnInit {
     receipt += commands.HORIZONTAL_LINE.HR2_58MM
     receipt += '\n'
     receipt += commands.TEXT_FORMAT.TXT_ALIGN_LT
-    receipt += '\x1b\x45\x01' + vsprintf("%-17s %3s %10s \n", ["Item", "", "Price"]) + "\x1b\x45\x01"
+    receipt += '\x1b\x45\x01' + vsprintf("%-17s %3s %10s \n", ["Item", "", "Subtotal(₹)"]) + '\x1b\x45\x01';
 
     for (var pro in product) {
       if (product.hasOwnProperty(pro)) {
@@ -103,10 +104,10 @@ export class BillerWeightManualBillPage implements OnInit {
         var itemweight = item.weight
         var itemperkg = item.price
         var itemtotal = item.totalcost
-        receipt += vsprintf("%-17s %3s %10.2f\n", [this.formatTextWrap(itemquality, 16), "", "Rs."+itemtotal+"/-"])
-        receipt += '\x1b\x61\x00' + "-" + " " + itemweight + " Kgs" +  '\x1b\x61\x00' 
+        receipt += vsprintf("%-17s %3s %10.2f\n", [this.formatTextWrap(itemquality, 16), "", itemtotal])
+        receipt += '\x1b\x61\x00' + "-" + " " + itemweight + " Kg"
         receipt += '\n'
-        receipt += '\x1b\x61\x00' + "-" + "Rs." + itemperkg + "/-" + " Per/Kg" +  '\x1b\x61\x00' 
+        receipt += '\x1b\x61\x00' + "-" + " " + "Rs." + itemperkg + "/kg"
         receipt += '\n'
 
       }
@@ -118,9 +119,9 @@ export class BillerWeightManualBillPage implements OnInit {
     // receipt += vsprintf("%-17s %3s %10.2f\n", ["Total Price", "", totalPrice])
     receipt += '\n'
     receipt += commands.HORIZONTAL_LINE.HR2_58MM
-    receipt += commands.TEXT_FORMAT.TXT_NORMAL   
+    receipt += commands.TEXT_FORMAT.TXT_NORMAL
     receipt += '\x1B' + '\x61' + '\x30'// left align
-    receipt += '\x1b\x45\x01' + vsprintf("%-17s %3s %10s\n", ["Total Price", "", "Rs."+totalPrice+"/-"]) + '\x1b\x45\x01'
+    receipt += '\x1b\x45\x01' + vsprintf("%-17s %3s %10s\n", ["Total Amount", "", "Rs." + totalPrice + "/-"])
 
 
 
@@ -163,12 +164,11 @@ export class BillerWeightManualBillPage implements OnInit {
     }
     );
     localStorage.removeItem("SetBillerAddItem");
-    this.router.navigate(['/BillerManualdashboard'])
+    this.router.navigate(['/biller-weight-manual-record'])
   }
 
 
   printText(receipt) {
-
     this.bluetoothSerial.write(receipt);
   }
 
@@ -179,6 +179,8 @@ export class BillerWeightManualBillPage implements OnInit {
 
   onSuccess() {
     alert("Successfully Printed");
+    //Data to be printed presented in jsonData format.....
+
     const items = item => ({
       quality: item.quality,
       weight: item.weight,
@@ -216,7 +218,7 @@ export class BillerWeightManualBillPage implements OnInit {
     receipt += commands.HORIZONTAL_LINE.HR2_58MM
     receipt += '\n'
     receipt += commands.TEXT_FORMAT.TXT_ALIGN_LT
-    receipt += '\x1b\x45\x01' + vsprintf("%-17s %3s %10s \n", ["Item", "", "Price"]) + "\x1b\x45\x01"
+    receipt += '\x1b\x45\x01' + vsprintf("%-17s %3s %10s \n", ["Item", "", "Price"])
 
     for (var pro in product) {
       if (product.hasOwnProperty(pro)) {
@@ -225,10 +227,10 @@ export class BillerWeightManualBillPage implements OnInit {
         var itemweight = item.weight
         var itemperkg = item.price
         var itemtotal = item.totalcost
-        receipt += vsprintf("%-17s %3s %10.2f\n", [this.formatTextWrap(itemquality, 16), "", "Rs."+itemtotal+"/-"])
-        receipt += '\x1b\x61\x00' + "-" + " " + itemweight + " Kgs" +  '\x1b\x61\x00' 
+        receipt += vsprintf("%-17s %3s %10.2f\n", [this.formatTextWrap(itemquality, 16), "", itemtotal])
+        receipt += '\x1b\x61\x00' + "-" + " " + itemweight + " Kg"
         receipt += '\n'
-        receipt += '\x1b\x61\x00' + "-" + "Rs." + itemperkg + "/-" + " Per/Kg" +  '\x1b\x61\x00' 
+        receipt += '\x1b\x61\x00' + "-" + " " + itemperkg + " Per/Kg"
         receipt += '\n'
 
       }
@@ -239,10 +241,9 @@ export class BillerWeightManualBillPage implements OnInit {
     // receipt += commands.HORIZONTAL_LINE.HR2_58MM
     // receipt += vsprintf("%-17s %3s %10.2f\n", ["Total Price", "", totalPrice])
     receipt += '\n'
-    receipt += commands.HORIZONTAL_LINE.HR2_58MM
-    receipt += commands.TEXT_FORMAT.TXT_NORMAL   
+    receipt += commands.TEXT_FORMAT.TXT_NORMAL
     receipt += '\x1B' + '\x61' + '\x30'// left align
-    receipt += '\x1b\x45\x01' + vsprintf("%-17s %3s %10s\n", ["Total Price", "", "Rs."+totalPrice+"/-"]) + '\x1b\x45\x01'
+    receipt += '\x1b\x45\x01' + vsprintf("%-17s %3s %10s\n", ["Total Price", "", totalPrice])
 
 
 
