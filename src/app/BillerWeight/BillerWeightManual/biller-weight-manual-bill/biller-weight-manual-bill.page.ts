@@ -43,7 +43,7 @@ export class BillerWeightManualBillPage implements OnInit {
   price: any = [];
   totalsum: any = "";
   backToPrivious() {
-    this.router.navigate(['/BillerManualdashboard'])
+    this.router.navigate(['/biller-weight-manual-record'])
   }
 
 

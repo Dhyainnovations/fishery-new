@@ -70,25 +70,27 @@
     <!-----Table----->
 
 
-
     <table class="table">
-
-
-
       <thead style="background-color:#6863CC;" class="text-white">
         <tr>
-          <th scope="col-3">S.No</th>
+          <th scope="col-3">User Id</th>
           <th scope="col-2">Quality</th>
+          <th scope="col-2">Price/Kg</th>
           <th scope="col-2">Weight</th>
+          <th scope="col-2">Total price </th>
         </tr>
       </thead>
-      <tbody *ngFor="let record of manualBillList  let i=index; ">
+      <tbody *ngFor="let record of tableRec  let i=index; ">
         <tr>
-          <td>{{i+1}} </td>
-          <td>{{record.quality}}</td>
-          <td>{{record.total_weight}}</td>
+          <td>{{user}} </td>
+          <td>{{record.quality}} </td>
+          <td>{{record.pricekg}}</td>
+          <td>{{record.weight}} </td>
+          <td>{{record.totalamount}}</td>
         </tr>
+        
       </tbody>
+      
     </table>
 
     <div class="row">

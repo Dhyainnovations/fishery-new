@@ -137,7 +137,7 @@ export class BillerAutoDashboardPage implements OnInit {
 
   success = (data) => {
     alert("Successfully Connected");
-    this.router.navigate(['/centerweight-auto-weighter']);
+    this.router.navigate(['/BillerAutoweighter']);
 
   }
   fail = (error) => {

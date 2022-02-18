@@ -41,7 +41,7 @@ export class BillPage implements OnInit {
   price: any = [];
   totalsum: any = "";
   backToPrivious() {
-    this.router.navigate(['/BillerManualdashboard'])
+    this.router.navigate(['/biller-auto-record'])
   }
 
 

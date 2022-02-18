@@ -70,7 +70,6 @@ export class BillerAutoWeighterPage implements OnInit {
   category: any;
   quality: any;
   price: any;
-  weight: any;
   counter: any;
   ID: any;
   counterNo: any
@@ -247,13 +246,13 @@ export class BillerAutoWeighterPage implements OnInit {
       category: this.category,
       id: this.ID,
       quality: this.type,
-      weight: this.weight,
+      weight:  this.recivedWeightValue,
       counter: this.counter,
       userid: this.userId,
       isDeleted: "0",
       purchaseddate: this.currentDateTime,
       cost: this.cost,
-      totalcost: this.cost + this.weight
+      totalcost: this.cost + this.recivedWeightValue
     }
 
     console.log(data);
@@ -280,7 +279,7 @@ export class BillerAutoWeighterPage implements OnInit {
       title: 'Item Added Successfully'
     })
 
-    this.weight = ''
+   
   }
 
   generateBill() {

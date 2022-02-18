@@ -21,6 +21,7 @@ export class BillerWeightManualRecordPage implements OnInit {
       this.totalAmount()
       this.records();
       this.list_manual_bill();
+      this.tableRecords()
       this.user = localStorage.getItem("Fishery-username",)
       console.log(this.user);
       window.addEventListener('offline', () => {
@@ -143,6 +144,37 @@ export class BillerWeightManualRecordPage implements OnInit {
     );
   }
 
+  tableRec = []
+  TotalTableWeight = []
+  tableRecords() {
+
+    const data = {
+      "from_date": "2022-02-01",
+      "to_date": "2022-02-17"
+    }
+    this.http.post('/list_localsale_date_manual_bill', data).subscribe((response: any) => {
+      this.tableRec = response.records;
+      console.log(response);
+      
+
+      // for (var i = 0; i < response.records.length; i++) {
+      //   this.TotalTableWeight.push(response.records[i].weight)
+      //   console.log(response.records[i].weight);
+      //  this.sum = this.sum + response.records[i].weight
+       
+      //  console.log(this.sumofWeight);
+       
+      // }
+
+      // this.sumofWeight += this.sum;
+    
+
+
+    }, (error: any) => {
+      console.log(error);
+    }
+    );
+  }
 
   records() {
     this.http.get('/list_manual_weight',).subscribe((response: any) => {
