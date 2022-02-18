@@ -153,14 +153,14 @@ export class BillPage implements OnInit {
       if (response.success == "true") {
       }
 
-      this.bluetoothSerial.write("Printer Successfully Connected");
+     
 
     }, (error: any) => {
       console.log(error);
     }
     );
     localStorage.removeItem("SetBillerAddItem");
-    this.router.navigate(['/BillerAutoweighter'])
+    this.router.navigate(['/biller-auto-record'])
   }
 
 

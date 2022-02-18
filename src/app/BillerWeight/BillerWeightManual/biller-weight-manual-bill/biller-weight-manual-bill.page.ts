@@ -95,7 +95,7 @@ export class BillerWeightManualBillPage implements OnInit {
     receipt += commands.HORIZONTAL_LINE.HR2_58MM
     receipt += '\n'
     receipt += commands.TEXT_FORMAT.TXT_ALIGN_LT
-    receipt += '\x1b\x45\x01' + vsprintf("%-17s %3s %10s \n", ["Item", "", "Price(Rs)"])
+    receipt += '\x1b\x45\x01' + vsprintf("%-17s %3s %10s \n", ["Item", "", "Price(Rs.)"])
 
     for (var pro in product) {
       if (product.hasOwnProperty(pro)) {
@@ -107,7 +107,7 @@ export class BillerWeightManualBillPage implements OnInit {
         receipt += vsprintf("%-17s %3s %10.2f\n", [this.formatTextWrap(itemquality, 16), "", itemtotal])
         receipt += '\x1b\x61\x00' + "-" + " " + itemweight + " Kgs"
         receipt += '\n'
-        receipt += '\x1b\x61\x00' + "-" + " " + "Rs." + itemperkg + " /kg"
+        receipt += '\x1b\x61\x00' + "-" + "" + "Rs." + itemperkg + " /kg"
         receipt += '\n'
 
       }
@@ -120,12 +120,8 @@ export class BillerWeightManualBillPage implements OnInit {
     receipt += '\n'
     receipt += commands.TEXT_FORMAT.TXT_NORMAL
     receipt += '\x1B' + '\x61' + '\x30'// left align
-    receipt += '\x1b\x45\x01' + vsprintf("%-17s %3s %10s\n", ["Total Amount", "", totalPrice])
-
-
-
+    receipt += '\x1b\x45\x01' + vsprintf("%-17s %3s %10s\n", ["Total Amount(Rs)", "", totalPrice])
     receipt += commands.TEXT_FORMAT.TXT_ALIGN_RT
-
     receipt += '\n'
     receipt += commands.TEXT_FORMAT.TXT_FONT_A
     receipt += commands.HORIZONTAL_LINE.HR2_58MM
@@ -163,12 +159,12 @@ export class BillerWeightManualBillPage implements OnInit {
     }
     );
     localStorage.removeItem("SetBillerAddItem");
-    this.router.navigate(['/BillerManualdashboard'])
+    this.router.navigate(['/biller-weight-manual-record'])
   }
 
 
   printText(receipt) {
-   
+    alert(receipt);
     this.bluetoothSerial.write(receipt);
   }
 
@@ -178,6 +174,8 @@ export class BillerWeightManualBillPage implements OnInit {
   jsonData = [];
 
   onSuccess() {
+    alert("Successfully Printed");
+    //Data to be printed presented in jsonData format.....
     const items = item => ({
       quality: item.quality,
       weight: item.weight,
@@ -227,7 +225,7 @@ export class BillerWeightManualBillPage implements OnInit {
         receipt += vsprintf("%-17s %3s %10.2f\n", [this.formatTextWrap(itemquality, 16), "", itemtotal])
         receipt += '\x1b\x61\x00' + "-" + " " + itemweight + " Kgs"
         receipt += '\n'
-        receipt += '\x1b\x61\x00' + "-" + " " + "Rs." + itemperkg + " /kg"
+        receipt += '\x1b\x61\x00' + "-" + "" + "Rs." + itemperkg + " /kg"
         receipt += '\n'
 
       }
@@ -240,7 +238,7 @@ export class BillerWeightManualBillPage implements OnInit {
     receipt += '\n'
     receipt += commands.TEXT_FORMAT.TXT_NORMAL
     receipt += '\x1B' + '\x61' + '\x30'// left align
-    receipt += '\x1b\x45\x01' + vsprintf("%-17s %3s %10s\n", ["Total Amount", "", totalPrice])
+    receipt += '\x1b\x45\x01' + vsprintf("%-17s %3s %10s\n", ["Total Amount(Rs)", "", totalPrice])
 
 
 
