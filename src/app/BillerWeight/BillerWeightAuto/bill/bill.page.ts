@@ -101,7 +101,7 @@ export class BillPage implements OnInit {
         var itemweight = item.weight
         var itemperkg = item.price
         var itemtotal = item.totalcost
-        receipt += vsprintf("%-17s %3s %10.2f\n", [this.formatTextWrap(itemquality, 16), "", "Rs."+itemtotal+"/-"])
+        receipt += vsprintf("%-17s %3s %10.2f\n", [this.formatTextWrap(itemquality, 16), "", itemtotal])
         receipt += '\x1b\x61\x00' + "-" + " " + itemweight + " Kgs" +  '\x1b\x61\x00' 
         receipt += '\n'
         receipt += '\x1b\x61\x00' + "-" + "Rs." + itemperkg + "/-" + " Per/Kg" +  '\x1b\x61\x00' 
