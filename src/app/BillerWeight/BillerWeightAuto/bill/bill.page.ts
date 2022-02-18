@@ -115,6 +115,8 @@ export class BillPage implements OnInit {
     // receipt += commands.HORIZONTAL_LINE.HR2_58MM
     // receipt += vsprintf("%-17s %3s %10.2f\n", ["Total Price", "", totalPrice])
     receipt += '\n'
+    receipt += commands.HORIZONTAL_LINE.HR2_58MM
+    receipt += '\n'
     receipt += commands.TEXT_FORMAT.TXT_NORMAL
     receipt += '\x1B' + '\x61' + '\x30'// left align
     receipt += '\x1b\x45\x01' + vsprintf("%-17s %3s %10s\n", ["Total Amount", "", totalPrice])
@@ -153,7 +155,7 @@ export class BillPage implements OnInit {
       if (response.success == "true") {
       }
 
-     
+
 
     }, (error: any) => {
       console.log(error);
@@ -234,6 +236,8 @@ export class BillPage implements OnInit {
     // receipt += commands.TEXT_FORMAT.TXT_FONT_A
     // receipt += commands.HORIZONTAL_LINE.HR2_58MM
     // receipt += vsprintf("%-17s %3s %10.2f\n", ["Total Price", "", totalPrice])
+    receipt += '\n'
+    receipt += commands.HORIZONTAL_LINE.HR2_58MM
     receipt += '\n'
     receipt += commands.TEXT_FORMAT.TXT_NORMAL
     receipt += '\x1B' + '\x61' + '\x30'// left align

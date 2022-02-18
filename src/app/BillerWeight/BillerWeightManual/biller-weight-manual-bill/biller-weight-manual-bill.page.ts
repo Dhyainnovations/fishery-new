@@ -81,6 +81,7 @@ export class BillerWeightManualBillPage implements OnInit {
     receipt += "\x1b\x45\x01 \x00" + company + "\x1b\x45\x00"
     receipt += '\n'
     receipt += "\x00" + time + "\x00"
+
     receipt += '\n'
     receipt += commands.TEXT_FORMAT.TXT_NORMAL
     receipt += commands.HORIZONTAL_LINE.HR_58MM
@@ -95,6 +96,7 @@ export class BillerWeightManualBillPage implements OnInit {
     receipt += '\n'
     receipt += commands.TEXT_FORMAT.TXT_ALIGN_LT
     receipt += '\x1b\x45\x01' + vsprintf("%-17s %3s %10s \n", ["Item", "", "Price(Rs.)"])
+
     for (var pro in product) {
       if (product.hasOwnProperty(pro)) {
         var item = product[pro]
@@ -105,8 +107,9 @@ export class BillerWeightManualBillPage implements OnInit {
         receipt += vsprintf("%-17s %3s %10.2f\n", [this.formatTextWrap(itemquality, 16), "", itemtotal])
         receipt += '\x1b\x61\x00' + "-" + " " + itemweight + " Kgs"
         receipt += '\n'
-        receipt += '\x1b\x61\x00' + "-" + "" + "Rs." + itemperkg + " /kg"
+        receipt += '\x1b\x61\x00' + "-" + " " + "Rs." + itemperkg + " /kg"
         receipt += '\n'
+
       }
       receipt += '\n'
     }
@@ -117,6 +120,8 @@ export class BillerWeightManualBillPage implements OnInit {
     receipt += '\n'
     receipt += commands.TEXT_FORMAT.TXT_NORMAL
     receipt += '\x1B' + '\x61' + '\x30'// left align
+    receipt += commands.HORIZONTAL_LINE.HR2_58MM
+    receipt += '\n'
     receipt += '\x1b\x45\x01' + vsprintf("%-17s %3s %10s\n", ["Total Amount(Rs)", "", totalPrice])
     receipt += commands.TEXT_FORMAT.TXT_ALIGN_RT
     receipt += '\n'
@@ -127,16 +132,15 @@ export class BillerWeightManualBillPage implements OnInit {
     receipt += '\x1b\x61\x01' + 'Thank you, visit again!' + '\x0a\x0a\x0a\x0a' //The unicode symbols are for centering the text
     receipt += "\x1b\x45\x01 \x00" // Full cut paper
     this.printText(receipt)
-    console.log("print1");
 
 
     let hours = new Date().getHours();
     let minutes = new Date().getMinutes();
     let seconds = new Date().getSeconds();
     this.hr = hours + 12;
+
     this.updateTime = this.myDate + ' ' + hours + ":" + minutes + ":" + seconds
     console.log(this.updateTime);
-
 
 
     this.billWeight();
@@ -148,32 +152,35 @@ export class BillerWeightManualBillPage implements OnInit {
       isDeleted: "0",
       purchaseddate: this.updateTime,
     }
+
     this.http.post('/manual_bill', data).subscribe((response: any) => {
       console.log(response);
       if (response.success == "true") {
-
+        localStorage.removeItem("SetBillerAddItem");
+        this.router.navigate(['/biller-weight-manual-record'])
       }
+
+
     }, (error: any) => {
       console.log(error);
     }
     );
+
   }
 
 
   printText(receipt) {
     alert(receipt);
     this.bluetoothSerial.write(receipt);
-    localStorage.removeItem("SetBillerAddItem");
-    this.router.navigate(['/biller-weight-manual-record'])
   }
+
+
+
+
   jsonData = [];
-
-
 
   onSuccess() {
     alert("Successfully Printed");
-
-
     //Data to be printed presented in jsonData format.....
     const items = item => ({
       quality: item.quality,
@@ -224,7 +231,7 @@ export class BillerWeightManualBillPage implements OnInit {
         receipt += vsprintf("%-17s %3s %10.2f\n", [this.formatTextWrap(itemquality, 16), "", itemtotal])
         receipt += '\x1b\x61\x00' + "-" + " " + itemweight + " Kgs"
         receipt += '\n'
-        receipt += '\x1b\x61\x00' + "-" + "" + "Rs." + itemperkg + " /kg"
+        receipt += '\x1b\x61\x00' + "-" + " " + "Rs." + itemperkg + " /kg"
         receipt += '\n'
 
       }
@@ -234,6 +241,7 @@ export class BillerWeightManualBillPage implements OnInit {
     // receipt += commands.TEXT_FORMAT.TXT_FONT_A
     // receipt += commands.HORIZONTAL_LINE.HR2_58MM
     // receipt += vsprintf("%-17s %3s %10.2f\n", ["Total Price", "", totalPrice])
+    receipt += commands.HORIZONTAL_LINE.HR2_58MM
     receipt += '\n'
     receipt += commands.TEXT_FORMAT.TXT_NORMAL
     receipt += '\x1B' + '\x61' + '\x30'// left align
@@ -251,7 +259,6 @@ export class BillerWeightManualBillPage implements OnInit {
     receipt += '\x1b\x61\x01' + 'Thank you, visit again!' + '\x0a\x0a\x0a\x0a' //The unicode symbols are for centering the text
     receipt += "\x1b\x45\x01 \x00" // Full cut paper
     this.printText(receipt)
-    console.log("print2");
   }
 
   onError(error) {
