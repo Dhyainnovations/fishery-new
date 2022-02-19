@@ -1,0 +1,90 @@
+<ion-content>
+  <ion-content>
+    <img src="assets/bacground.png">
+
+    <div style="margin-top: -105px;" class="row">
+      <div class="col-6 mt-4 ">
+        <ion-icon style="margin-left:20px;width: 45px; height:25px;color: #655fcb" (click)="backToPrivios()"
+          name="arrow-back">
+        </ion-icon>
+      </div>
+
+      <div *ngIf="onlineAlart" class="col-6 ion-text-right mt-2">
+        <lottie-player src="https://assets5.lottiefiles.com/packages/lf20_dsp2yB.json" background="transparent"
+          speed="1.5" style="width:50%; margin-left: 50%;" loop autoplay></lottie-player>
+        <!-- <p style="background-color: #6863CC;border-radius:10px;color:#fff;width: 50px;  margin-left: 50%;">Online</p> -->
+      </div>
+
+      <div *ngIf="offlineAlart" class="col-6 ion-text-right ">
+        <!-- <p style="background-color: #6863CC;border-radius:10px;color:#fff;width: 50px;  margin-left: 50%;">Offline</p> -->
+        <img style="width:50%; margin-left: 50%; border-radius: 55%;" src="assets/offline.gif" alt="">
+      </div>
+
+    </div>
+
+    <!-----Title----->
+    <div class="row">
+
+      <div style="margin-top:-50px" class="col-12 ion-text-center">
+        <b style="font-size: 25px;">SETTINGS</b>
+      </div>
+
+      <div class=" col-6 dropdown toggle mt-3">
+        <input id="t7" type="checkbox">
+        <label for="t7">{{user}}</label>
+        <ul>
+          <!-- <li><a (click)="setting()">Settings</a></li> -->
+          <li><a (click)="logout()">Logout</a></li>
+        </ul>
+      </div>
+
+    </div>
+    <!-----Sub-Title----->
+    <h4 class="text-center connectivity mt-4"><b>PRINTER CONNECTIVITY</b></h4>
+    <div class="row text-center mt-4">
+      <div class="col-8">
+
+        <!-----Toggle----->
+        <h5 class="text-center bluetooth-status"><b>Printer Connection</b></h5>
+      </div>
+      <div class="col-12 mt-2">
+        <div class="button-wrapper p-5">
+          <div class="container">
+            <div class="row">
+              <button (click)="enablebluetooth()" class="submit-button px-2 py-2" color="transparent"
+                style="font-size: 13px;" style="background-color: #655fcb;">
+                CONNECT
+              </button>
+            </div>
+          </div>
+        </div>
+        <!-- <ion-toggle slot="end" color="tertiary" class="toggle-bluetooth" (click)="enablebluetooth()"
+          checked="{{bluetoothtoggle}}">
+        </ion-toggle> -->
+      </div>
+    </div>
+
+    <!--Show Unpaired Device-->
+
+    <ion-item *ngFor='let device of unpairedDevices'>
+      <span (click)="selectDevice(device.id)">
+        <p>Select a Device To Connect : </p>
+        {{device.name || device.address}}
+      </span>
+    </ion-item>
+    <ion-spinner name="crescent" *ngIf="gettingDevices" style="margin-left: 50%;"></ion-spinner>
+
+    <div class="button-wrapper p-4">
+      <div class="container">
+        <p>Connected Id : {{printerBluetoothId}}</p>
+        <div class="row p-5">
+          <button (click)="disconnect()" class="submit-button px-2 py-2" color="transparent"
+            style="font-size: 13px;background-color: #655fcb;">
+            DISCONNECT
+          </button>
+        </div>
+      </div>
+    </div>
+
+
+  </ion-content>

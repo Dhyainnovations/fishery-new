@@ -1,0 +1,38 @@
+<ion-content class="background">
+  <!-----Title----->
+  <h4 class="text-center welcome-back"><b>WELCOME BACK</b><br>
+  To<br>
+  <img src="assets/DhyaLogo.png" class="logo-image"><br>
+  <b>Smart POS</b></h4>
+
+  <!-- <div class="row">
+    <div class="col-12 ion-text-center">
+      <lottie-player  src="https://assets2.lottiefiles.com/packages/lf20_oh6P9B.json"
+        background="transparent" speed="1.5" style="width:50%;margin: auto;" loop autoplay></lottie-player>
+    </div>
+  </div> -->
+
+  <!-----Username-Input----->
+  <div class="user-input-wrap px-4 mt-5">
+    <ion-input [(ngModel)]="username" class="username px-3 py-1 rounded" placeholder="Enter User Name"></ion-input>
+  </div>
+
+  
+
+  <!-----Password-Input----->
+  <div class="user-password-wrap px-4 mt-4">
+    <ion-input type="password" [(ngModel)]="password" class="password px-3 py-1 rounded"
+      placeholder="Enter User Password"></ion-input>
+  </div>
+
+  <!-- <p class="forgot-password mt-3">Forgot Password ?</p> -->
+
+
+  <!-----Login-Button----->
+  <div class="row">
+    <div class="col-12 ion-text-center">
+      <button class="login-btn  mt-5" (click)="login()"><b>Login</b></button>
+    </div>
+  </div>
+
+</ion-content>

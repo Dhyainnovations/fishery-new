@@ -1,0 +1,175 @@
+<ion-content class="background">
+  <!-------refresher--------->
+  <div class="ion-padding">
+    <ion-refresher slot="fixed" (ionRefresh)="dosomething($event)">
+      <ion-refresher-content pullingIcon="arrow-dropdown" refreshingSpiner="circles" refreshingText="Refreshing...">
+      </ion-refresher-content>
+    </ion-refresher>
+  </div>
+
+  <!-------- online offline alert----------->
+  <div class="row">
+    <div class="col-3 mt-4 ">
+      <ion-icon style="margin-left:20px;width: 45px; height:25px;color:#fff" (click)="backToPrivios()"
+        name="arrow-back">
+      </ion-icon>
+    </div>
+
+    <div class="col-6 ion-text-center">
+      <h6 style="color: #6863CC;" class="mx-4 mt-4" ><b>WEIGHTER</b></h6>
+    </div>
+
+    <div *ngIf="onlineAlart" class="col-3 ion-text-right mt-2">
+      <lottie-player src="https://assets5.lottiefiles.com/packages/lf20_dsp2yB.json" background="transparent"
+        speed="1.5" style="width:100%; margin-left: 10%;" loop autoplay></lottie-player>
+      <!-- <p style="background-color: #6863CC;border-radius:10px;color:#fff;width: 50px;  margin-left: 50%;">Online</p> -->
+    </div>
+
+    <div *ngIf="offlineAlart" class="col-6 ion-text-right ">
+      <!-- <p style="background-color: #6863CC;border-radius:10px;color:#fff;width: 50px;  margin-left: 50%;">Offline</p> -->
+      <img style="width:45%; margin-left: 50%; border-radius: 55%;" src="assets/offline.gif" alt="">
+    </div>
+
+  </div>
+
+  <div class="row ">
+    <!-----Display Date----->
+
+    <div class="date-card col-6 display-date mx-5 ">
+      <p style="margin: 7px;" > <b>{{currentDateTime | date:'dd-MM-yyyy'}}</b> </p>
+    </div>
+
+    <div style="margin-top: -12%;"  class=" col-6 dropdown toggle ">
+      <input id="t10" type="checkbox">
+      <label for="t10">{{user}}</label>
+      <ul>
+        <!-- <li><a (click)="setting()">Settings</a></li> -->
+        <li><a (click)="logout()">Logout</a></li>
+      </ul>
+    </div>
+
+  </div>
+
+  <div class="row">
+
+    <!-----Display Weight----->
+    <div class="col-12 ion-text-center mt-4">
+      <input [(ngModel)]="weight" type="number" placeholder="ENTER THE WEIGHT" class="text-center"
+        style="border: 0.5px solid rgba(0, 0, 0, 0.164);  box-shadow: 1px 1px 8px 1px #6863CC;;font-size: 16px;padding: 5px;margin-left: 10px;margin-right: 10px">
+      KG
+    </div>
+  </div>
+
+
+
+  <div class="container weighter-details-wrapper">
+    <div class="row">
+
+      <!-----Fish category----->
+      <div class="col-6">
+        <form (change)="SelectCategory(Selectcategory.value)" #Selectcategory="ngForm">
+          <p class="select-category" style="font-size: 13px;"><b><u>Select Category:</u></b></p>
+          <select class="selectDropdown" [(ngModel)]="category" placeholder="category" style="width: 96%;"  name="category">
+            <option value="" disabled selected>Category</option>
+            <option *ngFor="let category of categorylist" [value]="category.category">{{category.category}}</option>
+          </select>
+        </form>
+      </div>
+
+      <!-----Fish quality----->
+      <div class="col-6">
+        <form (change)="SelectType(Selecttype.value)" #Selecttype="ngForm">
+          <p class="select-category" style="font-size: 13px;"><b><u>Select Quality: </u></b></p>
+          <select class="selectDropdown" [(ngModel)]="fishQuality" placeholder="fishQuality" name="fishQuality" style="width: 96%;">
+            <option value="" disabled selected>Fish Type</option>
+            <option *ngFor="let type of StoreTypeData" [value]="type">{{type}}</option>
+          </select>
+        </form>
+      </div>
+
+      <div id="sideMenuList" class="col-6">
+        <button [class]="activeItem == 'center' ? 'active list': 'list' " (click)="center('center')"
+          class="btn btn-primary type-btn">Center</button>
+      </div>
+      <div id="sideMenuList" class="col-6">
+        <button [class]="activeItem == 'localsale' ? 'active list': 'list' " (click)="localsale('localsale')"
+          class="btn btn-primary type-btn">Local Sale</button>
+      </div>
+      <div id="sideMenuList" class="col-6">
+        <button [class]="activeItem == 'market' ? 'active list': 'list' " (click)="market('market')"
+          class="btn btn-primary type-btn">Market</button>
+      </div>
+      <div id="sideMenuList" class="col-6">
+        <button [class]="activeItem == 'merchant' ? 'active list': 'list' " (click)="merchant('merchant')"
+          class="btn btn-primary type-btn">Merchant</button>
+      </div>
+
+    </div>
+
+
+
+    <div class="row mt-3">
+      <!-----FLocation----->
+      <div class="col-12 ion-text-center">
+        <form (change)="SelectLocation(Selectlocation.value)" #Selectlocation="ngForm">
+          <p class="select-category" style="font-size: 13px;"><b><u>Select Location: </u></b></p>
+          <select class="selectDropdown" ngModel placeholder="place" name="place" style="width: 96%;">
+            <option value="" disabled selected hidden>Location</option>
+            <option *ngFor="let location of locationlist" [value]="location.place">{{location.place}}</option>
+          </select>
+        </form>
+      </div>
+    </div>
+
+
+    <!-----Submit Button---->
+    <div class="row">
+      <div class="button-wrapper mt-2">
+        <ion-button (click)="onlineApiCal()" class="submit-button" color="transparent"
+          style="background-color: #6863CC;width: 100% !important;"
+          [disabled]="!place || !type || !category ||  !onlineAlart  || weight <='0' ">
+          <b>SUBMIT</b>
+        </ion-button>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-----card----->
+
+  <div style="font-size: 12px;">
+    <div class="row mb-4">
+      <div id="cardActive" class="col-12">
+        <div    [class]="record.type == 'center' ? 'active cardColor': 'cardColor' " class="card mt-3" *ngFor="let record of tableRecodrs">
+          <div  class="row">
+            <div class="col-5">
+              <b style="color: #6863CC;" >Date:</b><span id="data">{{record.updatedAt | date:'dd-MM-yyyy'}}</span><br>
+              <b  style="color: #6863CC;" >Category</b><span id="data"> : {{record.category}}</span><br>
+              <b  style="color: #6863CC;" >Weight </b> <span id="data">: {{record.quantity}}Kg</span> <br>
+            </div>
+
+            <div class="col-5">
+              <b  style="color: #6863CC;">Time</b> <span id="data">: {{record.time}}</span><br>
+              <b  style="color: #6863CC;">Quality</b> <span id="data">: {{record.quality}} </span><br>
+              <b  style="color: #6863CC;" >Location</b> : <span id="data">{{record.place}}</span><br>
+
+
+            </div>
+            <div class="col-2 ion-text-left mt-2">
+              <div (click)="delete(record.boxid)" [value]="record.boxid" class="dot">
+                <svg style="margin: 10px;" xmlns="http://www.w3.org/2000/svg" width="16" height="18" fill="#fff"
+                  class="bi bi-trash3" viewBox="0 0 16 16">
+                  <path fill-rule="evenodd"
+                    d="M6.5 1a.5.5 0 0 0-.5.5v1h4v-1a.5.5 0 0 0-.5-.5h-3ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1H3.042l.846 10.58a1 1 0 0 0 .997.92h6.23a1 1 0 0 0 .997-.92l.846-10.58Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z" />
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</ion-content>

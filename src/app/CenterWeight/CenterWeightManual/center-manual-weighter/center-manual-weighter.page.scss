@@ -1,0 +1,211 @@
+select {
+    border       : 1px solid rgba(0, 0, 0, 0.493);
+    border-radius: 5px;
+    padding      : 2px;
+  }
+  
+  #profile {
+    border-radius: 50px;
+    margin-right : 15px !important;
+  }
+  
+  
+  
+  /* Chrome, Safari, Edge, Opera */
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin            : 0;
+  }
+  
+  /* Firefox */
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
+  
+  table {
+    border-spacing: 0px;
+    table-layout: fixed;
+    text-align: center;
+  }
+  
+  td, th {
+    border: 0.10px solid rgba(0, 0, 0, 0.281);
+    word-break: break-all;
+  }
+  
+  .card{
+    padding: 5px;
+    border:1px solid #fff;
+    box-shadow:3px 3px 16px 4px #ccc;
+    margin-left: 8px !important;
+    margin-right:6px !important;
+    margin: auto;
+    width: 96%;
+    background-color: #fff !important;
+    border-radius: 2px;
+  }
+  
+  @import url(https://fonts.googleapis.com/css?family=Open+Sans:400,700);
+  
+  
+  section {
+  margin-top: 30px;
+  background: #E3F9F9;
+  padding: 20px;
+  box-shadow: 0 3px 5px rgba(0,0,0,0.15);
+  }
+  .dropdown {
+  width: 170px;
+  display: inline-block;
+  margin-left: 47%;
+  position: relative;
+  }
+  .dropdown.toggle > input {
+  display: none;
+  }
+  .dropdown > a, .dropdown.toggle > label {
+  border-radius: 2px;
+  box-shadow: 0 6px 5px -5px rgba(0,0,0,0.3);
+  }
+  .dropdown > a::after, .dropdown.toggle > label::after {
+  content: "";
+  float: right;
+  margin: 15px 15px 0 0;
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 10px solid #CCC;
+  }
+  .dropdown ul {
+  list-style-type: none;
+  display: block;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  width: 100%;
+  box-shadow: 0 6px 5px -5px rgba(0,0,0,0.3);
+  overflow: hidden;
+  }
+  .dropdown a, .dropdown.toggle > label {
+  display: block;
+  padding: 0 0 0 10px;
+  text-decoration: none;
+  line-height: 40px;
+  font-size: 13px;
+  text-transform: uppercase;
+  font-weight: bold;
+  color: #fff;
+  background-color: #655fcb;
+  }
+  .dropdown li {
+  height: 0;
+  overflow: hidden;
+  transition: all 500ms;
+  }
+  .dropdown.hover li {
+  transition-delay: 300ms;
+  }
+  .dropdown li:first-child a {
+  border-radius: 2px 2px 0 0;
+  }
+  .dropdown li:last-child a {
+  border-radius: 0 0 2px 2px;
+  }
+  .dropdown li:first-child a::before {
+  content: "";
+  display: block;
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 10px solid #FFF;
+  margin: -10px 0 0 30px;
+  }
+  // .dropdown a:hover, .dropdown.toggle > label:hover, .dropdown.toggle > input:checked ~ label {
+  //   background-color: #a8a3fd;
+  //   color: #fff;
+  // }
+  .dropdown > a:hover::after, .dropdown.toggle > label:hover::after, .dropdown.toggle > input:checked ~ label::after {
+  border-top-color: #AAA;
+  }
+  .dropdown li:first-child a:hover::before {
+  border-bottom-color: red;
+  }
+  .dropdown.hover:hover li, .dropdown.toggle > input:checked ~ ul li {          
+  height: 50px;
+  }
+  .dropdown.hover:hover li:first-child, .dropdown.toggle > input:checked ~ ul li:first-child {
+  padding-top: 15px;
+  }
+  
+  //   ion-content {
+  //     background-color: #fff !important;
+  //     // background: linear-gradient(to bottom, darkturquoise
+  //     // 0%, #d1f2e7
+  //     // 100%) !important;
+  //     --offset-bottom : auto !important;
+  //     --overflow      : hidden;
+  //     overflow        : auto;
+  
+  //     &::-webkit-scrollbar {
+  //         display: none;
+  //     }
+  // }
+  
+  
+  .type-btn{
+    background-color: #655fcb;
+    color:#fff;
+    width: 100%;
+    margin: 15px 2px;
+   
+  }
+  
+  .list{
+    background-color: #7772d6!important;
+    color: rgb(219, 217, 217);
+    font-size: 15px;
+    margin: 18px -5px;
+  }
+  
+  #sideMenuList .active{
+    color: #fff;
+    background-color: #655fcb !important;
+    font-weight: 700;
+  }
+  
+  .selectDropdown{
+    border: 2px solid #655fcb;
+  }
+#data{
+  font-size: 12px;
+  font-weight: 700;
+}
+
+  #cardActive .active{
+    color: #655fcb;
+    background-color: #fff !important;
+    font-weight: 700;
+
+    #data{
+      color: #535353,
+     
+      
+    }
+  }
+
+  .cardColor{
+    background-color: rgba(250, 100, 100, 0.602)!important;
+    
+    color: rgb(219, 217, 217);
+    font-size: 15px;
+    margin: 18px -5px;
+
+    #data{
+      color: #535353,
+    }
+
+  }

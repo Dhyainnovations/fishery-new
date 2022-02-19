@@ -1,0 +1,60 @@
+<ion-content id="print-section">
+  <!-----Title----->
+  <img src="assets/bacground.png">
+  <h1 class="text-center weighter" style="margin-top: -75px;"><b style="font-size: 20px;">BILL</b></h1>
+  <div class="container">
+    <div class="row mt-5">
+      <div class="col-6">
+        <p>Biller Name : <span>{{name}}</span></p>
+        <p>Counter : <span>{{counter}}</span></p>
+      </div>
+      <div class="col-6">
+        <p>Date : {{currentDate | date:'dd-MM-yyyy'}}</p>
+      </div>
+    </div>
+  </div>
+
+  <table class="table" id="printData">
+    <thead>
+      <tr style="background-color: #6863CC;color: white;">
+        <th scope="col">Category</th>
+        <th scope="col">Quality</th>      
+        <th scope="col">Weight</th>
+        <th scope="col">Cost/Kg</th>
+        <th scope="col">Total Cost</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of GetBillDataFromLocalStorageData">
+        <td>{{data.category}}</td>
+        <td>{{data.quality}}</td>       
+        <td>{{data.weight}}</td>
+        <td>{{data.price}}</td>
+        <td>{{data.totalcost}}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="text-center mt-4" style="background-color: #6863CC;color: white;border-radius: 2px;margin: 10px;">
+    <p style="font-size: 20px;">Total Price Is Rs.{{totalsum}}</p>
+  </div>
+
+
+  <div class="row ion-text-center mt-5">
+    <div class="col-6">
+      <div>
+        <button (click)="backToPrivious()" class="btn btn-sm text-white"
+          style="background-color:#6863CC ;">Back</button>
+      </div>
+    </div>
+    <div class="col-6">
+      <div>
+        <button (click)="printBill()" class="btn btn-sm text-white"
+        style="background-color:#6863CC ;">print</button> 
+        
+      </div>
+    </div>
+  </div>
+
+
+</ion-content>

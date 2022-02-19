@@ -1,0 +1,8 @@
+{
+  "name": "Fishery-app",
+  "integrations": {
+    "capacitor": {},
+    "cordova": {}
+  },
+  "type": "angular"
+}

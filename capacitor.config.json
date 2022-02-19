@@ -1,0 +1,6 @@
+{
+	"appId": "com.fishery.app",
+	"appName": "fishery",
+	"webDir": "www",
+	"bundledWebRuntime": false
+}
