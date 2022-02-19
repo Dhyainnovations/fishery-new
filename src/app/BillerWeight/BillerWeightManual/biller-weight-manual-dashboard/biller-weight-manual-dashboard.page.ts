@@ -243,7 +243,7 @@ export class BillerWeightManualDashboardPage implements OnInit {
     this.generateId();
     const data = {
       category: this.category,
-      id: this.ID,
+      id: this.user,
       quality: this.type,
       weight: this.weight,
       counter: this.counter,
