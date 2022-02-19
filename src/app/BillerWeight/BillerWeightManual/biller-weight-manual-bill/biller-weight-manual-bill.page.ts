@@ -77,16 +77,16 @@ export class BillerWeightManualBillPage implements OnInit {
     //let change = amoutntReceived - totalPrice
 
     let receipt = ""
-    receipt += commands.TEXT_FORMAT.TXT_WIDTH[1]
+    receipt += commands.TEXT_FORMAT.TXT_CUSTOM_SIZE
     receipt += "\x1b\x45\x01 \x00" + company + "\x1b\x45\x00"
     receipt += '\n'
     receipt += "\x00" + time + "\x00"
 
     receipt += '\n'
-    receipt += commands.TEXT_FORMAT.TXT_NORMAL
+    receipt += commands.TEXT_FORMAT.TXT_CUSTOM_SIZE
     receipt += commands.HORIZONTAL_LINE.HR_58MM
     receipt += '\n'
-    receipt += commands.TEXT_FORMAT.TXT_NORMAL
+    receipt += commands.TEXT_FORMAT.TXT_CUSTOM_SIZE
     receipt += '\x1B' + '\x61' + '\x30'// left align
     receipt += vsprintf("%-17s %3s %10s\n", ["Counter", "", counter])
     receipt += vsprintf("%-17s %3s %10s\n", ["Biller", "", biller])
@@ -118,7 +118,7 @@ export class BillerWeightManualBillPage implements OnInit {
     // receipt += commands.HORIZONTAL_LINE.HR2_58MM
     // receipt += vsprintf("%-17s %3s %10.2f\n", ["Total Price", "", totalPrice])
     receipt += '\n'
-    receipt += commands.TEXT_FORMAT.TXT_NORMAL
+    receipt += commands.TEXT_FORMAT.TXT_CUSTOM_SIZE
     receipt += '\x1B' + '\x61' + '\x30'// left align
     receipt += commands.HORIZONTAL_LINE.HR2_58MM
     receipt += '\n'
@@ -130,7 +130,10 @@ export class BillerWeightManualBillPage implements OnInit {
     receipt += '\n'
     receipt += commands.TEXT_FORMAT.TXT_FONT_B
     receipt += '\x1b\x61\x01' + 'Thank you, visit again!' + '\x0a\x0a\x0a\x0a' //The unicode symbols are for centering the text
-    receipt += "\x1b\x45\x01 \x00" // Full cut paper
+    receipt += '\x1b\x45\x01 \x00' // Full cut paper
+    receipt += '\x1d\x56\x01'
+    receipt += '\x1d\x56\x41'
+    receipt += '\x1d\x56\x42'
     this.printText(receipt)
 
 
