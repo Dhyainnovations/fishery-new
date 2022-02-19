@@ -16,8 +16,10 @@ export class BillerWeightManualDashboardPage implements OnInit {
 
   constructor(public datepipe: DatePipe, private router: Router, private activatedRoute: ActivatedRoute, private http: HttpService, route: ActivatedRoute, private network: Network,) {
     route.params.subscribe(val => {
+      
+      this.myDate = new Date();
+      this.myDate = this.datepipe.transform(this.myDate, 'yyyy-MM-dd');
 
-      this.currentDateTime = this.datepipe.transform((new Date), 'yyyy-MM-dd hh:mm:ss');
       this.dropdownVisible = false
 
       window.addEventListener('offline', () => {
@@ -93,6 +95,14 @@ export class BillerWeightManualDashboardPage implements OnInit {
 
 
 
+
+    let hours = new Date().getHours();
+    let minutes = new Date().getMinutes();
+    let seconds = new Date().getSeconds();
+    this.hr = hours + 12;
+
+    this.currentDateTime = this.myDate + ' ' + hours + ":" + minutes + ":" + seconds
+    console.log(this.currentDateTime);
 
 
 
