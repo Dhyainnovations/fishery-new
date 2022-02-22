@@ -85,7 +85,7 @@ export class BillerAutoWeighterPage implements OnInit {
   dropdownVisible: any = false
 
   backToPrivios() {
-    this.router.navigate(['/biller-weight-manual-record'])
+    this.router.navigate(['/biller-auto-record'])
   }
 
   generateId() {
@@ -283,7 +283,7 @@ export class BillerAutoWeighterPage implements OnInit {
   }
 
   generateBill() {
-    this.router.navigate(['/BillerManualbill'])
+    this.router.navigate(['/BillerAutobill'])
   }
 
 
@@ -294,6 +294,7 @@ export class BillerAutoWeighterPage implements OnInit {
     localStorage.removeItem("Fishery-username",)
     localStorage.removeItem("logintype",)
     localStorage.removeItem("permission",)
+    localStorage.removeItem("printerBluetoothId",)
     this.router.navigate(['/loginpage'])
   }
 

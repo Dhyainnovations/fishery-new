@@ -54,10 +54,20 @@
       <!-----Toggle----->
       <h5 class="text-center bluetooth-status"><b>Bluetooth Status</b></h5>
     </div>
-    <div class="col-1 mt-2">
-      <ion-toggle slot="end" color="tertiary" class="toggle-bluetooth" (click)="enablebluetooth()"
+    <div class="col-12 mt-2">
+      <div class="button-wrapper p-5">
+        <div class="container">
+          <div class="row">
+            <button (click)="enablebluetooth()" class="submit-button px-2 py-2" color="transparent"
+              style="font-size: 13px;background-color: #655fcb;" >
+              CONNECT
+            </button>
+          </div>
+        </div>
+      </div>
+      <!-- <ion-toggle slot="end" color="tertiary" class="toggle-bluetooth" (click)="enablebluetooth()"
         checked="{{bluetoothtoggle}}">
-      </ion-toggle>
+      </ion-toggle> -->
     </div>
   </div>
 
