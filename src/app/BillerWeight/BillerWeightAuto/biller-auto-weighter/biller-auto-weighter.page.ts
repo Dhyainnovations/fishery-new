@@ -340,5 +340,5 @@ export class BillerAutoWeighterPage implements OnInit {
   }
 
 
-  recivedWeightValue: any = 24
+  recivedWeightValue: any = ""
 }
