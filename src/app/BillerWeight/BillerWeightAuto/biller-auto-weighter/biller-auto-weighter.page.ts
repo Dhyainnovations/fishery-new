@@ -107,11 +107,12 @@ export class BillerAutoWeighterPage implements OnInit {
     this.bluetoothSerial.subscribeRawData().subscribe((dt) => {
       this.bluetoothSerial.read().then((dd) => {
         this.onDataReceive(dd);
+        this.weight = dd
         this.cdr.detectChanges(); // either here
       });
     });
   }
-
+  weight: any;
   onDataReceive(val) {
     var data = JSON.stringify(val)
     this.recivedWeightValue = val;
@@ -119,7 +120,7 @@ export class BillerAutoWeighterPage implements OnInit {
     this.cdr.detectChanges(); // or here
   }
 
-  recivedWeightValue: any ;
+  recivedWeightValue: any;
 
   SelectCounter(data) {
     const formdata = new FormData();
@@ -264,8 +265,14 @@ export class BillerAutoWeighterPage implements OnInit {
 
   CheckGenerateBillButton = true;
   SetBillerAddItem = [];
+
+  recivedWeightValueshow: any;
+  weightshow :any;
+
   addItem() {
     this.CheckGenerateBillButton = false;
+    this.recivedWeightValueshow = this.recivedWeightValue
+    this.weightshow = this.weight;
     this.generateId();
     const data = {
       category: this.category,
@@ -279,6 +286,7 @@ export class BillerAutoWeighterPage implements OnInit {
       cost: this.cost,
       totalcost: this.cost * this.recivedWeightValue
     }
+    console.log(this.recivedWeightValue);
 
 
     console.log(data);
