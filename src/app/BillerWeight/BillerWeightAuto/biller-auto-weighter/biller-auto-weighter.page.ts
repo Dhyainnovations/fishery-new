@@ -112,7 +112,6 @@ export class BillerAutoWeighterPage implements OnInit {
     });
   }
 
-
   onDataReceive(val) {
     var data = JSON.stringify(val)
     this.recivedWeightValue = val;
