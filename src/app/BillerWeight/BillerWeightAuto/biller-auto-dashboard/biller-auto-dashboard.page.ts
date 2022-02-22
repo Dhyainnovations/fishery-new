@@ -178,6 +178,7 @@ export class BillerAutoDashboardPage implements OnInit {
   user: any = "";
 
   logout() {
+    localStorage.removeItem("ConnectedBluetoothID",)    
     localStorage.removeItem("orgid",)
     localStorage.removeItem("Fishery-username",)
     localStorage.removeItem("logintype",)

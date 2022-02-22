@@ -371,6 +371,7 @@ export class BillerAutoWeighterPage implements OnInit {
     this.router.navigate(['/loginpage'])
     this.bluetoothSerial.disconnect();
     localStorage.removeItem("printerBluetoothId",)
+    localStorage.removeItem("ConnectedBluetoothID",)    
   }
 
 

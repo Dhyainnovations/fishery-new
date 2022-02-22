@@ -21,7 +21,7 @@ export class BillerAutoRecordPage implements OnInit {
       this.records();
       this.list_manual_bill();
       this.tableRecords()
-
+      this.ConnectedBluetoothID = localStorage.getItem("ConnectedBluetoothID",);
       this.user = localStorage.getItem("Fishery-username",)
       console.log(this.user);
 
@@ -56,7 +56,7 @@ export class BillerAutoRecordPage implements OnInit {
   totalweight: any = '';
   tableRecodrs: any = []
   cardRecords: any = []
-
+  ConnectedBluetoothID:any;
   isVisible: any = false
   lastEntryisVisible: any = false
 
@@ -184,7 +184,13 @@ export class BillerAutoRecordPage implements OnInit {
   }
 
   navigateToNextPage() {
-    this.router.navigate(['/BillerAutodashboard'])
+
+    if(this.ConnectedBluetoothID != null){
+      this.router.navigate(['/BillerAutoweighter'])
+    }else{
+      this.router.navigate(['/BillerAutodashboard'])
+    }
+   
   }
   navigateToSettings() {
     this.router.navigate(['/settings'])
@@ -250,6 +256,7 @@ export class BillerAutoRecordPage implements OnInit {
     localStorage.removeItem("Fishery-username",)
     localStorage.removeItem("logintype",)
     localStorage.removeItem("permission",)
+    localStorage.removeItem("ConnectedBluetoothID",)    
     this.bluetoothSerial.disconnect();
     localStorage.removeItem("printerBluetoothId",)
     this.router.navigate(['/loginpage'])
