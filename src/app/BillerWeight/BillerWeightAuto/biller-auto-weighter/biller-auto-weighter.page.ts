@@ -34,7 +34,7 @@ export class BillerAutoWeighterPage implements OnInit {
       });
 
       this.generateId();
-      this.deviceConnected();
+     this.conectbluetoothDevice();
 
     });
 
@@ -43,6 +43,7 @@ export class BillerAutoWeighterPage implements OnInit {
   ngOnInit() {
     this.userId = localStorage.getItem("orgid",)
     this.user = localStorage.getItem("Fishery-username",)
+    this.ConnectedBluetoothID = localStorage.getItem("ConnectedBluetoothID",)
     this.http.get('/list_type_manual').subscribe((response: any) => {
       console.log(response);
       if (response.success == "true") {
@@ -63,7 +64,7 @@ export class BillerAutoWeighterPage implements OnInit {
   }
 
   currentDateTime: any;
-
+  ConnectedBluetoothID: any;
   currentDate: any = new Date()
   user: any;
   isDisabled: boolean = true;
@@ -103,7 +104,24 @@ export class BillerAutoWeighterPage implements OnInit {
 
   myDate: any;
 
-  deviceConnected() {
+
+  conectbluetoothDevice() {
+    this.bluetoothSerial.connect(this.ConnectedBluetoothID).subscribe(this.onSuccess, this.onError);
+  }
+
+  
+  weight: any;
+
+
+  onDataReceive(val) {
+    var data = JSON.stringify(val)
+    this.recivedWeightValue = val;
+    var data1 = data.replace('\\r\\n', '')
+    this.cdr.detectChanges(); // or here
+  }
+
+
+  onSuccess() {
     this.bluetoothSerial.subscribeRawData().subscribe((dt) => {
       this.bluetoothSerial.read().then((dd) => {
         this.onDataReceive(dd);
@@ -112,14 +130,9 @@ export class BillerAutoWeighterPage implements OnInit {
       });
     });
   }
-  weight: any;
-  onDataReceive(val) {
-    var data = JSON.stringify(val)
-    this.recivedWeightValue = val;
-    var data1 = data.replace('\\r\\n', '')
-    this.cdr.detectChanges(); // or here
-  }
+  onError() {
 
+  }
   recivedWeightValue: any;
 
   SelectCounter(data) {
@@ -267,7 +280,7 @@ export class BillerAutoWeighterPage implements OnInit {
   SetBillerAddItem = [];
 
   recivedWeightValueshow: any;
-  weightshow :any;
+  weightshow: any;
 
   addItem() {
     this.CheckGenerateBillButton = false;
