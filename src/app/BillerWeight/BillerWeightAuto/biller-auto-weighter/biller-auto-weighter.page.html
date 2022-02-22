@@ -1,74 +1,89 @@
-<ion-content>
-  <img src="assets/bacground.png">
+<ion-content class="background">
 
-  <div style="margin-top: -105px;" class="row">
+
+  <div style="margin-top: 0px;" class="row mt-3">
     <div class="col-6 mt-4 ">
-      <ion-icon style="margin-left:20px;width: 45px; height:25px;color:#918ed1" (click)="backToPrivios()"
+      <ion-icon style="margin-left:20px;width: 45px; height:25px;color:#fff" (click)="backToPrivios()"
         name="arrow-back">
       </ion-icon>
     </div>
 
     <div *ngIf="onlineAlart" class="col-6 ion-text-right mt-2">
       <lottie-player src="https://assets5.lottiefiles.com/packages/lf20_dsp2yB.json" background="transparent"
-        speed="1.5" style="width:50%; margin-left: 50%;" loop autoplay></lottie-player>
+        speed="1.5" style="width:35%; margin-left: 50%;" loop autoplay></lottie-player>
       <!-- <p style="background-color: #6863CC;border-radius:10px;color:#fff;width: 50px;  margin-left: 50%;">Online</p> -->
     </div>
 
     <div *ngIf="offlineAlart" class="col-6 ion-text-right ">
       <!-- <p style="background-color: #6863CC;border-radius:10px;color:#fff;width: 50px;  margin-left: 50%;">Offline</p> -->
-      <img style="width:50%; margin-left: 50%; border-radius: 55%;" src="assets/offline.gif" alt="">
+      <img style="width:35%; margin-left: 50%; border-radius: 55%;" src="assets/offline.gif" alt="">
     </div>
 
   </div>
   <!-----Title----->
-
-  <div class="row">
-
-    <div style="margin-top:-50px" class="col-12 ion-text-center">
+  <div class="row ">
+    <div style="margin-top:-45px" class="col-12 ion-text-center">
       <b style="font-size: 25px;">BILLER</b>
     </div>
 
-    <div class=" col-6 dropdown toggle mt-3">
-      <input id="t3" type="checkbox">
-      <label for="t3">{{user}}</label>
-      <ul>
-        <li><a (click)="navigateToSettings()">Settings</a></li>
-        <li><a (click)="logout()">Logout</a></li>
-      </ul>
+    <div class="row ">
+      <!-----Display Date----->
+
+      <div class="date-card col-6 display-date mx-5 ">
+        <p style="margin: 7px;" > <b>{{currentDateTime | date:'dd-MM-yyyy'}}</b> </p>
+      </div>
+
+      <div style="margin-top: -12%;" class=" col-6 dropdown toggle ">
+        <input id="t1" type="checkbox">
+        <label for="t1">{{user}}</label>
+        <ul>
+          <li><a (click)="navigateToSettings()">Settings</a></li>
+          <li><a (click)="logout()">Logout</a></li>
+        </ul>
+      </div>
+
     </div>
 
   </div>
 
 
   <!-----Display Weight----->
-  <p class="text-center">{{recivedWeightValue}}</p>
+  <div class="row">
+    <div class="col-12 ion-text-center mt-4">
+      <input [(ngModel)]="recivedWeightValue" type="number"  class="text-center"
+        style="border: 0.5px solid rgba(0, 0, 0, 0.164);  box-shadow: 1px 1px 8px 1px #6863CC;;font-size: 16px;padding: 5px;margin-left: 10px;margin-right: 10px">
+      KG
+    </div>
+  </div>
+<p>{{recivedWeightValue}}</p>
 
   <!-- <p> weight is <b>267.70</b> kgs</p> -->
 
 
   <div class="container weighter-details-wrapper">
     <div class="row">
-      <!-----Display Date----->
-      <div class="col-6 display-date">
-        <b style="font-size: 13px;">Date: </b>
-        <b>{{currentDate | date:'dd-MM-yyyy'}}</b>
-      </div>
 
-      <div class="col-6 display-date">
+
+      <div class="col-12 display-date">
 
         <form (change)="SelectCounter(Selectcounter.value)" #Selectcounter="ngForm">
 
           <div class="row">
-            <div class="col-12">
+            <div class="col-4 offset-3">
               <p class="select-category"><b><u>Select Counter: </u></b></p>
-              <select [(ngModel)]="counter" placeholder="counter" name="counter"
-                style="width: 100%;font-size: 13px;padding: 2px;">
+            </div>
+            <!-----  select counter----->
+            <div class="col-3">
+              <select class="selectDropdown" [(ngModel)]="counter" placeholder="counter" name="counter"
+                style="width: 70%;font-size: 13px;padding: 2px;margin: auto;">
                 <option value="" disabled selected hidden>Price</option>
                 <option [value]="1">1</option>
                 <option [value]="2">2</option>
                 <option value="3">3</option>
               </select>
             </div>
+
+
           </div>
 
 
@@ -78,10 +93,11 @@
 
 
       <!-----Fish Category----->
-      <div class="col-6 mt-3">
+      <div class="col-6">
         <form (change)="SelectCategory(Selectcategory.value)" #Selectcategory="ngForm">
           <p class="select-category" style="font-size: 13px;"><b><u>Select Category:</u></b></p>
-          <select [(ngModel)]="category" placeholder="category" name="category">
+          <select class="selectDropdown" [(ngModel)]="category" placeholder="category" style="width: 100%;"
+            name="category">
             <option value="" disabled selected>Category</option>
             <option *ngFor="let category of categorylist" [value]="category.category">{{category.category}}</option>
           </select>
@@ -91,30 +107,26 @@
 
 
       <!-----Fish quality----->
-      <div class="col-6 mt-3">
+      <div class="col-6 ">
         <form (change)="SelectType(Selecttype.value)" #Selecttype="ngForm">
           <p class="select-category" style="font-size: 13px;"><b><u>Select Quality: </u></b></p>
-          <select [(ngModel)]="type" placeholder="type" name="type" style="width: 96%;">
+          <select class="selectDropdown" [(ngModel)]="type" placeholder="type" name="type" style="width: 100%;">
             <option value="" disabled selected>Fish Type</option>
             <option *ngFor="let quality of qualityList" [value]="quality.type">{{quality.type}}</option>
           </select>
         </form>
       </div>
 
-
-
-
-    </div>
-    <div class="button-wrapper p-4">
-      <div class="container">
-        <div class="row">
-          <button (click)="addItem()" class="submit-button px-4 py-2 " color="transparent"
-            style="font-size: 13px;color: white;" [disabled]=" recivedWeightValue <='0' || !counter || !category || !type || !onlineAlart">
-            ADD ITEM
-          </button>
-        </div>
+      <div class=" col-12 mt-2">
+        <button (click)="addItem()" class="submit-button px-4 py-2 " color="transparent"
+          style="font-size: 13px;color: white;width: 100%;" [disabled]=" !counter || !category || !type ">
+          ADD ITEM
+        </button>
       </div>
+
+
     </div>
+
   </div>
 
 
@@ -149,14 +161,12 @@
     <div class="container">
       <div class="row">
         <button (click)="generateBill()" class="submit-button px-2 py-2" color="transparent" style="font-size: 13px;"
-          [disabled]="CheckGenerateBillButton">
+          [disabled]="SetBillerAddItem.length<=0">
           GENERATE BILL
         </button>
       </div>
     </div>
   </div>
-
-
 
 
 </ion-content>

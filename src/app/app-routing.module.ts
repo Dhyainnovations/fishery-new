@@ -82,7 +82,8 @@ const routes: Routes = [
   {
     path: 'user-creation',
     loadChildren: () => import('./admin/user-creation/user-creation.module').then(m => m.UserCreationPageModule)
-  },  {
+  },
+  {
     path: 'settings',
     loadChildren: () => import('./settings/settings.module').then( m => m.SettingsPageModule)
   },

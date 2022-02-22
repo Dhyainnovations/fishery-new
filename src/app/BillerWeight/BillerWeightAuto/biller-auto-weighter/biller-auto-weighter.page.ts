@@ -5,10 +5,8 @@ import { Router } from '@angular/router'
 import Swal from 'sweetalert2';
 import { Network } from '@awesome-cordova-plugins/network/ngx';
 import { DatePipe } from '@angular/common';
-import { BluetoothSerial } from '@awesome-cordova-plugins/bluetooth-serial/ngx';
-import { AlertController } from '@ionic/angular';
 import { ChangeDetectorRef } from '@angular/core';
-
+import { BluetoothSerial } from '@awesome-cordova-plugins/bluetooth-serial/ngx';
 @Component({
   selector: 'app-biller-auto-weighter',
   templateUrl: './biller-auto-weighter.page.html',
@@ -16,9 +14,12 @@ import { ChangeDetectorRef } from '@angular/core';
 })
 export class BillerAutoWeighterPage implements OnInit {
 
-  constructor(public datepipe: DatePipe, private router: Router, private activatedRoute: ActivatedRoute, private http: HttpService, route: ActivatedRoute, private network: Network, private bluetoothSerial: BluetoothSerial, private alertController: AlertController, private cdr: ChangeDetectorRef) {
+
+  constructor(public datepipe: DatePipe, private router: Router, private activatedRoute: ActivatedRoute, private http: HttpService, route: ActivatedRoute, private network: Network, private bluetoothSerial: BluetoothSerial, private cdr: ChangeDetectorRef,) {
     route.params.subscribe(val => {
 
+      this.myDate = new Date();
+      this.myDate = this.datepipe.transform(this.myDate, 'yyyy-MM-dd');
       this.currentDateTime = this.datepipe.transform((new Date), 'yyyy-MM-dd hh:mm:ss');
       this.dropdownVisible = false
 
@@ -35,15 +36,13 @@ export class BillerAutoWeighterPage implements OnInit {
 
       this.generateId();
 
+
     });
 
   }
 
+
   ngOnInit() {
-
-
-
-
     this.userId = localStorage.getItem("orgid",)
     this.user = localStorage.getItem("Fishery-username",)
     this.http.get('/list_type_manual').subscribe((response: any) => {
@@ -56,11 +55,15 @@ export class BillerAutoWeighterPage implements OnInit {
     );
     this.getList();
     this.getCategoryList();
+    this.deviceConnected();
   }
 
+  myDate;
   currentDateTime: any;
-
-  currentDate: any = new Date()
+  tdyDate: any;
+  hr: any;
+  updateTime: any;
+  currentDate;
   user: any;
   isDisabled: boolean = true;
   userId: any;
@@ -74,8 +77,7 @@ export class BillerAutoWeighterPage implements OnInit {
   ID: any;
   counterNo: any
   type: any;
-
-
+  mdy: any;
   typelist: any = []
   qualityList = [];
   tableRecodrs: any = []
@@ -84,8 +86,10 @@ export class BillerAutoWeighterPage implements OnInit {
   offlineAlart: any = false
   dropdownVisible: any = false
 
+
+
   backToPrivios() {
-    this.router.navigate(['/biller-auto-record'])
+    this.router.navigate(['/biller-weight-manual-record'])
   }
 
   generateId() {
@@ -95,10 +99,22 @@ export class BillerAutoWeighterPage implements OnInit {
     this.ID = '_' + Math.random().toString(36).substr(2, 25);
   };
 
+  deviceConnected() {
+    this.bluetoothSerial.subscribeRawData().subscribe((dt) => {
+      this.bluetoothSerial.read().then((dd) => {
+        this.onDataReceive(dd);
+        this.cdr.detectChanges(); // either here
+      });
+    });
+  }
 
+  recivedWeightValue: any;
 
+  onDataReceive(val) {
+    var data = JSON.stringify(val)
+    this.recivedWeightValue = val;
 
-
+  }
 
   SelectCounter(data) {
     const formdata = new FormData();
@@ -156,7 +172,7 @@ export class BillerAutoWeighterPage implements OnInit {
     )
   }
 
-  cost = "";
+  cost: any = "";
 
   SelectType(data) {
     const formdata = new FormData();
@@ -236,24 +252,65 @@ export class BillerAutoWeighterPage implements OnInit {
 
   }
 
+  navigateToNextPage() {
+    this.router.navigate(['/settings'])
+  }
 
   CheckGenerateBillButton = true;
   SetBillerAddItem = [];
   addItem() {
+    var date = new Date().toLocaleString('en-US', { hour12: true }).split(" ");
+    this.tdyDate = date;
+    console.log(this.tdyDate);
+
+
+    // Now we can access our time at date[1], and monthdayyear @ date[0]
+    var time = date[1];
+    var time_status = date[2];
+    console.log(time_status);
+
+
+
+    this.mdy = date[0];
+
+    // We then parse  the mdy into parts
+    this.mdy = this.mdy.split('/');
+    var month = parseInt(this.mdy[1]);
+    var day = parseInt(this.mdy[1]);
+    var year = parseInt(this.mdy[2]);
+    console.log(time_status);
+
+    // Putting it all together
+    var formattedDate = year + '-' + month + '-' + day + ' ';
+    console.log(formattedDate);
+
+    //console.log(formattedDate);
+
+    let hours = new Date().getHours();
+    let minutes = new Date().getMinutes();
+    let seconds = new Date().getSeconds();
+    this.hr = hours + 12;
+    this.currentDate = this.myDate;
+
+    this.updateTime = this.myDate + ' ' + hours + ":" + minutes + ":" + seconds
+    console.log(this.updateTime);
+
+
     this.CheckGenerateBillButton = false;
     this.generateId();
     const data = {
       category: this.category,
-      id: this.ID,
+      id: this.user,
       quality: this.type,
-      weight:  this.recivedWeightValue,
+      weight: this.recivedWeightValue,
       counter: this.counter,
-      userid: this.userId,
+      userid: this.ID,
       isDeleted: "0",
-      purchaseddate: this.currentDateTime,
+      purchaseddate: this.updateTime,
       cost: this.cost,
-      totalcost: this.cost + this.recivedWeightValue
+      totalcost: this.cost * this.recivedWeightValue
     }
+
 
     console.log(data);
     this.SetBillerAddItem.push(data);
@@ -279,22 +336,25 @@ export class BillerAutoWeighterPage implements OnInit {
       title: 'Item Added Successfully'
     })
 
-   
+    this.recivedWeightValue = ''
+
   }
 
   generateBill() {
-    this.router.navigate(['/BillerAutobill'])
+    this.router.navigate(['/BillerManualbill'])
   }
 
 
+  navigateToSettings() {
+    this.router.navigate(['/settings'])
 
+  }
 
   logout() {
     localStorage.removeItem("orgid",)
     localStorage.removeItem("Fishery-username",)
     localStorage.removeItem("logintype",)
     localStorage.removeItem("permission",)
-    localStorage.removeItem("printerBluetoothId",)
     this.router.navigate(['/loginpage'])
   }
 
@@ -321,25 +381,10 @@ export class BillerAutoWeighterPage implements OnInit {
     }
 
   }
-  navigateToSettings() {
-    this.router.navigate(['/settings'])
-  }
 
 
-  deviceConnected() {
-    this.bluetoothSerial.subscribeRawData().subscribe((dt) => {
-      this.bluetoothSerial.read().then((dd) => {
-        this.onDataReceive(dd);
-        this.cdr.detectChanges(); // either here
-      });
-    });
-  }
-  onDataReceive(dd) {
-    var data = JSON.stringify(dd)
-    this.recivedWeightValue = dd;
-    this.cdr.detectChanges(); // or here
-  }
 
 
-  recivedWeightValue: any = " "
+
+
 }

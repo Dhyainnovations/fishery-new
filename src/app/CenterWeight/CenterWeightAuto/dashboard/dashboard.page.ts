@@ -192,9 +192,6 @@ export class DashboardPage implements OnInit {
       }
     );
   }
-  navigateToSettings() {
-    this.router.navigate(['/settings'])
-  }
 
 
   logout() {

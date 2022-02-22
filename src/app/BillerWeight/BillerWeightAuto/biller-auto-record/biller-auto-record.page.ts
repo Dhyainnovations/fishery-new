@@ -250,6 +250,7 @@ export class BillerAutoRecordPage implements OnInit {
     localStorage.removeItem("Fishery-username",)
     localStorage.removeItem("logintype",)
     localStorage.removeItem("permission",)
+    localStorage.removeItem("printerBluetoothId",)
     this.router.navigate(['/loginpage'])
   }
 }

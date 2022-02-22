@@ -4,7 +4,7 @@ import { BluetoothSerial } from '@awesome-cordova-plugins/bluetooth-serial/ngx';
 import { AlertController } from '@ionic/angular';
 import { ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-
+import { DatePipe } from '@angular/common';
 @Component({
   selector: 'app-biller-auto-dashboard',
   templateUrl: './biller-auto-dashboard.page.html',
@@ -13,9 +13,9 @@ import { ActivatedRoute } from '@angular/router';
 export class BillerAutoDashboardPage implements OnInit {
 
 
-  constructor(private router: Router, private bluetoothSerial: BluetoothSerial, private alertController: AlertController, private cdr: ChangeDetectorRef, route: ActivatedRoute,) {
+  constructor(private router: Router, private bluetoothSerial: BluetoothSerial, private alertController: AlertController, private cdr: ChangeDetectorRef, route: ActivatedRoute,public datepipe: DatePipe,) {
     route.params.subscribe(val => {
-
+      this.currentDateTime = this.datepipe.transform((new Date), 'yyyy-MM-dd hh:mm:ss');
       this.user = localStorage.getItem("Fishery-username",)
       console.log(this.user);
       window.addEventListener('offline', () => {
@@ -40,7 +40,7 @@ export class BillerAutoDashboardPage implements OnInit {
   checkonline: any;
   offlineAlart: any = false;
   checkoffline: any;
-
+  currentDateTime:any;
 
   backToPrivios() {
     this.router.navigate(['/biller-auto-record'])
@@ -181,6 +181,8 @@ export class BillerAutoDashboardPage implements OnInit {
     localStorage.removeItem("Fishery-username",)
     localStorage.removeItem("logintype",)
     localStorage.removeItem("permission",)
+    localStorage.removeItem("printerBluetoothId",)
     this.router.navigate(['/loginpage'])
+    
   }
 }

@@ -400,9 +400,7 @@ export class WeighterPage implements OnInit {
     this.locationlist = (JSON.parse((GetLocation)));
   }
 
-  navigateToSettings() {
-    this.router.navigate(['/settings'])
-  }
+
 
 
   dosomething(event) {
