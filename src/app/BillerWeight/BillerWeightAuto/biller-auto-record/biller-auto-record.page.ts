@@ -6,7 +6,7 @@ import Swal from 'sweetalert2';
 import { NavController } from '@ionic/angular';
 import { Network } from '@awesome-cordova-plugins/network/ngx';
 import { DatePipe } from '@angular/common';
-
+import { BluetoothSerial } from '@awesome-cordova-plugins/bluetooth-serial/ngx';
 @Component({
   selector: 'app-biller-auto-record',
   templateUrl: './biller-auto-record.page.html',
@@ -14,7 +14,7 @@ import { DatePipe } from '@angular/common';
 })
 export class BillerAutoRecordPage implements OnInit {
 
-  constructor(private network: Network, public datepipe: DatePipe, public navCtrl: NavController, private router: Router, private activatedRoute: ActivatedRoute, private http: HttpService, route: ActivatedRoute) {
+  constructor(private network: Network, public datepipe: DatePipe, public navCtrl: NavController, private router: Router, private activatedRoute: ActivatedRoute, private http: HttpService, route: ActivatedRoute,private bluetoothSerial: BluetoothSerial,) {
     route.params.subscribe(val => {
       this.totalWeight()
       this.totalAmount()
@@ -251,5 +251,7 @@ export class BillerAutoRecordPage implements OnInit {
     localStorage.removeItem("logintype",)
     localStorage.removeItem("permission",)
     this.router.navigate(['/loginpage'])
+    localStorage.removeItem("printerBluetoothId",)
+    this.bluetoothSerial.disconnect();
   }
 }

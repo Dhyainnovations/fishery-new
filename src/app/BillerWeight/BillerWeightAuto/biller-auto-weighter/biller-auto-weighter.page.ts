@@ -6,9 +6,7 @@ import Swal from 'sweetalert2';
 import { Network } from '@awesome-cordova-plugins/network/ngx';
 import { DatePipe } from '@angular/common';
 import { BluetoothSerial } from '@awesome-cordova-plugins/bluetooth-serial/ngx';
-import { AlertController } from '@ionic/angular';
 import { ChangeDetectorRef } from '@angular/core';
-
 @Component({
   selector: 'app-biller-auto-weighter',
   templateUrl: './biller-auto-weighter.page.html',
@@ -16,10 +14,12 @@ import { ChangeDetectorRef } from '@angular/core';
 })
 export class BillerAutoWeighterPage implements OnInit {
 
-  constructor(public datepipe: DatePipe, private router: Router, private activatedRoute: ActivatedRoute, private http: HttpService, route: ActivatedRoute, private network: Network, private bluetoothSerial: BluetoothSerial, private alertController: AlertController, private cdr: ChangeDetectorRef) {
+  constructor(public datepipe: DatePipe, private router: Router, private activatedRoute: ActivatedRoute, private http: HttpService, route: ActivatedRoute, private network: Network, private bluetoothSerial: BluetoothSerial, private cdr: ChangeDetectorRef,) {
     route.params.subscribe(val => {
 
-      this.currentDateTime = this.datepipe.transform((new Date), 'yyyy-MM-dd hh:mm:ss');
+      this.myDate = new Date();
+      this.myDate = this.datepipe.transform(this.myDate, 'yyyy-MM-dd');
+
       this.dropdownVisible = false
 
       window.addEventListener('offline', () => {
@@ -34,16 +34,13 @@ export class BillerAutoWeighterPage implements OnInit {
       });
 
       this.generateId();
+      this.deviceConnected();
 
     });
 
   }
 
   ngOnInit() {
-
-
-
-
     this.userId = localStorage.getItem("orgid",)
     this.user = localStorage.getItem("Fishery-username",)
     this.http.get('/list_type_manual').subscribe((response: any) => {
@@ -56,6 +53,13 @@ export class BillerAutoWeighterPage implements OnInit {
     );
     this.getList();
     this.getCategoryList();
+    let hours = new Date().getHours();
+    let minutes = new Date().getMinutes();
+    let seconds = new Date().getSeconds();
+    this.hr = hours + 12;
+
+    this.currentDateTime = this.myDate + ' ' + hours + ":" + minutes + ":" + seconds
+    console.log(this.currentDateTime);
   }
 
   currentDateTime: any;
@@ -70,11 +74,12 @@ export class BillerAutoWeighterPage implements OnInit {
   category: any;
   quality: any;
   price: any;
+
   counter: any;
   ID: any;
   counterNo: any
   type: any;
-
+  hr: any;
 
   typelist: any = []
   qualityList = [];
@@ -85,7 +90,7 @@ export class BillerAutoWeighterPage implements OnInit {
   dropdownVisible: any = false
 
   backToPrivios() {
-    this.router.navigate(['/BillerAutodashboard'])
+    this.router.navigate(['/biller-auto-record'])
   }
 
   generateId() {
@@ -96,9 +101,26 @@ export class BillerAutoWeighterPage implements OnInit {
   };
 
 
+  myDate: any;
+
+  deviceConnected() {
+    this.bluetoothSerial.subscribeRawData().subscribe((dt) => {
+      this.bluetoothSerial.read().then((dd) => {
+        this.onDataReceive(dd);
+        this.cdr.detectChanges(); // either here
+      });
+    });
+  }
 
 
+  onDataReceive(val) {
+    var data = JSON.stringify(val)
+    this.recivedWeightValue = val;
+    var data1 = data.replace('\\r\\n', '')
+    this.cdr.detectChanges(); // or here
+  }
 
+  recivedWeightValue: any ;
 
   SelectCounter(data) {
     const formdata = new FormData();
@@ -156,7 +178,7 @@ export class BillerAutoWeighterPage implements OnInit {
     )
   }
 
-  cost = "";
+  cost: any = "";
 
   SelectType(data) {
     const formdata = new FormData();
@@ -192,6 +214,7 @@ export class BillerAutoWeighterPage implements OnInit {
 
 
   listQualityCategory = [];
+
   getList() {
     this.http.get('/list_price').subscribe((response: any) => {
       this.listQualityCategory = response.records;
@@ -236,6 +259,9 @@ export class BillerAutoWeighterPage implements OnInit {
 
   }
 
+  navigateToNextPage() {
+    this.router.navigate(['/settings'])
+  }
 
   CheckGenerateBillButton = true;
   SetBillerAddItem = [];
@@ -244,16 +270,17 @@ export class BillerAutoWeighterPage implements OnInit {
     this.generateId();
     const data = {
       category: this.category,
-      id: this.ID,
+      id: this.user,
       quality: this.type,
-      weight:  this.recivedWeightValue,
+      weight: this.recivedWeightValue,
       counter: this.counter,
       userid: this.userId,
       isDeleted: "0",
       purchaseddate: this.currentDateTime,
       cost: this.cost,
-      totalcost: this.cost + this.recivedWeightValue
+      totalcost: this.cost * this.recivedWeightValue
     }
+
 
     console.log(data);
     this.SetBillerAddItem.push(data);
@@ -279,7 +306,8 @@ export class BillerAutoWeighterPage implements OnInit {
       title: 'Item Added Successfully'
     })
 
-   
+
+
   }
 
   generateBill() {
@@ -287,7 +315,10 @@ export class BillerAutoWeighterPage implements OnInit {
   }
 
 
+  navigateToSettings() {
+    this.router.navigate(['/settings'])
 
+  }
 
   logout() {
     localStorage.removeItem("orgid",)
@@ -295,6 +326,7 @@ export class BillerAutoWeighterPage implements OnInit {
     localStorage.removeItem("logintype",)
     localStorage.removeItem("permission",)
     this.router.navigate(['/loginpage'])
+    localStorage.removeItem("printerBluetoothId",)
   }
 
 
@@ -320,25 +352,4 @@ export class BillerAutoWeighterPage implements OnInit {
     }
 
   }
-  navigateToSettings() {
-    this.router.navigate(['/settings'])
-  }
-
-
-  deviceConnected() {
-    this.bluetoothSerial.subscribeRawData().subscribe((dt) => {
-      this.bluetoothSerial.read().then((dd) => {
-        this.onDataReceive(dd);
-        this.cdr.detectChanges(); // either here
-      });
-    });
-  }
-  onDataReceive(dd) {
-    var data = JSON.stringify(dd)
-    this.recivedWeightValue = dd;
-    this.cdr.detectChanges(); // or here
-  }
-
-
-  recivedWeightValue: any = ""
 }

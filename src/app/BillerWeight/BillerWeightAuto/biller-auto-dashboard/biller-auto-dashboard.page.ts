@@ -182,5 +182,7 @@ export class BillerAutoDashboardPage implements OnInit {
     localStorage.removeItem("logintype",)
     localStorage.removeItem("permission",)
     this.router.navigate(['/loginpage'])
+    localStorage.removeItem("printerBluetoothId",)
+    this.bluetoothSerial.disconnect();
   }
 }

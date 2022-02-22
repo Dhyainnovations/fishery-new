@@ -223,7 +223,10 @@ export class SettingsPage implements OnInit {
     localStorage.removeItem("Fishery-username",)
     localStorage.removeItem("logintype",)
     localStorage.removeItem("permission",)
+    localStorage.removeItem("printerBluetoothId",)
+    this.bluetoothSerial.disconnect();
     this.router.navigate(['/loginpage'])
+   
   }
 
 

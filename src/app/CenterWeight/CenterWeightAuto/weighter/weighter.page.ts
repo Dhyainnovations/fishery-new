@@ -502,6 +502,7 @@ export class WeighterPage implements OnInit {
     localStorage.removeItem("logintype",)
     localStorage.removeItem("permission",)
     this.router.navigate(['/loginpage'])
+    this.bluetoothSerial.disconnect();
   }
 
 

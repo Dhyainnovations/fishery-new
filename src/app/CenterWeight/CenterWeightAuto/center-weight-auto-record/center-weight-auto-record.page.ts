@@ -6,7 +6,7 @@ import Swal from 'sweetalert2';
 import { NavController } from '@ionic/angular';
 import { DatePipe } from '@angular/common';
 import { Network } from '@awesome-cordova-plugins/network/ngx';
-
+import { BluetoothSerial } from '@awesome-cordova-plugins/bluetooth-serial/ngx';
 @Component({
   selector: 'app-center-weight-auto-record',
   templateUrl: './center-weight-auto-record.page.html',
@@ -14,7 +14,7 @@ import { Network } from '@awesome-cordova-plugins/network/ngx';
 })
 export class CenterWeightAutoRecordPage implements OnInit {
 
-  constructor(private network: Network, public datepipe: DatePipe, public navCtrl: NavController, private router: Router, private activatedRoute: ActivatedRoute, private http: HttpService, route: ActivatedRoute) {
+  constructor(private network: Network, public datepipe: DatePipe, public navCtrl: NavController, private router: Router, private activatedRoute: ActivatedRoute, private http: HttpService, route: ActivatedRoute,private bluetoothSerial: BluetoothSerial) {
     route.params.subscribe(val => {
       this.currentDateTime = this.datepipe.transform((new Date), 'yyyy-MM-dd hh:mm:ss');
       this.totalWeight()
@@ -310,6 +310,7 @@ export class CenterWeightAutoRecordPage implements OnInit {
     localStorage.removeItem("logintype",)
     localStorage.removeItem("permission",)
     this.router.navigate(['/loginpage'])
+    this.bluetoothSerial.disconnect();
   }
 
 }

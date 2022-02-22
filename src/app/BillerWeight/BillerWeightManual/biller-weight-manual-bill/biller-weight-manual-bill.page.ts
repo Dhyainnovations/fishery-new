@@ -77,16 +77,16 @@ export class BillerWeightManualBillPage implements OnInit {
     //let change = amoutntReceived - totalPrice
 
     let receipt = ""
-    receipt += commands.TEXT_FORMAT.TXT_CUSTOM_SIZE
+    receipt += commands.TEXT_FORMAT.TXT_WIDTH[1]
     receipt += "\x1b\x45\x01 \x00" + company + "\x1b\x45\x00"
     receipt += '\n'
     receipt += "\x00" + time + "\x00"
 
     receipt += '\n'
-    receipt += commands.TEXT_FORMAT.TXT_CUSTOM_SIZE
+    receipt += commands.TEXT_FORMAT.TXT_NORMAL
     receipt += commands.HORIZONTAL_LINE.HR_58MM
     receipt += '\n'
-    receipt += commands.TEXT_FORMAT.TXT_CUSTOM_SIZE
+    receipt += commands.TEXT_FORMAT.TXT_NORMAL
     receipt += '\x1B' + '\x61' + '\x30'// left align
     receipt += vsprintf("%-17s %3s %10s\n", ["Counter", "", counter])
     receipt += vsprintf("%-17s %3s %10s\n", ["Biller", "", biller])
@@ -95,7 +95,7 @@ export class BillerWeightManualBillPage implements OnInit {
     receipt += commands.HORIZONTAL_LINE.HR2_58MM
     receipt += '\n'
     receipt += commands.TEXT_FORMAT.TXT_ALIGN_LT
-    receipt += '\x1b\x45\x01' + vsprintf("%-17s %3s %10s \n", ["Item", "", "Price(Rs.)"])
+    receipt += '\x1b\x45\x01' + vsprintf("%-17s %3s %10s \n", ["Item", "", "Price(Rs)"])
 
     for (var pro in product) {
       if (product.hasOwnProperty(pro)) {
@@ -118,22 +118,23 @@ export class BillerWeightManualBillPage implements OnInit {
     // receipt += commands.HORIZONTAL_LINE.HR2_58MM
     // receipt += vsprintf("%-17s %3s %10.2f\n", ["Total Price", "", totalPrice])
     receipt += '\n'
-    receipt += commands.TEXT_FORMAT.TXT_CUSTOM_SIZE
-    receipt += '\x1B' + '\x61' + '\x30'// left align
     receipt += commands.HORIZONTAL_LINE.HR2_58MM
     receipt += '\n'
-    receipt += '\x1b\x45\x01' + vsprintf("%-17s %3s %10s\n", ["Total Amount(Rs)", "", totalPrice])
+    receipt += commands.TEXT_FORMAT.TXT_NORMAL
+    receipt += '\x1B' + '\x61' + '\x30'// left align
+    receipt += '\x1b\x45\x01' + vsprintf("%-17s %3s %10s\n", ["Total Amount", "", totalPrice])
+
+
+
     receipt += commands.TEXT_FORMAT.TXT_ALIGN_RT
+
     receipt += '\n'
     receipt += commands.TEXT_FORMAT.TXT_FONT_A
     receipt += commands.HORIZONTAL_LINE.HR2_58MM
     receipt += '\n'
     receipt += commands.TEXT_FORMAT.TXT_FONT_B
     receipt += '\x1b\x61\x01' + 'Thank you, visit again!' + '\x0a\x0a\x0a\x0a' //The unicode symbols are for centering the text
-    receipt += '\x1b\x45\x01 \x00' // Full cut paper
-    receipt += '\x1d\x56\x01'
-    receipt += '\x1d\x56\x41'
-    receipt += '\x1d\x56\x42'
+    receipt += "\x1b\x45\x01 \x00" // Full cut paper
     this.printText(receipt)
 
 
@@ -184,7 +185,6 @@ export class BillerWeightManualBillPage implements OnInit {
 
   onSuccess() {
     alert("Successfully Printed");
-    //Data to be printed presented in jsonData format.....
     const items = item => ({
       quality: item.quality,
       weight: item.weight,
@@ -244,11 +244,12 @@ export class BillerWeightManualBillPage implements OnInit {
     // receipt += commands.TEXT_FORMAT.TXT_FONT_A
     // receipt += commands.HORIZONTAL_LINE.HR2_58MM
     // receipt += vsprintf("%-17s %3s %10.2f\n", ["Total Price", "", totalPrice])
+    receipt += '\n'
     receipt += commands.HORIZONTAL_LINE.HR2_58MM
     receipt += '\n'
     receipt += commands.TEXT_FORMAT.TXT_NORMAL
     receipt += '\x1B' + '\x61' + '\x30'// left align
-    receipt += '\x1b\x45\x01' + vsprintf("%-17s %3s %10s\n", ["Total Amount(Rs)", "", totalPrice])
+    receipt += '\x1b\x45\x01' + vsprintf("%-17s %3s %10s\n", ["Total Amount", "", totalPrice])
 
 
 
