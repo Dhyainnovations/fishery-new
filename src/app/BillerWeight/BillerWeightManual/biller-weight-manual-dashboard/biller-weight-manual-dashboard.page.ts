@@ -16,7 +16,7 @@ export class BillerWeightManualDashboardPage implements OnInit {
 
   constructor(public datepipe: DatePipe, private router: Router, private activatedRoute: ActivatedRoute, private http: HttpService, route: ActivatedRoute, private network: Network,) {
     route.params.subscribe(val => {
-      
+
       this.myDate = new Date();
       this.myDate = this.datepipe.transform(this.myDate, 'yyyy-MM-dd');
 
@@ -53,6 +53,13 @@ export class BillerWeightManualDashboardPage implements OnInit {
     );
     this.getList();
     this.getCategoryList();
+    let hours = new Date().getHours();
+    let minutes = new Date().getMinutes();
+    let seconds = new Date().getSeconds();
+    this.hr = hours + 12;
+
+    this.currentDateTime = this.myDate + ' ' + hours + ":" + minutes + ":" + seconds
+    console.log(this.currentDateTime);
   }
 
   currentDateTime: any;
@@ -72,7 +79,7 @@ export class BillerWeightManualDashboardPage implements OnInit {
   ID: any;
   counterNo: any
   type: any;
-
+  hr: any;
 
   typelist: any = []
   qualityList = [];
@@ -94,15 +101,9 @@ export class BillerWeightManualDashboardPage implements OnInit {
   };
 
 
+  myDate: any;
 
 
-    let hours = new Date().getHours();
-    let minutes = new Date().getMinutes();
-    let seconds = new Date().getSeconds();
-    this.hr = hours + 12;
-
-    this.currentDateTime = this.myDate + ' ' + hours + ":" + minutes + ":" + seconds
-    console.log(this.currentDateTime);
 
 
 
@@ -198,6 +199,7 @@ export class BillerWeightManualDashboardPage implements OnInit {
 
 
   listQualityCategory = [];
+
   getList() {
     this.http.get('/list_price').subscribe((response: any) => {
       this.listQualityCategory = response.records;
@@ -300,7 +302,7 @@ export class BillerWeightManualDashboardPage implements OnInit {
 
   navigateToSettings() {
     this.router.navigate(['/settings'])
-  
+
   }
 
   logout() {
@@ -334,10 +336,4 @@ export class BillerWeightManualDashboardPage implements OnInit {
     }
 
   }
-
-
-
-
-
-
 }

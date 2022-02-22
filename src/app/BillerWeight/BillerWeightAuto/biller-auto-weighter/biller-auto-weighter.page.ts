@@ -85,7 +85,7 @@ export class BillerAutoWeighterPage implements OnInit {
   dropdownVisible: any = false
 
   backToPrivios() {
-    this.router.navigate(['/biller-weight-manual-record'])
+    this.router.navigate(['/BillerAutodashboard'])
   }
 
   generateId() {
@@ -283,7 +283,7 @@ export class BillerAutoWeighterPage implements OnInit {
   }
 
   generateBill() {
-    this.router.navigate(['/BillerManualbill'])
+    this.router.navigate(['/BillerAutobill'])
   }
 
 
@@ -340,5 +340,5 @@ export class BillerAutoWeighterPage implements OnInit {
   }
 
 
-  recivedWeightValue: any = " "
+  recivedWeightValue: any = 24
 }
