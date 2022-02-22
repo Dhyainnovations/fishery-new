@@ -17,7 +17,7 @@ export class BillerAutoWeighterPage implements OnInit {
 
   constructor(public datepipe: DatePipe, private router: Router, private activatedRoute: ActivatedRoute, private http: HttpService, route: ActivatedRoute, private network: Network, private bluetoothSerial: BluetoothSerial, private cdr: ChangeDetectorRef,) {
     route.params.subscribe(val => {
-
+      this.ConnectedBluetoothID = localStorage.getItem("ConnectedBluetoothID",);
       this.myDate = new Date();
       this.myDate = this.datepipe.transform(this.myDate, 'yyyy-MM-dd');
       this.currentDateTime = this.datepipe.transform((new Date), 'yyyy-MM-dd hh:mm:ss');
@@ -35,7 +35,7 @@ export class BillerAutoWeighterPage implements OnInit {
       });
 
       this.generateId();
-
+      this.connectBluetooth();
 
     });
 
@@ -55,9 +55,11 @@ export class BillerAutoWeighterPage implements OnInit {
     );
     this.getList();
     this.getCategoryList();
-    this.deviceConnected();
+
   }
 
+
+  ConnectedBluetoothID: any;
   myDate;
   currentDateTime: any;
   tdyDate: any;
@@ -89,7 +91,7 @@ export class BillerAutoWeighterPage implements OnInit {
 
 
   backToPrivios() {
-    this.router.navigate(['/biller-weight-manual-record'])
+    this.router.navigate(['/biller-auto-record'])
   }
 
   generateId() {
@@ -99,7 +101,12 @@ export class BillerAutoWeighterPage implements OnInit {
     this.ID = '_' + Math.random().toString(36).substr(2, 25);
   };
 
-  deviceConnected() {
+
+  connectBluetooth() {
+    this.bluetoothSerial.connect(this.ConnectedBluetoothID).subscribe(this.success, this.fail);
+  }
+
+  success() {
     this.bluetoothSerial.subscribeRawData().subscribe((dt) => {
       this.bluetoothSerial.read().then((dd) => {
         this.onDataReceive(dd);
@@ -108,10 +115,16 @@ export class BillerAutoWeighterPage implements OnInit {
     });
   }
 
+  fail() {
+
+  }
+
+
+
   recivedWeightValue: any;
 
   onDataReceive(val) {
-    var data = JSON.stringify(val)
+    // var data = JSON.stringify(val)
     this.recivedWeightValue = val;
 
   }
@@ -341,7 +354,7 @@ export class BillerAutoWeighterPage implements OnInit {
   }
 
   generateBill() {
-    this.router.navigate(['/BillerManualbill'])
+    this.router.navigate(['/BillerAutobill'])
   }
 
 
@@ -356,6 +369,8 @@ export class BillerAutoWeighterPage implements OnInit {
     localStorage.removeItem("logintype",)
     localStorage.removeItem("permission",)
     this.router.navigate(['/loginpage'])
+    this.bluetoothSerial.disconnect();
+    localStorage.removeItem("printerBluetoothId",)
   }
 
 

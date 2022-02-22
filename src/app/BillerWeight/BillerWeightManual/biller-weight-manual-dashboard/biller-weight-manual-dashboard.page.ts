@@ -16,7 +16,7 @@ export class BillerWeightManualDashboardPage implements OnInit {
 
   constructor(public datepipe: DatePipe, private router: Router, private activatedRoute: ActivatedRoute, private http: HttpService, route: ActivatedRoute, private network: Network,) {
     route.params.subscribe(val => {
-
+      this.currentDateTime = this.datepipe.transform((new Date), 'yyyy-MM-dd hh:mm:ss');
       this.myDate = new Date();
       this.myDate = this.datepipe.transform(this.myDate, 'yyyy-MM-dd');
 
@@ -64,7 +64,7 @@ export class BillerWeightManualDashboardPage implements OnInit {
   currentDate;
 
   
-
+  currentDateTime:any;
   user: any;
   isDisabled: boolean = true;
   userId: any;
@@ -348,6 +348,7 @@ export class BillerWeightManualDashboardPage implements OnInit {
     localStorage.removeItem("logintype",)
     localStorage.removeItem("permission",)
     this.router.navigate(['/loginpage'])
+    localStorage.removeItem("printerBluetoothId",)
   }
 
 

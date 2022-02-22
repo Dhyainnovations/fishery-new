@@ -31,7 +31,8 @@ export class BillPage implements OnInit {
 
   ngOnInit() {
     this.name = localStorage.getItem("Fishery-username",)
-    this.location = localStorage.getItem("orgid",)
+    this.location = localStorage.getItem("orgid",);
+    this.bluetoothSerial.disconnect();
   }
   currentDate = new Date();
 
@@ -162,12 +163,12 @@ export class BillPage implements OnInit {
     }
     );
     localStorage.removeItem("SetBillerAddItem");
-    this.router.navigate(['/biller-auto-record'])
+    this.router.navigate(['/biller-auto-record']);
+    this.bluetoothSerial.disconnect();
   }
 
 
   printText(receipt) {
-
     this.bluetoothSerial.write(receipt);
   }
 

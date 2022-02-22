@@ -66,6 +66,7 @@ export class BillerWeightManualRecordPage implements OnInit {
     localStorage.removeItem("logintype",)
     localStorage.removeItem("permission",)
     this.router.navigate(['/loginpage'])
+    localStorage.removeItem("printerBluetoothId",)
   }
 
   dosomething(event) {

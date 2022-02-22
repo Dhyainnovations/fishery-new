@@ -127,6 +127,7 @@ export class BillerAutoDashboardPage implements OnInit {
           text: 'Connect',
           handler: () => {
             this.bluetoothSerial.connect(id).subscribe(this.success, this.fail);
+            localStorage.setItem('ConnectedBluetoothID', id);
           }
         }
       ]
@@ -181,6 +182,7 @@ export class BillerAutoDashboardPage implements OnInit {
     localStorage.removeItem("Fishery-username",)
     localStorage.removeItem("logintype",)
     localStorage.removeItem("permission",)
+    this.bluetoothSerial.disconnect();
     localStorage.removeItem("printerBluetoothId",)
     this.router.navigate(['/loginpage'])
     
