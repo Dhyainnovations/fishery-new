@@ -7,7 +7,7 @@ import { Network } from '@awesome-cordova-plugins/network/ngx';
 import { DatePipe } from '@angular/common';
 import { ChangeDetectorRef } from '@angular/core';
 import { BluetoothSerial } from '@awesome-cordova-plugins/bluetooth-serial/ngx';
-import { AnyMxRecord } from 'dns';
+
 @Component({
   selector: 'app-biller-auto-weighter',
   templateUrl: './biller-auto-weighter.page.html',
