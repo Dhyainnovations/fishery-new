@@ -18,6 +18,7 @@ export class BillerAutoWeighterPage implements OnInit {
 
   constructor(public datepipe: DatePipe, private router: Router, private activatedRoute: ActivatedRoute, private http: HttpService, route: ActivatedRoute, private network: Network, private bluetoothSerial: BluetoothSerial, private cdr: ChangeDetectorRef,) {
     route.params.subscribe(val => {
+    
       this.currentDateTime = this.datepipe.transform((new Date), 'yyyy-MM-dd hh:mm:ss');
       this.myDate = new Date();
       this.myDate = this.datepipe.transform(this.myDate, 'yyyy-MM-dd');
@@ -34,7 +35,7 @@ export class BillerAutoWeighterPage implements OnInit {
         this.offlineAlart = false
         this.checkonline = true;
       });
-
+     
       this.generateId();
 
 
@@ -59,6 +60,7 @@ export class BillerAutoWeighterPage implements OnInit {
     );
     this.getList();
     this.getCategoryList();
+
   }
 
   myDate;
@@ -138,7 +140,7 @@ export class BillerAutoWeighterPage implements OnInit {
   StoreTypeData = [];
 
 
-  SelectCategory(data) {
+  selectCategory(data) {
     this.StoreTypeData = [];
     const formdata = new FormData();
     formdata.append("category", data.category);

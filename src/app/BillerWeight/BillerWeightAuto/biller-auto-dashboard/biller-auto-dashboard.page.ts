@@ -140,7 +140,7 @@ export class BillerAutoDashboardPage implements OnInit {
           handler: () => {
             this.bluetoothSerial.connect(id).subscribe(this.success, this.fail);
             this.connectedBluetoothId = id;
-            localStorage.setItem("connectedBluetoothId",  this.connectedBluetoothId)
+           
           }
         }
       ]
@@ -155,7 +155,7 @@ export class BillerAutoDashboardPage implements OnInit {
 
   success = (data) => {
     alert("Successfully Connected");
-   
+    localStorage.setItem("connectedBluetoothId",  this.connectedBluetoothId)
     this.bluetoothconnected = true;
     this.bluetoothnotconnected = false;
     localStorage.setItem("bluetoothStatus", this.bluetoothconnected)
