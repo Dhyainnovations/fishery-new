@@ -21,7 +21,7 @@ export class BillerAutoRecordPage implements OnInit {
       this.totalAmount()
       this.records();
       this.list_manual_bill();
-    
+      this.connectedBluetoothID = localStorage.getItem('connectedBluetoothID',);
       this.user = localStorage.getItem("Fishery-username",)
       console.log(this.user);
       this.currentDateTime = this.datepipe.transform((new Date), 'yyyy-MM-dd hh:mm:ss');
@@ -37,7 +37,7 @@ export class BillerAutoRecordPage implements OnInit {
 
   buttonDisabled: boolean;
 
-
+  connectedBluetoothID:any;
   totalweight: any = '';
   tableRecodrs: any = []
   cardRecords: any = []
@@ -144,7 +144,13 @@ export class BillerAutoRecordPage implements OnInit {
 
 
   navigateToNextPage() {
-    this.router.navigate(['/BillerAutodashboard'])
+
+    if(this.connectedBluetoothID != null){
+      this.router.navigate(['/BillerAutoweighter'])
+    }else{
+      this.router.navigate(['/BillerAutodashboard'])
+    }
+   
   }
 
 

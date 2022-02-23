@@ -20,7 +20,7 @@ export class BillerAutoWeighterPage implements OnInit {
       this.currentDateTime = this.datepipe.transform((new Date), 'yyyy-MM-dd hh:mm:ss');
       this.myDate = new Date();
       this.myDate = this.datepipe.transform(this.myDate, 'yyyy-MM-dd');
-      this.connectedBluetoothID = localStorage.getItem("connectedBluetoothID",);
+      this.connectedBluetoothID = localStorage.getItem('connectedBluetoothID',);
       this.dropdownVisible = false
 
       window.addEventListener('offline', () => {
@@ -33,7 +33,7 @@ export class BillerAutoWeighterPage implements OnInit {
         this.offlineAlart = false
         this.checkonline = true;
       });
-
+      this.deviceConnected();
       this.generateId();
 
 
@@ -105,7 +105,7 @@ export class BillerAutoWeighterPage implements OnInit {
   };
 
   deviceConnected() {
-    this.bluetoothSerial.disconnect();
+
     this.bluetoothSerial.connect(this.connectedBluetoothID).subscribe(this.onSuccess, this.onError);
     this.bluetoothSerial.subscribeRawData().subscribe((dt) => {
       this.bluetoothSerial.read().then((dd) => {
@@ -296,6 +296,7 @@ export class BillerAutoWeighterPage implements OnInit {
   }
 
   generateBill() {
+    this.bluetoothSerial.disconnect();
     this.router.navigate(['/BillerAutobill'])
   }
 

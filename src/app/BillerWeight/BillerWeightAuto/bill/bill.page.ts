@@ -43,6 +43,7 @@ export class BillPage implements OnInit {
   price: any = [];
   totalsum: any = "";
   backToPrivious() {
+    this.bluetoothSerial.disconnect();
     this.router.navigate(['/BillerAutoweighter'])
   }
 
@@ -152,6 +153,7 @@ export class BillPage implements OnInit {
  
       if (response.success == "true") {
         localStorage.removeItem("SetBillerAddItem");
+        this.bluetoothSerial.disconnect();
         this.router.navigate(['/biller-auto-record'])
       }
 
