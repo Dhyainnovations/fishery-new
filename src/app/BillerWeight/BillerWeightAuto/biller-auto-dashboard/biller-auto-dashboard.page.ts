@@ -155,7 +155,7 @@ export class BillerAutoDashboardPage implements OnInit {
 
   success = (data) => {
     alert("Successfully Connected");
-    this.bluetoothSerial.disconnect();
+   
     this.bluetoothconnected = true;
     this.bluetoothnotconnected = false;
     localStorage.setItem("bluetoothStatus", this.bluetoothconnected)
