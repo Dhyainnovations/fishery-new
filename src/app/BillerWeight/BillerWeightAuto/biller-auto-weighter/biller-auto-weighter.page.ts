@@ -48,6 +48,7 @@ export class BillerAutoWeighterPage implements OnInit {
     this.userId = localStorage.getItem("orgid",)
     this.user = localStorage.getItem("Fishery-username",)
     this.connectedBluetoothId = localStorage.getItem("connectedBluetoothId",)
+    alert(this.connectedBluetoothId)
     this.bluetoothSerial.disconnect();
     this.bluetoothSerial.connect(this.connectedBluetoothId).subscribe(this.onSuccess, this.onError);
     this.http.get('/list_type_manual').subscribe((response: any) => {
@@ -140,7 +141,7 @@ export class BillerAutoWeighterPage implements OnInit {
   StoreTypeData = [];
 
 
-  selectCategory(data) {
+  SelectCategory(data) {
     this.StoreTypeData = [];
     const formdata = new FormData();
     formdata.append("category", data.category);
