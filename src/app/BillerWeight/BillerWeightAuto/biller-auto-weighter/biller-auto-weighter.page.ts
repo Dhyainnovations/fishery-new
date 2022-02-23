@@ -5,7 +5,9 @@ import { Router } from '@angular/router'
 import Swal from 'sweetalert2';
 import { Network } from '@awesome-cordova-plugins/network/ngx';
 import { DatePipe } from '@angular/common';
-
+import { ChangeDetectorRef } from '@angular/core';
+import { BluetoothSerial } from '@awesome-cordova-plugins/bluetooth-serial/ngx';
+import { AnyMxRecord } from 'dns';
 @Component({
   selector: 'app-biller-auto-weighter',
   templateUrl: './biller-auto-weighter.page.html',
@@ -14,7 +16,7 @@ import { DatePipe } from '@angular/common';
 export class BillerAutoWeighterPage implements OnInit {
 
 
-  constructor(public datepipe: DatePipe, private router: Router, private activatedRoute: ActivatedRoute, private http: HttpService, route: ActivatedRoute, private network: Network,) {
+  constructor(public datepipe: DatePipe, private router: Router, private activatedRoute: ActivatedRoute, private http: HttpService, route: ActivatedRoute, private network: Network, private bluetoothSerial: BluetoothSerial, private cdr: ChangeDetectorRef,) {
     route.params.subscribe(val => {
       this.currentDateTime = this.datepipe.transform((new Date), 'yyyy-MM-dd hh:mm:ss');
       this.myDate = new Date();
@@ -39,11 +41,13 @@ export class BillerAutoWeighterPage implements OnInit {
     });
 
   }
-  
+
 
   ngOnInit() {
     this.userId = localStorage.getItem("orgid",)
     this.user = localStorage.getItem("Fishery-username",)
+    this.connectedBluetoothId = localStorage.getItem("connectedBluetoothId",)
+    this.bluetoothSerial.connect(this.connectedBluetoothId).subscribe(this.onSuccess, this.onError);
     this.http.get('/list_type_manual').subscribe((response: any) => {
       console.log(response);
       if (response.success == "true") {
@@ -63,8 +67,8 @@ export class BillerAutoWeighterPage implements OnInit {
   updateTime: any;
   currentDate;
 
-  
-  currentDateTime:any;
+  connectedBluetoothId: any;
+  currentDateTime: any;
   user: any;
   isDisabled: boolean = true;
   userId: any;
@@ -90,7 +94,7 @@ export class BillerAutoWeighterPage implements OnInit {
   offlineAlart: any = false
   dropdownVisible: any = false
 
-  
+
 
   backToPrivios() {
     this.router.navigate(['/biller-auto-record'])
@@ -223,7 +227,23 @@ export class BillerAutoWeighterPage implements OnInit {
   }
 
 
+  onSuccess() {
+    this.bluetoothSerial.subscribeRawData().subscribe((dt) => {
+      this.bluetoothSerial.read().then((dd) => {
+        this.onDataReceive(dd);
+        this.cdr.detectChanges(); // either here
+      });
+    });
+  }
 
+  onDataReceive(val) {
+    this.weight = val;
+    this.cdr.detectChanges(); // or here
+  }
+
+  onError() {
+    alert("Error While Connecting with Bluetooth")
+  }
 
 
   dosomething(event) {
@@ -339,7 +359,7 @@ export class BillerAutoWeighterPage implements OnInit {
 
   navigateToSettings() {
     this.router.navigate(['/settings'])
-  
+
   }
 
   logout() {

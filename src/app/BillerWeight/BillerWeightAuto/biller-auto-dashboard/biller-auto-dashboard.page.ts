@@ -9,13 +9,14 @@ import Swal from 'sweetalert2';
 import { NavController } from '@ionic/angular';
 import { DatePipe } from '@angular/common';
 import { Network } from '@awesome-cordova-plugins/network/ngx';
+
+
 @Component({
   selector: 'app-biller-auto-dashboard',
   templateUrl: './biller-auto-dashboard.page.html',
   styleUrls: ['./biller-auto-dashboard.page.scss'],
 })
 export class BillerAutoDashboardPage implements OnInit {
-
 
   constructor(private router: Router, private bluetoothSerial: BluetoothSerial, private alertController: AlertController, private cdr: ChangeDetectorRef, private network: Network, public datepipe: DatePipe, public navCtrl: NavController, private route: ActivatedRoute, private http: HttpService,) {
     route.params.subscribe(val => {
@@ -138,9 +139,8 @@ export class BillerAutoDashboardPage implements OnInit {
           text: 'Connect',
           handler: () => {
             this.bluetoothSerial.connect(id).subscribe(this.success, this.fail);
-            localStorage.setItem('ConnectedBluetoothID', id);
-            this.connectedid = id;
-
+            this.connectedBluetoothId = id;
+            localStorage.setItem("connectedBluetoothId",  this.connectedBluetoothId)
           }
         }
       ]
@@ -152,11 +152,13 @@ export class BillerAutoDashboardPage implements OnInit {
     this.router.navigate(['/biller-auto-record']);
 
   }
-  connectedid: any;
+
   success = (data) => {
     alert("Successfully Connected");
-    alert(this.connectedid);
     this.bluetoothSerial.disconnect();
+    this.bluetoothconnected = true;
+    this.bluetoothnotconnected = false;
+    localStorage.setItem("bluetoothStatus", this.bluetoothconnected)
     this.router.navigate(['/BillerAutoweighter']);
   }
   fail = (error) => {
@@ -179,7 +181,7 @@ export class BillerAutoDashboardPage implements OnInit {
       }
     )
   }
-
+  connectedBluetoothId: any;
   bluetoothtoggle: any = false;
 
   enablebluetooth() {
@@ -200,5 +202,6 @@ export class BillerAutoDashboardPage implements OnInit {
     localStorage.removeItem("logintype",)
     localStorage.removeItem("permission",)
     this.router.navigate(['/loginpage'])
+    localStorage.removeItem("printerBluetoothId",)
   }
 }

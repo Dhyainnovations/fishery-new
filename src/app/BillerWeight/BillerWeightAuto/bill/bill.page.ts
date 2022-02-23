@@ -56,6 +56,7 @@ export class BillPage implements OnInit {
   myDate: any;
 
   printBill() {
+    this.bluetoothSerial.disconnect();
     this.bluetoothSerial.connect(this.printerBluetoothId).subscribe(this.onSuccess, this.onError);
     const items = item => ({
       quality: item.quality,
@@ -157,6 +158,7 @@ export class BillPage implements OnInit {
       if (response.success == "true") {
         localStorage.removeItem("SetBillerAddItem");
         this.router.navigate(['/BillerAutoweighter'])
+        this.bluetoothSerial.disconnect();
       }
 
 

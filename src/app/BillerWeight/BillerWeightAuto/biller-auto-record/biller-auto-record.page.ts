@@ -188,7 +188,7 @@ export class BillerAutoRecordPage implements OnInit {
 
 
   navigateToNextPage() {
-    this.router.navigate(['/BillerAutoweighter'])
+    this.router.navigate(['/BillerAutodashboard'])
   }
 
 
