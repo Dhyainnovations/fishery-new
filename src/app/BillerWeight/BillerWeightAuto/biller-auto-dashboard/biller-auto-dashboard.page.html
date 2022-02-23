@@ -14,37 +14,27 @@
       </ion-icon>
     </div>
     <div class="col-10">
-      <div *ngIf="onlineAlart" class="col-12 ion-text-right ">
-        <lottie-player src="https://assets5.lottiefiles.com/packages/lf20_dsp2yB.json" background="transparent"
-          speed="1.5" style="width:25%; margin-left: 70%;" loop autoplay></lottie-player>
-        <!-- <p style="background-color: #6863CC;border-radius:10px;color:#fff;width: 50px;  margin-left: 50%;">Online</p> -->
-      </div>
-
-      <div *ngIf="offlineAlart" class="col-12 ion-text-right ">
-        <!-- <p style="background-color: #6863CC;border-radius:10px;color:#fff;width: 50px;  margin-left: 50%;">Offline</p> -->
-        <img style="width:25%; margin-left: 70%; border-radius: 55%;" src="assets/offline.gif" alt="">
-      </div>
     </div>
 
   </div>
 
   <!-----Title----->
-    <div class="row">
+  <div class="row">
 
-      <div style="margin-top:-50px" class="col-12 ion-text-center">
-        <b style="font-size: 25px;">DASHBOARD</b>
-      </div>
-
-      <div class=" col-6 dropdown toggle mt-3">
-        <input id="t4" type="checkbox">
-        <label for="t4">{{user}}</label>
-        <ul>
-        
-          <li><a (click)="logout()">Logout</a></li>
-        </ul>
-      </div>
-
+    <div style="margin-top:-50px" class="col-12 ion-text-center">
+      <b style="font-size: 25px;">DASHBOARD</b>
     </div>
+
+    <div class=" col-6 dropdown toggle mt-3">
+      <input id="t4" type="checkbox">
+      <label for="t4">{{user}}</label>
+      <ul>
+
+        <li><a (click)="logout()">Logout</a></li>
+      </ul>
+    </div>
+
+  </div>
 
   <!-----Sub-Title----->
   <h4 class="text-center connectivity mt-4"><b>CONNECTIVITY</b></h4>
@@ -59,15 +49,13 @@
         <div class="container">
           <div class="row">
             <button (click)="enablebluetooth()" class="submit-button px-2 py-2" color="transparent"
-              style="font-size: 13px;background-color: #655fcb;" >
+              style="font-size: 13px;background-color: #655fcb;">
               CONNECT
             </button>
           </div>
         </div>
       </div>
-      <!-- <ion-toggle slot="end" color="tertiary" class="toggle-bluetooth" (click)="enablebluetooth()"
-        checked="{{bluetoothtoggle}}">
-      </ion-toggle> -->
+
     </div>
   </div>
 
@@ -94,6 +82,6 @@
   </div>
 
 
-  <!-- <button class="btn btn-primary" (click)="next()">next</button> -->
+
 
 </ion-content>

@@ -17,6 +17,8 @@ import { vsprintf } from 'sprintf-js'
 })
 export class BillPage implements OnInit {
 
+ 
+
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private http: HttpService, route: ActivatedRoute, private alertController: AlertController, private bluetoothSerial: BluetoothSerial, public datepipe: DatePipe) {
     route.params.subscribe(val => {
       this.GetBillDataFromLocalStorage();
@@ -56,80 +58,76 @@ export class BillPage implements OnInit {
 
   printBill() {
     this.bluetoothSerial.connect(this.printerBluetoothId).subscribe(this.onSuccess, this.onError);
-    // const items = item => ({
-    //   quality: item.quality,
-    //   weight: item.weight,
-    //   price: item.price,
-    //   totalcost: item.totalcost,
-    // })
-    // let product = this.jsonData.map(items)
+    const items = item => ({
+      quality: item.quality,
+      weight: item.weight,
+      price: item.price,
+      totalcost: item.totalcost,
+    })
+    let product = this.jsonData.map(items)
 
-    // //Calculate the total price of the items in an object
-    // let totalPrice = this.totalsum
+    //Calculate the total price of the items in an object
+    let totalPrice = this.totalsum
 
-    // let company = "Sakthi & Co"
-    // let counter = this.billWeightData.counter
-    // let biller = this.name
-    // let time = this.purchaseddate;
-    // //let amoutntReceived = 400
-    // //let change = amoutntReceived - totalPrice
+    let company = "Sakthi & Co"
+    let counter = this.billWeightData.counter
+    let biller = this.name
+    let time = this.purchaseddate;
+    let receipt = ""
+    receipt += commands.TEXT_FORMAT.TXT_WIDTH[2]
+    receipt += "\x1b\x45\x01 \x00" + company + "\x1b\x45\x00"
+    receipt += '\n'
+    receipt += "\x00" + time + "\x00"
 
-    // let receipt = ""
-    // receipt += commands.TEXT_FORMAT.TXT_WIDTH[2]
-    // receipt += "\x1b\x45\x01 \x00" + company + "\x1b\x45\x00"
-    // receipt += '\n'
-    // receipt += "\x00" + time + "\x00"
+    receipt += '\n'
+    receipt += commands.TEXT_FORMAT.TXT_4SQUARE
+    receipt += commands.HORIZONTAL_LINE.HR_58MM
+    receipt += '\n'
+    receipt += commands.TEXT_FORMAT.TXT_4SQUARE
+    receipt += '\x1B' + '\x61' + '\x30'// left align
+    receipt += vsprintf("%-17s %3s %10s\n", ["Counter", "", counter])
+    receipt += vsprintf("%-17s %3s %10s\n", ["Biller", "", biller])
+    receipt += commands.TEXT_FORMAT.TXT_ALIGN_RT
+    receipt += commands.TEXT_FORMAT.TXT_4SQUARE
+    receipt += commands.HORIZONTAL_LINE.HR2_58MM
+    receipt += '\n'
+    receipt += commands.TEXT_FORMAT.TXT_ALIGN_LT
+    receipt += '\x1b\x45\x01' + vsprintf("%-17s %3s %10s \n", ["Item", "", "Price(Rs.)"])
 
-    // receipt += '\n'
-    // receipt += commands.TEXT_FORMAT.TXT_4SQUARE
-    // receipt += commands.HORIZONTAL_LINE.HR_58MM
-    // receipt += '\n'
-    // receipt += commands.TEXT_FORMAT.TXT_4SQUARE
-    // receipt += '\x1B' + '\x61' + '\x30'// left align
-    // receipt += vsprintf("%-17s %3s %10s\n", ["Counter", "", counter])
-    // receipt += vsprintf("%-17s %3s %10s\n", ["Biller", "", biller])
-    // receipt += commands.TEXT_FORMAT.TXT_ALIGN_RT
-    // receipt += commands.TEXT_FORMAT.TXT_4SQUARE
-    // receipt += commands.HORIZONTAL_LINE.HR2_58MM
-    // receipt += '\n'
+    for (var pro in product) {
+      if (product.hasOwnProperty(pro)) {
+        var item = product[pro]
+        var itemquality = item.quality
+        var itemweight = item.weight
+        var itemperkg = item.price
+        var itemtotal = item.totalcost
+        receipt += vsprintf("%-17s %3s %10.2f\n", [this.formatTextWrap(itemquality, 16), "", itemtotal])
+        receipt += '\x1b\x61\x00' + "-" + " " + itemweight + " Kgs"
+        receipt += '\n'
+        receipt += '\x1b\x61\x00' + "-" + " " + "Rs." + itemperkg + " /kg"
+        receipt += '\n'
+
+      }
+      receipt += '\n'
+    }
     // receipt += commands.TEXT_FORMAT.TXT_ALIGN_LT
-    // receipt += '\x1b\x45\x01' + vsprintf("%-17s %3s %10s \n", ["Item", "", "Price(Rs.)"])
-
-    // for (var pro in product) {
-    //   if (product.hasOwnProperty(pro)) {
-    //     var item = product[pro]
-    //     var itemquality = item.quality
-    //     var itemweight = item.weight
-    //     var itemperkg = item.price
-    //     var itemtotal = item.totalcost
-    //     receipt += vsprintf("%-17s %3s %10.2f\n", [this.formatTextWrap(itemquality, 16), "", itemtotal])
-    //     receipt += '\x1b\x61\x00' + "-" + " " + itemweight + " Kgs"
-    //     receipt += '\n'
-    //     receipt += '\x1b\x61\x00' + "-" + " " + "Rs." + itemperkg + " /kg"
-    //     receipt += '\n'
-
-    //   }
-    //   receipt += '\n'
-    // }
-    // // receipt += commands.TEXT_FORMAT.TXT_ALIGN_LT
-    // // receipt += commands.TEXT_FORMAT.TXT_FONT_A
-    // // receipt += commands.HORIZONTAL_LINE.HR2_58MM
-    // // receipt += vsprintf("%-17s %3s %10.2f\n", ["Total Price", "", totalPrice])
-    // receipt += '\n'
-    // receipt += commands.TEXT_FORMAT.TXT_4SQUARE
-    // receipt += '\x1B' + '\x61' + '\x30'// left align
-    // receipt += commands.HORIZONTAL_LINE.HR2_58MM
-    // receipt += '\n'
-    // receipt += '\x1b\x45\x01' + vsprintf("%-17s %3s %10s\n", ["Total Amount(Rs)", "", totalPrice])
-    // receipt += commands.TEXT_FORMAT.TXT_ALIGN_RT
-    // receipt += '\n'
     // receipt += commands.TEXT_FORMAT.TXT_FONT_A
     // receipt += commands.HORIZONTAL_LINE.HR2_58MM
-    // receipt += '\n'
-    // receipt += commands.TEXT_FORMAT.TXT_FONT_B
-    // receipt += '\x1b\x61\x01' + 'Thank you, visit again!' + '\x0a\x0a\x0a\x0a' //The unicode symbols are for centering the text
- 
-    // this.printText(receipt)
+    // receipt += vsprintf("%-17s %3s %10.2f\n", ["Total Price", "", totalPrice])
+    receipt += '\n'
+    receipt += commands.TEXT_FORMAT.TXT_4SQUARE
+    receipt += '\x1B' + '\x61' + '\x30'// left align
+    receipt += commands.HORIZONTAL_LINE.HR2_58MM
+    receipt += '\n'
+    receipt += '\x1b\x45\x01' + vsprintf("%-17s %3s %10s\n", ["Total Amount(Rs)", "", totalPrice])
+    receipt += commands.TEXT_FORMAT.TXT_ALIGN_RT
+    receipt += '\n'
+    receipt += commands.TEXT_FORMAT.TXT_FONT_A
+    receipt += commands.HORIZONTAL_LINE.HR2_58MM
+    receipt += '\n'
+    receipt += commands.TEXT_FORMAT.TXT_FONT_B
+    receipt += '\x1b\x61\x01' + 'Thank you, visit again!' + '\x0a\x0a\x0a\x0a' //The unicode symbols are for centering the text
+     this.printText(receipt)
 
 
     let hours = new Date().getHours();

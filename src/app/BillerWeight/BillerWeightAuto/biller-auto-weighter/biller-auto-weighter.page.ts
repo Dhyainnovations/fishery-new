@@ -5,6 +5,8 @@ import { Router } from '@angular/router'
 import Swal from 'sweetalert2';
 import { Network } from '@awesome-cordova-plugins/network/ngx';
 import { DatePipe } from '@angular/common';
+import { BluetoothSerial } from '@awesome-cordova-plugins/bluetooth-serial/ngx';
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-biller-auto-weighter',
@@ -13,12 +15,12 @@ import { DatePipe } from '@angular/common';
 })
 export class BillerAutoWeighterPage implements OnInit {
 
-  constructor(public datepipe: DatePipe, private router: Router, private activatedRoute: ActivatedRoute, private http: HttpService, route: ActivatedRoute, private network: Network,) {
+  constructor(public datepipe: DatePipe, private router: Router, private activatedRoute: ActivatedRoute, private http: HttpService, route: ActivatedRoute, private network: Network, private bluetoothSerial: BluetoothSerial, private cdr: ChangeDetectorRef,) {
     route.params.subscribe(val => {
       this.currentDateTime = this.datepipe.transform((new Date), 'yyyy-MM-dd hh:mm:ss');
       this.myDate = new Date();
       this.myDate = this.datepipe.transform(this.myDate, 'yyyy-MM-dd');
-
+      this.connectedBluetoothID = localStorage.getItem("connectedBluetoothID",);
       this.dropdownVisible = false
 
       window.addEventListener('offline', () => {
@@ -62,7 +64,7 @@ export class BillerAutoWeighterPage implements OnInit {
   updateTime: any;
   currentDate;
 
-
+  connectedBluetoothID: any;
   currentDateTime: any;
   user: any;
   isDisabled: boolean = true;
@@ -102,9 +104,32 @@ export class BillerAutoWeighterPage implements OnInit {
     this.ID = '_' + Math.random().toString(36).substr(2, 25);
   };
 
+  deviceConnected() {
+    this.bluetoothSerial.disconnect();
+    this.bluetoothSerial.connect(this.connectedBluetoothID).subscribe(this.onSuccess, this.onError);
+    this.bluetoothSerial.subscribeRawData().subscribe((dt) => {
+      this.bluetoothSerial.read().then((dd) => {
+        this.onDataReceive(dd);
+        this.cdr.detectChanges(); // either here
+      });
+    });
+  }
 
+  onSuccess() {
+    alert(this.connectedBluetoothID)
+  }
 
+  onError() {
+    alert("Error");
+  }
 
+  onDataReceive(val) {
+    var data = JSON.stringify(val)
+    this.recivedWeightValue = val;
+    this.cdr.detectChanges(); // or here
+  }
+
+  recivedWeightValue: any;
 
 
   SelectCounter(data) {

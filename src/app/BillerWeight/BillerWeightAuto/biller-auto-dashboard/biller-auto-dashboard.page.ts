@@ -49,15 +49,6 @@ export class BillerAutoDashboardPage implements OnInit {
   }
   bluetoothconnected: any = false;
   bluetoothnotconnected: any = true;
-
-  // ChangeBluetoothConnection() {
-  //   this.bluetoothconnected = !this.bluetoothconnected;
-  //   this.bluetoothnotconnected = !this.bluetoothnotconnected;
-  //   this.router.navigate(['/centerweight-auto-weighter'])
-  // }
-
-
-  //ScanBluetoothDevice
   unpairedDevices: any;
   pairedDevices: any;
   gettingDevices: boolean;
@@ -95,8 +86,6 @@ export class BillerAutoDashboardPage implements OnInit {
       });
   }
 
-
-
   async disconnect() {
     const alert = await this.alertController.create({
       header: 'Disconnect?',
@@ -121,6 +110,7 @@ export class BillerAutoDashboardPage implements OnInit {
   }
 
 
+
   async selectDevice(id: any) {
 
     const alert = await this.alertController.create({
@@ -138,9 +128,8 @@ export class BillerAutoDashboardPage implements OnInit {
           text: 'Connect',
           handler: () => {
             this.bluetoothSerial.connect(id).subscribe(this.success, this.fail);
-            localStorage.setItem('ConnectedBluetoothID', id);
-            this.connectedid = id;
-
+            this.connectedId = id;
+            localStorage.setItem('connectedBluetoothID', this.connectedId);
           }
         }
       ]
@@ -148,24 +137,17 @@ export class BillerAutoDashboardPage implements OnInit {
     await alert.present();
   }
 
-  backToPrivios() {
-    this.router.navigate(['/biller-auto-record']);
-
-  }
-  connectedid: any;
+  connectedId: any = "";
   success = (data) => {
-    alert("Successfully Connected");
-    alert(this.connectedid)
-    this.router.navigate(['/BillerAutoweighter']);
+    localStorage.setItem('connectedBluetoothID', this.connectedId);
+    alert("Successfully Connected")
+    this.bluetoothSerial.write("Bluetooth Successfully Connected" + this.connectedId);
+    this.router.navigate(['/BillerAutoweighter'])
+    this.bluetoothSerial.disconnect();
   }
   fail = (error) => {
     alert(error);
-    this.bluetoothnotconnected = true;
-    this.bluetoothconnected = false;
   }
-
-
-
 
 
   CheckBluetoothIsConnected() {

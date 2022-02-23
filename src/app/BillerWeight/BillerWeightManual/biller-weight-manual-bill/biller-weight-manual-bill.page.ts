@@ -73,9 +73,6 @@ export class BillerWeightManualBillPage implements OnInit {
     let counter = this.billWeightData.counter
     let biller = this.name
     let time = this.purchaseddate;
-    //let amoutntReceived = 400
-    //let change = amoutntReceived - totalPrice
-
     let receipt = ""
     receipt += commands.TEXT_FORMAT.TXT_WIDTH[2]
     receipt += "\x1b\x45\x01 \x00" + company + "\x1b\x45\x00"

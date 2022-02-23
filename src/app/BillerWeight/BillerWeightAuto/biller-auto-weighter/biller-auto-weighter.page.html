@@ -40,10 +40,12 @@
 
   <!-----Display Weight----->
   <div class="row">
-    <div class="col-12 ion-text-center mt-4">
-      <input [(ngModel)]="weight" type="number" placeholder="ENTER THE WEIGHT" class="text-center"
-        style="border: 0.5px solid rgba(0, 0, 0, 0.164);  box-shadow: 1px 1px 8px 1px #6863CC;;font-size: 16px;padding: 5px;margin-left: 10px;margin-right: 10px">
-      KG
+    <p class="select-category mx-4" style="font-size: 13px;"><b><u>Weight:</u></b></p>
+    <div class="col-12 ion-text-center mt-1">
+      <h1
+        style="border: 0.5px solid rgba(0, 0, 0, 0.164);  box-shadow: 1px 1px 8px 1px #6863CC;width: 85%;margin: auto;">
+        {{recivedWeightValue}} <span style="font-size: 17px;">Kg</span></h1>
+
     </div>
   </div>
 
