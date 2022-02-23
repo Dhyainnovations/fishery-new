@@ -39,13 +39,13 @@ export class BillerWeightManualDashboardPage implements OnInit {
     });
 
   }
-  
+
 
   ngOnInit() {
     this.userId = localStorage.getItem("orgid",)
     this.user = localStorage.getItem("Fishery-username",)
     this.http.get('/list_type_manual').subscribe((response: any) => {
-      console.log(response);
+
       if (response.success == "true") {
       }
     }, (error: any) => {
@@ -63,8 +63,8 @@ export class BillerWeightManualDashboardPage implements OnInit {
   updateTime: any;
   currentDate;
 
-  
-  currentDateTime:any;
+
+  currentDateTime: any;
   user: any;
   isDisabled: boolean = true;
   userId: any;
@@ -90,7 +90,7 @@ export class BillerWeightManualDashboardPage implements OnInit {
   offlineAlart: any = false
   dropdownVisible: any = false
 
-  
+
 
   backToPrivios() {
     this.router.navigate(['/biller-weight-manual-record'])
@@ -113,19 +113,6 @@ export class BillerWeightManualDashboardPage implements OnInit {
     formdata.append("price", data.price);
     this.counterNo = data.price;
 
-    // for (var i = 0; i <= this.StoreTypeBasedOnCategory.length; i++) {
-    //   const listTypeBasedOnCategory = {
-    //     Categorypush: this.StoreTypeBasedOnCategory[i].category,
-    //     Typepush: this.StoreTypeBasedOnCategory[i].type
-    //   }
-    //   //console.log(listTypeBasedOnCategory);
-    //   if (this.category == listTypeBasedOnCategory.Categorypush) {
-
-    //     this.StoreTypeData.push(listTypeBasedOnCategory.Typepush);
-
-    //   }
-
-    // }
   }
 
 
@@ -142,17 +129,8 @@ export class BillerWeightManualDashboardPage implements OnInit {
     }
 
     this.http.post('/read_type', data).subscribe((response: any) => {
-      console.log(response);
-
       this.qualityList = response.records;
 
-
-      // for (var i = 0; i < response.records.length; i++) {
-      //   this.cost.push(response.records[i].price);
-      //   console.log(this.cost);
-      //   var LocalPrice = (JSON.stringify(this.cost));
-      //   localStorage.setItem('LocalPrice', LocalPrice);
-      // }
 
     }, (error: any) => {
       console.log(error);
@@ -175,12 +153,6 @@ export class BillerWeightManualDashboardPage implements OnInit {
     }
     this.http.post('/price', getPrice).subscribe((response: any) => {
       this.cost = (response.records.price);
-      // for (var i = 0; i < response.records.length; i++) {
-      //   this.cost.push(response.records[i].price);
-      //   console.log(this.cost);
-      //   var LocalPrice = (JSON.stringify(this.cost));
-      //   localStorage.setItem('LocalPrice', LocalPrice);
-      // }
 
     }, (error: any) => {
       console.log(error);
@@ -203,8 +175,6 @@ export class BillerWeightManualDashboardPage implements OnInit {
   getList() {
     this.http.get('/list_price').subscribe((response: any) => {
       this.listQualityCategory = response.records;
-      console.log(response);
-
     }, (error: any) => {
       console.log(error);
     }
@@ -251,43 +221,12 @@ export class BillerWeightManualDashboardPage implements OnInit {
   CheckGenerateBillButton = true;
   SetBillerAddItem = [];
   addItem() {
-    var date = new Date().toLocaleString('en-US', { hour12: true }).split(" ");
-    this.tdyDate = date;
-    console.log(this.tdyDate);
-
-
-    // Now we can access our time at date[1], and monthdayyear @ date[0]
-    var time = date[1];
-    var time_status = date[2];
-    console.log(time_status);
-
-
-
-    this.mdy = date[0];
-
-    // We then parse  the mdy into parts
-    this.mdy = this.mdy.split('/');
-    var month = parseInt(this.mdy[1]);
-    var day = parseInt(this.mdy[1]);
-    var year = parseInt(this.mdy[2]);
-    console.log(time_status);
-
-    // Putting it all together
-    var formattedDate = year + '-' + month + '-' + day + ' ';
-    console.log(formattedDate);
-
-    //console.log(formattedDate);
-
     let hours = new Date().getHours();
     let minutes = new Date().getMinutes();
     let seconds = new Date().getSeconds();
     this.hr = hours + 12;
     this.currentDate = this.myDate;
-
     this.updateTime = this.myDate + ' ' + hours + ":" + minutes + ":" + seconds
-    console.log(this.updateTime);
-
-
     this.CheckGenerateBillButton = false;
     this.generateId();
     const data = {
@@ -304,7 +243,7 @@ export class BillerWeightManualDashboardPage implements OnInit {
     }
 
 
-    console.log(data);
+
     this.SetBillerAddItem.push(data);
     var SetBillerAddItem = (JSON.stringify(this.SetBillerAddItem));
     localStorage.setItem('SetBillerAddItem', SetBillerAddItem);
@@ -339,7 +278,7 @@ export class BillerWeightManualDashboardPage implements OnInit {
 
   navigateToSettings() {
     this.router.navigate(['/settings'])
-  
+
   }
 
   logout() {
@@ -355,16 +294,16 @@ export class BillerWeightManualDashboardPage implements OnInit {
   deleteID = [];
   DisplayAfterDelete = [];
   delete(id) {
-    console.log(id);
+
     this.deleteID = JSON.parse(localStorage.getItem("SetBillerAddItem"));
-    console.log(this.deleteID);
+
 
     for (var i = 0; i <= this.deleteID.length; i++) {
-      console.log(this.deleteID[i].id);
+
       if (this.deleteID[i].id == id) {
-        console.log(this.deleteID[i]);
+
         this.deleteID.splice(this.deleteID.findIndex(a => this.deleteID[i] === id), 1)
-        console.log(this.deleteID);
+
         localStorage.removeItem("SetBillerAddItem");
         var SetBillerAddItem = (JSON.stringify(this.deleteID));
         localStorage.setItem('SetBillerAddItem', SetBillerAddItem);

@@ -110,42 +110,12 @@ export class LoginPagePage implements OnInit {
           console.log(this.Localpermission);
 
           //----------- Category Local Storage --------------//
-          this.http.get('/list_category',).subscribe((response: any) => {
-            var SetCategory = (JSON.stringify(response.records));
-            localStorage.setItem('SetCategory', SetCategory);
-          }, (error: any) => {
-            console.log(error);
-          }
-          );
-
-          //----------- Type Local Storage --------------//
-          this.http.get('/list_type',).subscribe((response: any) => {
-            var SetType = (JSON.stringify(response.records));
-            localStorage.setItem('SetType', SetType);
-          }, (error: any) => {
-            console.log(error);
-          }
-          );
-
-          //----------- Location Local Storage --------------//
-          this.http.get('/list_location',).subscribe((response: any) => {
-            var SetLocation = (JSON.stringify(response.records));
-            localStorage.setItem('SetLocation', SetLocation);
-          }, (error: any) => {
-            console.log(error);
-          });
+     
 
 
           //----------- Set Type Based On Category Local Storage --------------//
 
-          this.http.get('/list_type_manual').subscribe((response: any) => {
-            var SetTypeBasedOnCategory = (JSON.stringify(response.records));
-            localStorage.setItem('SetTypeBasedOnCategory', SetTypeBasedOnCategory);
-            console.log(response);
-          }, (error: any) => {
-            console.log(error);
-          }
-          );
+     
           this.checkToNavigate();
         }
 
@@ -187,19 +157,6 @@ export class LoginPagePage implements OnInit {
   checkToNavigate() {
     //-------center login check----------//
 
-    if (this.Locallogintype == "ROLE_WSHO") {
-
-      //---------- Auto or Manual Checking -----------//
-
-      if (this.Localpermission == "MANUAL") {
-        this.router.navigate(['/center-weight-manual-record'])
-      }
-
-      if (this.Localpermission == "AUTO") {
-        this.router.navigate(['/center-weight-auto-record'])
-      }
-
-    }
 
 
 
@@ -220,9 +177,7 @@ export class LoginPagePage implements OnInit {
 
     //-------admin login check----------//
 
-    if (this.Locallogintype == "ROLE_ADMIN") {
-      this.router.navigate(['/admindashboard'])
-    }
+  
 
 
 
