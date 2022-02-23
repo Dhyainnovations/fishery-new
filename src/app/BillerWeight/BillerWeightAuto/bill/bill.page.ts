@@ -55,6 +55,7 @@ export class BillPage implements OnInit {
   updateTime: any;
   myDate: any;
   printBill() {
+    this.bluetoothSerial.disconnect();
     this.bluetoothSerial.connect(this.printerBluetoothId).subscribe(this.onSuccess, this.onError);
     const items = item => ({
       quality: item.quality,

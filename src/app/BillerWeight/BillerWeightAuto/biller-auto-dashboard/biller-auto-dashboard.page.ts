@@ -4,7 +4,11 @@ import { BluetoothSerial } from '@awesome-cordova-plugins/bluetooth-serial/ngx';
 import { AlertController } from '@ionic/angular';
 import { ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { HttpService } from '../weighter/./../../../shared/http.service';
+import Swal from 'sweetalert2';
+import { NavController } from '@ionic/angular';
 import { DatePipe } from '@angular/common';
+import { Network } from '@awesome-cordova-plugins/network/ngx';
 @Component({
   selector: 'app-biller-auto-dashboard',
   templateUrl: './biller-auto-dashboard.page.html',
@@ -13,38 +17,44 @@ import { DatePipe } from '@angular/common';
 export class BillerAutoDashboardPage implements OnInit {
 
 
-  constructor(private router: Router, private bluetoothSerial: BluetoothSerial, private alertController: AlertController, private cdr: ChangeDetectorRef, route: ActivatedRoute,public datepipe: DatePipe,) {
+  constructor(private router: Router, private bluetoothSerial: BluetoothSerial, private alertController: AlertController, private cdr: ChangeDetectorRef, private network: Network, public datepipe: DatePipe, public navCtrl: NavController, private route: ActivatedRoute, private http: HttpService,) {
     route.params.subscribe(val => {
-      this.currentDateTime = this.datepipe.transform((new Date), 'yyyy-MM-dd hh:mm:ss');
-      this.user = localStorage.getItem("Fishery-username",)
-      console.log(this.user);
+
+
       window.addEventListener('offline', () => {
         this.checkoffline = true;
         this.offlineAlart = true
         this.onlineAlart = false;
+
       });
       window.addEventListener('online', () => {
+
         this.onlineAlart = true;
         this.offlineAlart = false
         this.checkonline = true;
+
       });
     });
-    this.CheckBluetoothIsConnected();
+    this.user = localStorage.getItem("Fishery-username",)
   }
+  user: any;
+  disableSts: any = false;
+  checkoffline: any;
+  checkonline: any;
+  buttonDisabled: boolean;
+  onlineAlart: any = true;
+  offlineAlart: any = false
 
   ngOnInit() {
   }
+  bluetoothconnected: any = false;
+  bluetoothnotconnected: any = true;
 
-
-  onlineAlart: any = true;
-  checkonline: any;
-  offlineAlart: any = false;
-  checkoffline: any;
-  currentDateTime:any;
-
-  backToPrivios() {
-    this.router.navigate(['/biller-auto-record'])
-  }
+  // ChangeBluetoothConnection() {
+  //   this.bluetoothconnected = !this.bluetoothconnected;
+  //   this.bluetoothnotconnected = !this.bluetoothnotconnected;
+  //   this.router.navigate(['/centerweight-auto-weighter'])
+  // }
 
 
   //ScanBluetoothDevice
@@ -85,6 +95,8 @@ export class BillerAutoDashboardPage implements OnInit {
       });
   }
 
+
+
   async disconnect() {
     const alert = await this.alertController.create({
       header: 'Disconnect?',
@@ -109,7 +121,6 @@ export class BillerAutoDashboardPage implements OnInit {
   }
 
 
-
   async selectDevice(id: any) {
 
     const alert = await this.alertController.create({
@@ -128,6 +139,8 @@ export class BillerAutoDashboardPage implements OnInit {
           handler: () => {
             this.bluetoothSerial.connect(id).subscribe(this.success, this.fail);
             localStorage.setItem('ConnectedBluetoothID', id);
+            this.connectedid = id;
+
           }
         }
       ]
@@ -135,15 +148,24 @@ export class BillerAutoDashboardPage implements OnInit {
     await alert.present();
   }
 
+  backToPrivios() {
+    this.router.navigate(['/biller-auto-record']);
 
+  }
+  connectedid: any;
   success = (data) => {
     alert("Successfully Connected");
+    alert(this.connectedid)
     this.router.navigate(['/BillerAutoweighter']);
-
   }
   fail = (error) => {
     alert(error);
+    this.bluetoothnotconnected = true;
+    this.bluetoothconnected = false;
   }
+
+
+
 
 
   CheckBluetoothIsConnected() {
@@ -169,23 +191,13 @@ export class BillerAutoDashboardPage implements OnInit {
       }
     );
   }
-  navigateToSettings() {
-    this.router.navigate(['/settings'])
-  }
 
-
-
-  user: any = "";
 
   logout() {
-    localStorage.removeItem("ConnectedBluetoothID",)    
     localStorage.removeItem("orgid",)
     localStorage.removeItem("Fishery-username",)
     localStorage.removeItem("logintype",)
     localStorage.removeItem("permission",)
-    this.bluetoothSerial.disconnect();
-    localStorage.removeItem("printerBluetoothId",)
     this.router.navigate(['/loginpage'])
-    
   }
 }

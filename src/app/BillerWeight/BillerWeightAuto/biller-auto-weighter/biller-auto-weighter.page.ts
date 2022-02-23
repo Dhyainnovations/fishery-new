@@ -34,8 +34,8 @@ export class BillerAutoWeighterPage implements OnInit {
       });
 
       this.generateId();
-     this.conectbluetoothDevice();
 
+      this.ConnectedBluetoothID = localStorage.getItem("ConnectedBluetoothID",)
     });
 
   }
@@ -54,6 +54,7 @@ export class BillerAutoWeighterPage implements OnInit {
     );
     this.getList();
     this.getCategoryList();
+    this.deviceConnected();
     let hours = new Date().getHours();
     let minutes = new Date().getMinutes();
     let seconds = new Date().getSeconds();
@@ -105,33 +106,30 @@ export class BillerAutoWeighterPage implements OnInit {
   myDate: any;
 
 
-  conectbluetoothDevice() {
-    this.bluetoothSerial.connect(this.ConnectedBluetoothID).subscribe(this.onSuccess, this.onError);
-  }
-
-  
-  weight: any;
 
 
-  onDataReceive(val) {
-    var data = JSON.stringify(val)
-    this.recivedWeightValue = val;
-    var data1 = data.replace('\\r\\n', '')
-    this.cdr.detectChanges(); // or here
-  }
-
-
-  onSuccess() {
+  deviceConnected() {
+    this.bluetoothSerial.connect(this.ConnectedBluetoothID);
     this.bluetoothSerial.subscribeRawData().subscribe((dt) => {
       this.bluetoothSerial.read().then((dd) => {
         this.onDataReceive(dd);
-        this.weight = dd
         this.cdr.detectChanges(); // either here
       });
     });
   }
-  onError() {
 
+  onDataReceive(val) {
+    var data = JSON.stringify(val)
+    this.recivedWeightValue = val;
+
+    this.cdr.detectChanges(); // or here
+  }
+
+  onSuccess() {
+    alert("Connected " + this.ConnectedBluetoothID )
+  }
+  onError() {
+    alert("Error")
   }
   recivedWeightValue: any;
 
@@ -285,7 +283,7 @@ export class BillerAutoWeighterPage implements OnInit {
   addItem() {
     this.CheckGenerateBillButton = false;
     this.recivedWeightValueshow = this.recivedWeightValue
-    this.weightshow = this.weight;
+
     this.generateId();
     const data = {
       category: this.category,
