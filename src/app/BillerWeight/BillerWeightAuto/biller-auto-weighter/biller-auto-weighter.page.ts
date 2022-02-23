@@ -34,8 +34,10 @@ export class BillerAutoWeighterPage implements OnInit {
       });
 
       this.generateId();
-
+      this.deviceConnected();
       this.ConnectedBluetoothID = localStorage.getItem("ConnectedBluetoothID",)
+      alert(this.ConnectedBluetoothID);
+      
     });
 
   }
@@ -109,7 +111,7 @@ export class BillerAutoWeighterPage implements OnInit {
 
 
   deviceConnected() {
-    this.bluetoothSerial.connect(this.ConnectedBluetoothID);
+    alert("Bluetooth Connected")
     this.bluetoothSerial.subscribeRawData().subscribe((dt) => {
       this.bluetoothSerial.read().then((dd) => {
         this.onDataReceive(dd);
@@ -119,6 +121,7 @@ export class BillerAutoWeighterPage implements OnInit {
   }
 
   onDataReceive(val) {
+    alert(val)
     var data = JSON.stringify(val)
     this.recivedWeightValue = val;
 
