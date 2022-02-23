@@ -52,6 +52,9 @@ export class WeighterPage implements OnInit {
 
   ngOnInit() {
 
+
+
+
     this.activeItem = "center"
     this.currentDateTime = this.datepipe.transform((new Date), 'yyyy-MM-dd hh:mm:ss');
 
@@ -98,23 +101,73 @@ export class WeighterPage implements OnInit {
 
 
   center(val) {
-    console.log(val);
-    alert(val)
     this.activeItem = "center"
+    this.type = val;
+    console.log(this.type);
+
+    this.http.get('/list_center_place',).subscribe((response: any) => {
+      this.locationlist = response.records;
+      console.log(response);
+
+    }, (error: any) => {
+      console.log(error);
+    }
+    );
+
+
+
   }
 
   localsale(val) {
+
+    this.type = val;
+    console.log(this.type);
     this.activeItem = "localsale"
     console.log(val);
+    this.http.get('/list_localsale_place',).subscribe((response: any) => {
+      this.locationlist = response.records;
+      console.log(response);
+
+    }, (error: any) => {
+      console.log(error);
+    }
+    );
+
   }
 
+
+
+  cardType: any;
+  mergesdLocationList: any = []
   market(val) {
+    this.type = val;
+    console.log(this.type);
     this.activeItem = "market"
     console.log(val);
+    this.http.get('/list_market',).subscribe((response: any) => {
+      this.locationlist = response.records;
+      console.log(response);
+
+    }, (error: any) => {
+      console.log(error);
+    }
+    );
+
   }
   merchant(val) {
+    this.type = val;
     this.activeItem = "merchant"
+    console.log(this.type);
     console.log(val);
+    this.http.get('/list_merchant',).subscribe((response: any) => {
+      this.locationlist = response.records;
+      console.log(response);
+
+    }, (error: any) => {
+      console.log(error);
+    }
+    );
+
   }
 
 
@@ -489,10 +542,16 @@ export class WeighterPage implements OnInit {
     });
   }
 
+  showWeight: any
   onDataReceive(val) {
     var data = JSON.stringify(val)
-    this.recivedWeightValue = val;
-    var data1 = data.replace('\\r\\n', '')
+    let roundOfValue = Math.round(val * 100) / 100;;
+    this.recivedWeightValue = roundOfValue;
+
+    if (this.recivedWeightValue == this.recivedWeightValue) {
+      this.showWeight = this.recivedWeightValue
+    }
+
     this.cdr.detectChanges(); // or here
   }
 

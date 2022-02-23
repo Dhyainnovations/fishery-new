@@ -31,8 +31,8 @@
   <div class="row ">
     <!-----Display Date----->
 
-    <div class="date-card col-6 display-date mx-5 ">
-      <p style="margin: 7px;" > <b>{{currentDateTime | date:'dd-MM-yyyy'}}</b> </p>
+    <div class="date-card col-6 display-date  ">
+      <p class="mt-2" > <b>{{currentDateTime | date:'dd-MM-yyyy'}}</b> </p>
     </div>
 
     <div style="margin-top: -12%;"  class=" col-6 dropdown toggle ">
@@ -45,6 +45,10 @@
     </div>
 
   </div>
+
+
+  <!-- <h1>{{beast | number : '1.1-1'}}</h1> -->
+  
 
   <div class="row">
     <div class="col-12 ion-text-center">
@@ -81,13 +85,13 @@
         <h4 class="ion-text-center mx-3">No Records</h4>
         <lottie-player src="https://assets8.lottiefiles.com/datafiles/vhvOcuUkH41HdrL/data.json"
           background="transparent" speed="1.5" style="width:65%;margin:auto" loop autoplay></lottie-player>
-
       </div>
-
     </div>
+
   </div>
 
    <!-----stock Table----->
+   <div class="row">
    <h6 class="mx-2">Stock:</h6>
    <table class="table">
      <thead style="background-color:#6863CC;" class="text-white">
@@ -99,18 +103,24 @@
          <th scope="col-2">Quantity</th>
        </tr>
      </thead>
-     <tbody *ngFor="let record of stockTableRec   let i=index; ">
+     <tbody >
        <tr>
-         <td>{{record.type}}</td>
-         <td>{{record.location}}</td>
-         <td>{{record.category}}</td>
-         <td>{{record.quality}}</td>
-         <td>{{record.quantity}}</td>
+         <td>{{stockType}}</td>
+         <td>{{stockLocation}}</td>
+         <td>{{stockCategory}}</td>
+         <td>{{stockQuality}}</td>
+         <td>{{stockQuantity}}</td>
        </tr>
      </tbody>
    </table>
 
+   <div *ngIf="stockTableEmpty" class=" col-12 ion-text-center ">
+    <h4 class="ion-text-center mx-3">No Records</h4>
+  </div>
+   </div>
+
     <!-----market Table----->
+    <div class="row">
     <h6 class="mx-2">Market:</h6>
     <table class="table">
       <thead style="background-color:#6863CC;" class="text-white">
@@ -132,8 +142,14 @@
         </tr>
       </tbody>
     </table>
+    <div *ngIf="marketTableEmpty" class=" col-12 ion-text-center ">
+      <h4 class="ion-text-center mx-3">No Records</h4>
+    </div>
+    </div>
+
 
      <!-----merchent Table----->
+     <div class="row">
      <h6 class="mx-2">Merchant:</h6>
      <table class="table">
        <thead style="background-color:#6863CC;" class="text-white">
@@ -155,6 +171,10 @@
          </tr>
        </tbody>
      </table>
+     <div *ngIf="merchantTableEmpty" class=" col-12 ion-text-center ">
+      <h4 class="ion-text-center mx-3">No Records</h4>
+    </div>
+     </div>
 
 
 

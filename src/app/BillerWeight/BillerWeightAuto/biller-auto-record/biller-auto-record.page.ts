@@ -6,25 +6,22 @@ import Swal from 'sweetalert2';
 import { NavController } from '@ionic/angular';
 import { Network } from '@awesome-cordova-plugins/network/ngx';
 import { DatePipe } from '@angular/common';
-import { BluetoothSerial } from '@awesome-cordova-plugins/bluetooth-serial/ngx';
+
 @Component({
   selector: 'app-biller-auto-record',
   templateUrl: './biller-auto-record.page.html',
   styleUrls: ['./biller-auto-record.page.scss'],
 })
 export class BillerAutoRecordPage implements OnInit {
-
-  constructor(private network: Network, public datepipe: DatePipe, public navCtrl: NavController, private router: Router, private activatedRoute: ActivatedRoute, private http: HttpService, route: ActivatedRoute,private bluetoothSerial: BluetoothSerial,) {
+  constructor(private network: Network, public datepipe: DatePipe, public navCtrl: NavController, private router: Router, private activatedRoute: ActivatedRoute, private http: HttpService, route: ActivatedRoute) {
     route.params.subscribe(val => {
       this.totalWeight()
       this.totalAmount()
       this.records();
       this.list_manual_bill();
       this.tableRecords()
-      this.ConnectedBluetoothID = localStorage.getItem("ConnectedBluetoothID",);
       this.user = localStorage.getItem("Fishery-username",)
       console.log(this.user);
-
       window.addEventListener('offline', () => {
         this.checkoffline = true;
         this.offlineAlart = true
@@ -39,14 +36,15 @@ export class BillerAutoRecordPage implements OnInit {
 
       });
       this.currentDateTime = this.datepipe.transform((new Date), 'yyyy-MM-dd hh:mm:ss');
+      this.todayBillList()
     });
   }
 
   ngOnInit() {
 
   }
-  user: any = " ";
-  currentDateTime: any;
+  user: any;
+  currentDateTime:any;
   checkoffline: any;
   checkonline: any;
   buttonDisabled: boolean;
@@ -56,11 +54,18 @@ export class BillerAutoRecordPage implements OnInit {
   totalweight: any = '';
   tableRecodrs: any = []
   cardRecords: any = []
-  ConnectedBluetoothID:any;
+
   isVisible: any = false
   lastEntryisVisible: any = false
 
-
+  logout() {
+    localStorage.removeItem("orgid",)
+    localStorage.removeItem("Fishery-username",)
+    localStorage.removeItem("logintype",)
+    localStorage.removeItem("permission",)
+    this.router.navigate(['/loginpage'])
+    localStorage.removeItem("printerBluetoothId",)
+  }
 
   dosomething(event) {
     setTimeout(() => {
@@ -75,7 +80,6 @@ export class BillerAutoRecordPage implements OnInit {
       this.totalweight = response.records.total_weight;
       console.log(response);
 
-
       if (response.records.total_weight == null) {
         this.totalweight = 0;
       }
@@ -86,7 +90,6 @@ export class BillerAutoRecordPage implements OnInit {
     }
     );
   }
-
 
   totalCost: any;
   totalAmount() {
@@ -107,6 +110,10 @@ export class BillerAutoRecordPage implements OnInit {
 
   displayCardDetails = [];
 
+  navigateToSettings() {
+    this.router.navigate(['/settings'])
+  }
+
   list_manual_bill() {
     this.http.get('/list_manual_bill',).subscribe((response: any) => {
       this.lastEntryisVisible = true
@@ -126,7 +133,7 @@ export class BillerAutoRecordPage implements OnInit {
   manualBillList: any = []
 
   todayBillList() {
-    this.http.get('/list_today_manual_bill',).subscribe((response: any) => {
+    this.http.get('/total_quality_bill_weight',).subscribe((response: any) => {
       this.manualBillList = response.records;
       console.log(response);
 
@@ -136,21 +143,6 @@ export class BillerAutoRecordPage implements OnInit {
     );
   }
 
-
-
-
-  records() {
-    this.http.get('/list_manual_weight',).subscribe((response: any) => {
-      this.cardRecords = response.records;
-      console.log(response);
-
-    }, (error: any) => {
-      console.log(error);
-    }
-    );
-  }
-  // sum:any = 0;
-  // sumofWeight:any;
   tableRec = []
   TotalTableWeight = []
   tableRecords() {
@@ -183,18 +175,22 @@ export class BillerAutoRecordPage implements OnInit {
     );
   }
 
-  navigateToNextPage() {
+  records() {
+    this.http.get('/list_manual_weight',).subscribe((response: any) => {
+      this.cardRecords = response.records;
+      console.log(response);
 
-    if(this.ConnectedBluetoothID != null){
-      this.router.navigate(['/BillerAutoweighter'])
-    }else{
-      this.router.navigate(['/BillerAutodashboard'])
+    }, (error: any) => {
+      console.log(error);
     }
-   
+    );
   }
-  navigateToSettings() {
-    this.router.navigate(['/settings'])
+
+
+  navigateToNextPage() {
+    this.router.navigate(['/BillerAutoweighter'])
   }
+
 
   delete(id) {
     console.log(id);
@@ -251,14 +247,5 @@ export class BillerAutoRecordPage implements OnInit {
     }
     );
   }
-  logout() {
-    localStorage.removeItem("orgid",)
-    localStorage.removeItem("Fishery-username",)
-    localStorage.removeItem("logintype",)
-    localStorage.removeItem("permission",)
-    localStorage.removeItem("ConnectedBluetoothID",)    
-    this.bluetoothSerial.disconnect();
-    localStorage.removeItem("printerBluetoothId",)
-    this.router.navigate(['/loginpage'])
-  }
+
 }

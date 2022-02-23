@@ -50,6 +50,9 @@ export class CenterWeightManualRecordPage implements OnInit {
 
   }
 
+  
+
+  beast:any = 0.55215421;
   myDate: any
 
   fromdate: any;
@@ -60,6 +63,9 @@ export class CenterWeightManualRecordPage implements OnInit {
   buttonDisabled: boolean;
   onlineAlart: any = true;
   offlineAlart: any = false
+  stockTableEmpty:any = true;
+  marketTableEmpty:any = true;
+  merchantTableEmpty:any = true;
 
   backButtonSubscription: any;
   ngOnInit() {
@@ -159,23 +165,39 @@ export class CenterWeightManualRecordPage implements OnInit {
   }
 
   stockTableRec: any = []
+  stockType:any = '';
+  stockLocation:any = '';
+  stockCategory:any='';
+  stockQuality:any='';
+  stockQuantity:any='';
   stockTableRecords() {
     this.http.get('/list_table_stock',).subscribe((response: any) => {
-      this.stockTableRec = response;
-      if (this.stockTableRec == "No manual weight found.") {
+     
+      if (response.message == "No manual weight found.") {
         this.stockTableRec = [];
-        // this.isVisible = true
-        // this.lastEntryisVisible = false
+        this.stockTableEmpty = true
+       
       } else {
+        this.stockTableEmpty = false
+        for(var i=0;i<response.length;i++){
+        
+          this.stockType = response[i].records[i].type;
+          this.stockLocation = response[i].records[i].location;
+          this.stockCategory = response[i].records[i].category;
+          this.stockQuality = response[i].records[i].quality;
+          this.stockQuantity = response[i].records[i].quantity;
 
-        // this.isVisible = false
-        // this.lastEntryisVisible = true
+          console.log(response[i].records[i].type);
+          console.log(this.stockLocation);
+          
+          
+        }
+      
       }
     }, (error: any) => {
       console.log(error);
       this.stockTableRec = [];
-      // this.isVisible = true
-      // this.lastEntryisVisible = false
+      
 
     }
     );
@@ -186,20 +208,17 @@ export class CenterWeightManualRecordPage implements OnInit {
   marketTableRecords() {
     this.http.get('/list_table_market',).subscribe((response: any) => {
       this.marketTableRec = response.records;
-      if (this.marketTableRec == "No manual weight found.") {
+      if (response.message == "No manual weight found.") {
         this.marketTableRec = [];
-        // this.isVisible = true
-        this.lastEntryisVisible = false
+        this.marketTableEmpty = true
       } else {
 
-        // this.isVisible = false
-        this.lastEntryisVisible = true
+        this.marketTableEmpty = false
       }
     }, (error: any) => {
       console.log(error);
       this.marketTableRec = [];
-      // this.isVisible = true
-      // this.lastEntryisVisible = false
+     
 
     }
     );
@@ -211,18 +230,15 @@ export class CenterWeightManualRecordPage implements OnInit {
       this.merchantTableRec = response.records;
       if (this.merchantTableRec == "No manual weight found.") {
         this.merchantTableRec = [];
-        // this.isVisible = true
-        // this.lastEntryisVisible = false
+        this.merchantTableEmpty = true
       } else {
 
-        // this.isVisible = false
-        // this.lastEntryisVisible = true
+        this.merchantTableEmpty = false
       }
     }, (error: any) => {
       console.log(error);
       this.merchantTableRec = [];
-      // this.isVisible = true
-      // this.lastEntryisVisible = false
+   
 
     }
     );

@@ -15,13 +15,13 @@
 
     <div *ngIf="onlineAlart" class="col-6 ion-text-right mt-2">
       <lottie-player src="https://assets5.lottiefiles.com/packages/lf20_dsp2yB.json" background="transparent"
-        speed="1.5" style="width:50%; margin-left: 50%;" loop autoplay></lottie-player>
+        speed="1.5" style="width:35%; margin-left: 60%;" loop autoplay></lottie-player>
       <!-- <p style="background-color: #6863CC;border-radius:10px;color:#fff;width: 50px;  margin-left: 50%;">Online</p> -->
     </div>
 
     <div *ngIf="offlineAlart" class="col-6 ion-text-right ">
       <!-- <p style="background-color: #6863CC;border-radius:10px;color:#fff;width: 50px;  margin-left: 50%;">Offline</p> -->
-      <img style="width:50%; margin-left: 50%; border-radius: 55%;" src="assets/offline.gif" alt="">
+      <img style="width:35%; margin-left: 60%; border-radius: 55%;" src="assets/offline.gif" alt="">
     </div>
 
   </div>
@@ -33,21 +33,22 @@
       <b style="font-size: 20px;">AUTO-WEIGHTER</b>
     </div>
 
-    <div class="row">
+    <div class="row ">
       <!-----Display Date----->
-      <div class="col-6 display-date mx-4 mt-3">
-        <p> <b>{{currentDateTime | date:'dd-MM-yyyy'}}</b> </p>
+  
+      <div class="date-card col-6 display-date mx-5 ">
+        <p style="margin: 7px;" > <b>{{currentDateTime | date:'dd-MM-yyyy'}}</b> </p>
       </div>
-
-      <div style="margin-top:-45px" class=" col-6 dropdown toggle">
+  
+      <div style="margin-top: -12%;"  class=" col-6 dropdown toggle ">
         <input id="t1" type="checkbox">
         <label for="t1">{{user}}</label>
         <ul>
-         
+          <!-- <li><a (click)="setting()">Settings</a></li> -->
           <li><a (click)="logout()">Logout</a></li>
         </ul>
       </div>
-
+  
     </div>
 
 
@@ -57,11 +58,10 @@
       <div class="col-12 ion-text-center mt-1">
         <h1
           style="border: 0.5px solid rgba(0, 0, 0, 0.164);  box-shadow: 1px 1px 8px 1px #6863CC;width: 85%;margin: auto;">
-          {{recivedWeightValue}} <span style="font-size: 17px;">Kg</span></h1>
+          {{showWeight}} <span style="font-size: 17px;">Kg</span></h1>
 
       </div>
     </div>
-
 
 
     <div class="container weighter-details-wrapper">
@@ -89,6 +89,7 @@
           </form>
         </div>
 
+        <!---------  type buttons ----------->
         <div id="sideMenuList" class="col-6">
           <button [class]="activeItem == 'center' ? 'active list': 'list' " (click)="center('center')"
             class="btn btn-primary type-btn">Center</button>

@@ -8,27 +8,28 @@
       </ion-refresher-content>
     </ion-refresher>
   </div>
-  <div class="row">
-
-      <div class="col-8">
+   <div class="row">
+   
+    <div class="col-8">
       <h6 style="color: #6863CC;margin-left: 65%;" class=" mt-4" ><b>BILLER</b></h6>
     </div> 
 
-    <div *ngIf="onlineAlart" class="col-12 ion-text-right " style="margin-top:-25%">
+    <div *ngIf="onlineAlart" class="col-4 ion-text-right ">
       <lottie-player src="https://assets5.lottiefiles.com/packages/lf20_dsp2yB.json" background="transparent"
-        speed="1.5" style="width:20%; margin-left: 80%;" loop autoplay></lottie-player>
+        speed="1.5" style="width:70%; margin-left:20%; border-radius: 55%;" loop autoplay></lottie-player>
       <!-- <p style="background-color: #6863CC;border-radius:10px;color:#fff;width: 50px;  margin-left: 50%;">Online</p> -->
     </div>
 
-    <div *ngIf="offlineAlart" class="col-12 ion-text-right " style="margin-top:-25%">
+    <div *ngIf="offlineAlart" class="col-4 ion-text-right ">
       <!-- <p style="background-color: #6863CC;border-radius:10px;color:#fff;width: 50px;  margin-left: 50%;">Offline</p> -->
-      <img style="width:20%; margin-left: 80%; border-radius: 55%;" src="assets/offline.gif" alt="">
+      <img style="width:70%; margin-left:20%; border-radius: 55%;" src="assets/offline.gif" alt="">
     </div>
+
+  
 
   </div>
 
-
-     <div class="row ">
+    <div class="row ">
     <!-----Display Date----->
 
     <div class="date-card col-6 display-date mx-5 ">
@@ -50,9 +51,9 @@
     <div class="col-12 ion-text-center">
       <button (click)="navigateToNextPage()" class="navigate-btn  mt-5"><b>Start Billing</b></button>
     </div>
+    <div class="col-6"></div>
 
-
-    <div class="col-12 ion-text-center">
+     <div class="col-12 ion-text-center">
       <div class="weight-display" style="font-size: 16px;margin:7%;margin-top:3%">
         <p> Today's Total Weight  <b><br> {{totalweight}}</b> Kgs</p>
       </div>
@@ -60,15 +61,13 @@
 
      <div class="col-12 ion-text-center">
       <div class="weight-display" style="font-size: 16px;margin:7%;margin-top:-3%">
-        <p> Today's collected amount  <b><br> Rs.{{totalCost}}</b> /-</p>
+        <p> Today's Total Weight  <b><br> Rs.{{totalCost}}</b> /-</p>
       </div>
     </div>
 
 
 
-
     <!-----Table----->
-
 
 
     <table class="table">
@@ -91,20 +90,8 @@
         </tr>
         
       </tbody>
-      <!-- <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td><span style="color: #6863CC;">Total:</span> <br> {{sumofWeight}} </td>
-        <td><span style="color: #6863CC;">Total:</span> <br> 254534153645 </td>
-      </tr> -->
+      
     </table>
-    <!-- <div class="row">
-      <div class="col-2"></div>
-      <div style="font-size: 12px;" class="col-5"><span style="color: #6863CC;margin-left: 55px;">total:</span> <span style="font-size: 10px">1245</span></div>
-      <div   style="font-size: 12px;" class="col-5"><span style="color: #6863CC;margin-left: 8px;">total:</span> <span style="font-size: 10px">1245</span></div>
-     
-    </div> -->
 
     <div class="row">
       <div *ngIf="isVisible" class=" col-12 ion-text-center mt-3 ">
