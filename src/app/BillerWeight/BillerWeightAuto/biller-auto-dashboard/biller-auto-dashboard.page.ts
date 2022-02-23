@@ -155,7 +155,8 @@ export class BillerAutoDashboardPage implements OnInit {
   connectedid: any;
   success = (data) => {
     alert("Successfully Connected");
-    alert(this.connectedid)
+    alert(this.connectedid);
+    this.bluetoothSerial.disconnect();
     this.router.navigate(['/BillerAutoweighter']);
   }
   fail = (error) => {

@@ -277,12 +277,11 @@ export class BillerAutoWeighterPage implements OnInit {
   CheckGenerateBillButton = true;
   SetBillerAddItem = [];
 
-  recivedWeightValueshow: any;
-  weightshow: any;
+ 
 
   addItem() {
     this.CheckGenerateBillButton = false;
-    this.recivedWeightValueshow = this.recivedWeightValue
+ 
 
     this.generateId();
     const data = {
