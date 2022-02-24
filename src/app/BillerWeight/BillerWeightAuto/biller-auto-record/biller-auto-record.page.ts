@@ -17,6 +17,7 @@ export class BillerAutoRecordPage implements OnInit {
 
   constructor(private network: Network, public datepipe: DatePipe, public navCtrl: NavController, private router: Router, private activatedRoute: ActivatedRoute, private http: HttpService, route: ActivatedRoute) {
     route.params.subscribe(val => {
+ 
       this.totalWeight()
       this.totalAmount()
       this.records();
@@ -52,6 +53,7 @@ export class BillerAutoRecordPage implements OnInit {
     localStorage.removeItem("permission",)
     this.router.navigate(['/loginpage'])
     localStorage.removeItem("printerBluetoothId",)
+    localStorage.removeItem("connectedBluetoothID",)
   }
 
   dosomething(event) {

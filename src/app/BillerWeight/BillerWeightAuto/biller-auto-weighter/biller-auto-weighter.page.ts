@@ -17,22 +17,12 @@ export class BillerAutoWeighterPage implements OnInit {
 
   constructor(public datepipe: DatePipe, private router: Router, private activatedRoute: ActivatedRoute, private http: HttpService, route: ActivatedRoute, private network: Network, private bluetoothSerial: BluetoothSerial, private cdr: ChangeDetectorRef,) {
     route.params.subscribe(val => {
+      this.bluetoothSerial.disconnect();
       this.currentDateTime = this.datepipe.transform((new Date), 'yyyy-MM-dd hh:mm:ss');
       this.myDate = new Date();
       this.myDate = this.datepipe.transform(this.myDate, 'yyyy-MM-dd');
       this.connectedBluetoothID = localStorage.getItem('connectedBluetoothID',);
       this.dropdownVisible = false
-
-      window.addEventListener('offline', () => {
-        this.checkoffline = true;
-        this.offlineAlart = true
-        this.onlineAlart = false;
-      });
-      window.addEventListener('online', () => {
-        this.onlineAlart = true;
-        this.offlineAlart = false
-        this.checkonline = true;
-      });
       this.deviceConnected();
       this.generateId();
 
@@ -257,13 +247,13 @@ export class BillerAutoWeighterPage implements OnInit {
       category: this.category,
       id: this.user,
       quality: this.type,
-      weight: this.weight,
+      weight: this.recivedWeightValue,
       counter: this.counter,
       userid: this.ID,
       isDeleted: "0",
       purchaseddate: this.updateTime,
       cost: this.cost,
-      totalcost: this.cost * this.weight
+      totalcost: this.cost * this.recivedWeightValue
     }
 
 
@@ -313,6 +303,7 @@ export class BillerAutoWeighterPage implements OnInit {
     localStorage.removeItem("permission",)
     this.router.navigate(['/loginpage'])
     localStorage.removeItem("printerBluetoothId",)
+    localStorage.removeItem("connectedBluetoothID",)
   }
 
 
