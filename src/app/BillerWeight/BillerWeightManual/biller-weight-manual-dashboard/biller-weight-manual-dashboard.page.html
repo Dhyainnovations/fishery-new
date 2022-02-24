@@ -21,7 +21,7 @@
       <!-----Display Date----->
 
       <div class="date-card col-6 display-date mx-5 ">
-        <p style="margin: 7px;"> <b>{{currentDateTime| date:'dd-MM-yyyy'}}</b> </p>
+        <p style="margin: 7px;"> <b>{{myDate}}</b> </p>
       </div>
 
       <div style="margin-top: -12%;" class=" col-6 dropdown toggle ">
@@ -151,12 +151,12 @@
     <div class="container">
       <div class="row">
         <button (click)="generateBill()" class="submit-button px-2 py-2" color="transparent" style="font-size: 13px;"
-          [disabled]="SetBillerAddItem.length<=0 ">
+          [disabled]="SetBillerAddItem.length<=0 || printerAvailable">
           GENERATE BILL
         </button>
       </div>
     </div>
   </div>
 
-//|| printerAvailable
+<p class="text-center" *ngIf="printerAvailable">Kindly Connect Printer</p>
 </ion-content>

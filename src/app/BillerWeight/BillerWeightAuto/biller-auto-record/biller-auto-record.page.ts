@@ -17,7 +17,7 @@ export class BillerAutoRecordPage implements OnInit {
 
   constructor(private network: Network, public datepipe: DatePipe, public navCtrl: NavController, private router: Router, private activatedRoute: ActivatedRoute, private http: HttpService, route: ActivatedRoute) {
     route.params.subscribe(val => {
- 
+
       this.totalWeight()
       this.totalAmount()
       this.records();
@@ -27,6 +27,7 @@ export class BillerAutoRecordPage implements OnInit {
       console.log(this.user);
       this.currentDateTime = this.datepipe.transform((new Date), 'yyyy-MM-dd hh:mm:ss');
       this.todayBillList()
+      this.tableRecords()
     });
   }
 
@@ -34,11 +35,11 @@ export class BillerAutoRecordPage implements OnInit {
 
   }
   user: any;
-  currentDateTime:any;
+  currentDateTime: any;
 
   buttonDisabled: boolean;
-
-  connectedBluetoothID:any;
+  currentDate: any;
+  connectedBluetoothID: any;
   totalweight: any = '';
   tableRecodrs: any = []
   cardRecords: any = []
@@ -67,7 +68,7 @@ export class BillerAutoRecordPage implements OnInit {
   totalWeight() {
     this.http.get('/list_total_bill_weight',).subscribe((response: any) => {
       this.totalweight = response.records.total_weight;
-     
+
       if (response.records.total_weight == null) {
         this.totalweight = 0;
       }
@@ -83,7 +84,7 @@ export class BillerAutoRecordPage implements OnInit {
   totalAmount() {
     this.http.get('/bill_total_amount',).subscribe((response: any) => {
       this.totalCost = response.records.total_amount;
-    
+
       if (response.records.total_amount == null) {
         this.totalCost = 0;
       }
@@ -106,7 +107,7 @@ export class BillerAutoRecordPage implements OnInit {
     this.http.get('/list_manual_bill',).subscribe((response: any) => {
       this.lastEntryisVisible = true
       this.displayCardDetails = response.records
-    
+
 
 
     }, (error: any) => {
@@ -123,7 +124,7 @@ export class BillerAutoRecordPage implements OnInit {
   todayBillList() {
     this.http.get('/total_quality_bill_weight',).subscribe((response: any) => {
       this.manualBillList = response.records;
-     
+
 
     }, (error: any) => {
       console.log(error);
@@ -131,12 +132,27 @@ export class BillerAutoRecordPage implements OnInit {
     );
   }
 
-
+  tableRec = []
+  tableRecords() {
+    this.currentDate = this.datepipe.transform((new Date), 'yyyy-MM-dd');
+    const data = {
+      "from_date": this.currentDate,
+      "to_date": this.currentDate
+    }
+    console.log(data);
+    this.http.post('/list_localsale_date_manual_bill', data).subscribe((response: any) => {
+      this.tableRec = response.records;
+      console.log(response);
+    }, (error: any) => {
+      console.log(error);
+    }
+    );
+  }
 
   records() {
     this.http.get('/list_manual_weight',).subscribe((response: any) => {
       this.cardRecords = response.records;
-     
+
 
     }, (error: any) => {
       console.log(error);
@@ -147,12 +163,12 @@ export class BillerAutoRecordPage implements OnInit {
 
   navigateToNextPage() {
 
-    if(this.connectedBluetoothID != null){
+    if (this.connectedBluetoothID != null) {
       this.router.navigate(['/BillerAutoweighter'])
-    }else{
+    } else {
       this.router.navigate(['/BillerAutodashboard'])
     }
-   
+
   }
 
 

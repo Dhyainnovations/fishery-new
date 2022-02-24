@@ -21,10 +21,11 @@ export class BillerWeightManualRecordPage implements OnInit {
       this.totalAmount()
       this.records();
       this.list_manual_bill();
-
+      this.tableRecords();
       this.user = localStorage.getItem("Fishery-username",)
       console.log(this.user);
       this.currentDateTime = this.datepipe.transform((new Date), 'yyyy-MM-dd hh:mm:ss');
+      this.currentDate = this.datepipe.transform((new Date), 'yyyy-MM-dd');
       this.todayBillList()
     });
   }
@@ -34,6 +35,7 @@ export class BillerWeightManualRecordPage implements OnInit {
   }
   manualBillList: any = []
   user: any;
+  currentDate;
   currentDateTime: any;
   buttonDisabled: boolean;
   totalweight: any = '';
@@ -86,9 +88,6 @@ export class BillerWeightManualRecordPage implements OnInit {
     this.http.get('/list_manual_bill',).subscribe((response: any) => {
       this.lastEntryisVisible = true
       this.displayCardDetails = response.records
-
-
-
     }, (error: any) => {
       console.log(error);
       this.lastEntryisVisible = false
@@ -119,6 +118,23 @@ export class BillerWeightManualRecordPage implements OnInit {
     );
   }
 
+
+  tableRec = []
+  tableRecords() {
+    this.currentDate = this.datepipe.transform((new Date), 'yyyy-MM-dd');
+    const data = {
+      "from_date": this.currentDate,
+      "to_date": this.currentDate
+    }
+    console.log(data);
+    this.http.post('/list_localsale_date_manual_bill', data).subscribe((response: any) => {
+      this.tableRec = response.records;
+      console.log(response);
+    }, (error: any) => {
+      console.log(error);
+    }
+    );
+  }
 
 
 
