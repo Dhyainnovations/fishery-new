@@ -16,26 +16,13 @@ export class BillerWeightManualDashboardPage implements OnInit {
 
   constructor(public datepipe: DatePipe, private router: Router, private activatedRoute: ActivatedRoute, private http: HttpService, route: ActivatedRoute, private network: Network,) {
     route.params.subscribe(val => {
-      this.currentDateTime = this.datepipe.transform((new Date), 'yyyy-MM-dd hh:mm:ss');
+
       this.myDate = new Date();
       this.myDate = this.datepipe.transform(this.myDate, 'yyyy-MM-dd');
-
       this.dropdownVisible = false
-
-      window.addEventListener('offline', () => {
-        this.checkoffline = true;
-        this.offlineAlart = true
-        this.onlineAlart = false;
-      });
-      window.addEventListener('online', () => {
-        this.onlineAlart = true;
-        this.offlineAlart = false
-        this.checkonline = true;
-      });
-
       this.generateId();
-
-
+      this.printerBluetoothId = localStorage.getItem("printerBluetoothId",);
+      this.CheckPrinterAvailabilty();
     });
 
   }
@@ -56,15 +43,15 @@ export class BillerWeightManualDashboardPage implements OnInit {
     this.getCategoryList();
   }
 
+
+  //VariableDeclaration
   myDate;
-  // currentDate = new Date();
+  deleteID = [];
+  DisplayAfterDelete = [];
   tdyDate: any;
   hr: any;
   updateTime: any;
   currentDate;
-
-
-  currentDateTime: any;
   user: any;
   isDisabled: boolean = true;
   userId: any;
@@ -80,8 +67,6 @@ export class BillerWeightManualDashboardPage implements OnInit {
   counterNo: any
   type: any;
   mdy: any;
-
-
   typelist: any = []
   qualityList = [];
   tableRecodrs: any = []
@@ -89,187 +74,23 @@ export class BillerWeightManualDashboardPage implements OnInit {
   onlineAlart: any = true;
   offlineAlart: any = false
   dropdownVisible: any = false
+  StoreTypeBasedOnCategory = [];
+  StoreTypeData = [];
+  cost: any = "";
+  categorylist = [];
+  value: any;
+  listQualityCategory = [];
+  CheckGenerateBillButton = true;
+  SetBillerAddItem = [];
+  printerBluetoothId: any;
+  printerAvailable: boolean;
 
 
-
+  //Navigation
   backToPrivios() {
     this.router.navigate(['/biller-weight-manual-record'])
   }
 
-  generateId() {
-    // Math.random should be unique because of its seeding algorithm.
-    // Convert it to base 36 (numbers + letters), and grab the first 9 characters
-    // after the decimal.
-    this.ID = '_' + Math.random().toString(36).substr(2, 25);
-  };
-
-
-
-
-
-
-  SelectCounter(data) {
-    const formdata = new FormData();
-    formdata.append("price", data.price);
-    this.counterNo = data.price;
-
-  }
-
-
-  StoreTypeBasedOnCategory = [];
-  StoreTypeData = [];
-
-
-  SelectCategory(data) {
-    this.StoreTypeData = [];
-    const formdata = new FormData();
-    formdata.append("category", data.category);
-    data = {
-      category: data.category
-    }
-
-    this.http.post('/read_type', data).subscribe((response: any) => {
-      this.qualityList = response.records;
-
-
-    }, (error: any) => {
-      console.log(error);
-
-      this.qualityList = [];
-
-    }
-
-    )
-  }
-
-  cost: any = "";
-
-  SelectType(data) {
-    const formdata = new FormData();
-    formdata.append("type", data.type);
-    const getPrice = {
-      category: this.category,
-      quality: data.type,
-    }
-    this.http.post('/price', getPrice).subscribe((response: any) => {
-      this.cost = (response.records.price);
-
-    }, (error: any) => {
-      console.log(error);
-    }
-    );
-  }
-
-
-  checkboxsts: any = false
-
-  dropdownOpen() {
-    this.checkboxsts = true
-
-  }
-
-
-
-
-  listQualityCategory = [];
-  getList() {
-    this.http.get('/list_price').subscribe((response: any) => {
-      this.listQualityCategory = response.records;
-    }, (error: any) => {
-      console.log(error);
-    }
-    );
-  }
-
-  categorylist = [];
-  getCategoryList() {
-    this.http.get('/list_category',).subscribe((response: any) => {
-      this.categorylist = response.records;
-
-    }, (error: any) => {
-      console.log(error);
-    }
-    );
-  }
-
-
-
-
-
-  dosomething(event) {
-    setTimeout(() => {
-      event.target.complete();
-    }, 1500);
-  }
-
-  value: any;
-
-  NavigateTo() {
-    if (this.value == "settings") {
-      this.router.navigate(['/settings'])
-    } else {
-      this.logout()
-    }
-
-
-  }
-
-  navigateToNextPage() {
-    this.router.navigate(['/settings'])
-  }
-
-  CheckGenerateBillButton = true;
-  SetBillerAddItem = [];
-  addItem() {
-    let hours = new Date().getHours();
-    let minutes = new Date().getMinutes();
-    let seconds = new Date().getSeconds();
-    this.hr = hours + 12;
-    this.currentDate = this.myDate;
-    this.updateTime = this.myDate + ' ' + hours + ":" + minutes + ":" + seconds
-    this.CheckGenerateBillButton = false;
-    this.generateId();
-    const data = {
-      category: this.category,
-      id: this.user,
-      quality: this.type,
-      weight: this.weight,
-      counter: this.counter,
-      userid: this.ID,
-      isDeleted: "0",
-      purchaseddate: this.updateTime,
-      cost: this.cost,
-      totalcost: this.cost * this.weight
-    }
-
-
-
-    this.SetBillerAddItem.push(data);
-    var SetBillerAddItem = (JSON.stringify(this.SetBillerAddItem));
-    localStorage.setItem('SetBillerAddItem', SetBillerAddItem);
-
-
-    //toast
-    const Toast = Swal.mixin({
-      toast: true,
-      position: 'top-end',
-      showConfirmButton: false,
-      timer: 1000,
-      timerProgressBar: true,
-      didOpen: (toast) => {
-        toast.addEventListener('mouseenter', Swal.stopTimer)
-        toast.addEventListener('mouseleave', Swal.resumeTimer)
-      }
-    })
-
-    Toast.fire({
-      icon: 'success',
-      title: 'Item Added Successfully'
-    })
-
-    this.weight = ''
-
-  }
 
   generateBill() {
     this.router.navigate(['/BillerManualbill'])
@@ -281,6 +102,128 @@ export class BillerWeightManualDashboardPage implements OnInit {
 
   }
 
+
+
+  //GenerateUserID
+  generateId() {
+    // Math.random should be unique because of its seeding algorithm.
+    // Convert it to base 36 (numbers + letters), and grab the first 9 characters
+    // after the decimal.
+    this.ID = '_' + Math.random().toString(36).substr(2, 25);
+  };
+
+  //CounterSelection
+  SelectCounter(data) {
+    this.counterNo = data.price;
+  }
+
+  //CategorySelection
+  SelectCategory(data) {
+    this.StoreTypeData = [];
+    data = {
+      category: data.category
+    }
+    this.http.post('/read_type', data).subscribe((response: any) => {
+      this.qualityList = response.records;
+    }, (error: any) => {
+      console.log(error);
+      this.qualityList = [];
+    }
+    )
+  }
+
+  //QualitySelection
+  SelectType(data) {
+    const formdata = new FormData();
+    formdata.append("type", data.type);
+    const getPrice = {
+      category: this.category,
+      quality: data.type,
+    }
+    this.http.post('/price', getPrice).subscribe((response: any) => {
+      this.cost = (response.records.price);
+    }, (error: any) => {
+      console.log(error);
+    }
+    );
+  }
+
+
+  getList() {
+    this.http.get('/list_price').subscribe((response: any) => {
+      this.listQualityCategory = response.records;
+    }, (error: any) => {
+      console.log(error);
+    }
+    );
+  }
+
+
+  getCategoryList() {
+    this.http.get('/list_category',).subscribe((response: any) => {
+      this.categorylist = response.records;
+    }, (error: any) => {
+      console.log(error);
+    }
+    );
+  }
+
+  CheckPrinterAvailabilty() {
+    if (this.printerBluetoothId != null) {
+      this.printerAvailable = false;
+    } else {
+      this.printerAvailable = true;
+    }
+  }
+
+  //AddedItemToStoreInLocalStorage
+  addItem() {
+    let hours = new Date().getHours();
+    let minutes = new Date().getMinutes();
+    let seconds = new Date().getSeconds();
+    this.hr = hours + 12;
+    this.currentDate = this.myDate;
+    this.updateTime = this.myDate + ' ' + hours + ":" + minutes + ":" + seconds
+    this.CheckGenerateBillButton = false;
+    var totalcostroundoff = this.cost * this.weight;
+    this.generateId();
+
+    const data = {
+      category: this.category,
+      id: this.user,
+      quality: this.type,
+      weight: this.weight,
+      counter: this.counter,
+      userid: this.ID,
+      isDeleted: "0",
+      purchaseddate: this.updateTime,
+      cost: this.cost,
+      totalcost: Math.round(totalcostroundoff * 100) / 100
+    }
+    this.SetBillerAddItem.push(data);
+    var SetBillerAddItem = (JSON.stringify(this.SetBillerAddItem));
+    localStorage.setItem('SetBillerAddItem', SetBillerAddItem);
+    //Toast
+    const Toast = Swal.mixin({
+      toast: true,
+      position: 'top-end',
+      showConfirmButton: false,
+      timer: 1000,
+      timerProgressBar: true,
+      didOpen: (toast) => {
+        toast.addEventListener('mouseenter', Swal.stopTimer)
+        toast.addEventListener('mouseleave', Swal.resumeTimer)
+      }
+    })
+    Toast.fire({
+      icon: 'success',
+      title: 'Item Added Successfully'
+    })
+    this.weight = ''
+  }
+
+
+  //Logout
   logout() {
     localStorage.removeItem("orgid",)
     localStorage.removeItem("Fishery-username",)
@@ -290,33 +233,17 @@ export class BillerWeightManualDashboardPage implements OnInit {
     localStorage.removeItem("printerBluetoothId",)
   }
 
-
-  deleteID = [];
-  DisplayAfterDelete = [];
+  //DeleteSeparateItem
   delete(id) {
-
     this.deleteID = JSON.parse(localStorage.getItem("SetBillerAddItem"));
-
-
     for (var i = 0; i <= this.deleteID.length; i++) {
-
       if (this.deleteID[i].id == id) {
-
         this.deleteID.splice(this.deleteID.findIndex(a => this.deleteID[i] === id), 1)
-
         localStorage.removeItem("SetBillerAddItem");
         var SetBillerAddItem = (JSON.stringify(this.deleteID));
         localStorage.setItem('SetBillerAddItem', SetBillerAddItem);
         this.SetBillerAddItem = this.deleteID;
       }
-
     }
-
   }
-
-
-
-
-
-
 }

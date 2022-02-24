@@ -167,7 +167,6 @@ export class BillPage implements OnInit {
 
 
   printText(receipt) {
-    alert(receipt);
     this.bluetoothSerial.write(receipt);
   }
 
@@ -213,17 +212,17 @@ export class BillPage implements OnInit {
       const SendData = {
         category: localcategory,
         counter: localcounter,
-        id: localid,
+        id: localuserid,
         isDeleted: localisDeleted,
         purchaseddate: localpurchaseddate,
         price: localprice,
         quality: localquality,
-        userid: localuserid,
+        userid: localid,
         weight: localweight,
         totalcost: localprice * localweight,
       }
       const SendPushData = {
-        id: localid,
+        id: localuserid,
         price: localprice,
         quality: localquality,
         weight: localweight,

@@ -148,14 +148,11 @@ export class BillerWeightManualBillPage implements OnInit {
       purchaseddate: this.updateTime,
     }
 
-    this.http.post('/manual_bill', data).subscribe((response: any) => {
- 
+    this.http.post('/manual_bill', data).subscribe((response: any) => { 
       if (response.success == "true") {
         localStorage.removeItem("SetBillerAddItem");
         this.router.navigate(['/biller-weight-manual-record'])
       }
-
-
     }, (error: any) => {
       console.log(error);
     }
@@ -165,7 +162,6 @@ export class BillerWeightManualBillPage implements OnInit {
 
 
   printText(receipt) {
-    alert(receipt);
     this.bluetoothSerial.write(receipt);
   }
 
@@ -221,14 +217,14 @@ export class BillerWeightManualBillPage implements OnInit {
         totalcost: localprice * localweight,
       }
       const SendPushData = {
-        id: localid,
+        id: localuserid,
         price: localprice,
         quality: localquality,
         weight: localweight,
       }
 
       this.billWeightData = {
-        id: localid,
+        id: localuserid,
         price: localprice,
         weight: localweight,
         quality: localquality,
@@ -236,7 +232,7 @@ export class BillerWeightManualBillPage implements OnInit {
         counter: localcounter,
         userid: localid,
         isDeleted: localisDeleted,
-        purchaseddate: localpurchaseddate,
+        purchaseddate: this.updateTime,
       }
 
       this.price.push(SendData.totalcost);

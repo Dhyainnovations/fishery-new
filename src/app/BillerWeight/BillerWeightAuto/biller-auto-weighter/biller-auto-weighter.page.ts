@@ -22,10 +22,11 @@ export class BillerAutoWeighterPage implements OnInit {
       this.myDate = new Date();
       this.myDate = this.datepipe.transform(this.myDate, 'yyyy-MM-dd');
       this.connectedBluetoothID = localStorage.getItem('connectedBluetoothID',);
+      this.printerBluetoothId = localStorage.getItem("printerBluetoothId",);
       this.dropdownVisible = false
       this.deviceConnected();
       this.generateId();
-
+      this.CheckPrinterAvailabilty();
 
     });
 
@@ -48,12 +49,10 @@ export class BillerAutoWeighterPage implements OnInit {
   }
 
   myDate;
-  // currentDate = new Date();
   tdyDate: any;
   hr: any;
   updateTime: any;
   currentDate;
-
   connectedBluetoothID: any;
   currentDateTime: any;
   user: any;
@@ -71,8 +70,9 @@ export class BillerAutoWeighterPage implements OnInit {
   counterNo: any
   type: any;
   mdy: any;
-
-
+  value: any;
+  StoreTypeBasedOnCategory = [];
+  StoreTypeData = [];
   typelist: any = []
   qualityList = [];
   tableRecodrs: any = []
@@ -80,7 +80,9 @@ export class BillerAutoWeighterPage implements OnInit {
   onlineAlart: any = true;
   offlineAlart: any = false
   dropdownVisible: any = false
-
+  cost: any = "";
+  printerBluetoothId: any;
+  printerAvailable: any = false;
 
 
   backToPrivios() {
@@ -106,16 +108,16 @@ export class BillerAutoWeighterPage implements OnInit {
   }
 
   onSuccess() {
-    alert(this.connectedBluetoothID)
+
   }
 
   onError() {
-    alert("Error");
+
   }
 
   onDataReceive(val) {
     var data = JSON.stringify(val)
-    this.recivedWeightValue = val;
+    this.recivedWeightValue = Math.round(val * 100) / 100;
     this.cdr.detectChanges(); // or here
   }
 
@@ -129,9 +131,14 @@ export class BillerAutoWeighterPage implements OnInit {
 
   }
 
+  CheckPrinterAvailabilty() {
+    if (this.printerBluetoothId != null) {
+      this.printerAvailable = false;
+    } else {
+      this.printerAvailable = true;
+    }
+  }
 
-  StoreTypeBasedOnCategory = [];
-  StoreTypeData = [];
 
 
   SelectCategory(data) {
@@ -141,22 +148,16 @@ export class BillerAutoWeighterPage implements OnInit {
     data = {
       category: data.category
     }
-
     this.http.post('/read_type', data).subscribe((response: any) => {
       this.qualityList = response.records;
-
-
     }, (error: any) => {
       console.log(error);
-
       this.qualityList = [];
-
     }
-
     )
   }
 
-  cost: any = "";
+
 
   SelectType(data) {
     const formdata = new FormData();
@@ -167,20 +168,12 @@ export class BillerAutoWeighterPage implements OnInit {
     }
     this.http.post('/price', getPrice).subscribe((response: any) => {
       this.cost = (response.records.price);
-
     }, (error: any) => {
       console.log(error);
     }
     );
   }
 
-
-  checkboxsts: any = false
-
-  dropdownOpen() {
-    this.checkboxsts = true
-
-  }
 
 
 
@@ -199,7 +192,6 @@ export class BillerAutoWeighterPage implements OnInit {
   getCategoryList() {
     this.http.get('/list_category',).subscribe((response: any) => {
       this.categorylist = response.records;
-
     }, (error: any) => {
       console.log(error);
     }
@@ -207,33 +199,14 @@ export class BillerAutoWeighterPage implements OnInit {
   }
 
 
-
-
-
-  dosomething(event) {
-    setTimeout(() => {
-      event.target.complete();
-    }, 1500);
-  }
-
-  value: any;
-
-  NavigateTo() {
-    if (this.value == "settings") {
-      this.router.navigate(['/settings'])
-    } else {
-      this.logout()
-    }
-
-
-  }
-
   navigateToNextPage() {
     this.router.navigate(['/settings'])
   }
 
   CheckGenerateBillButton = true;
   SetBillerAddItem = [];
+
+
   addItem() {
     let hours = new Date().getHours();
     let minutes = new Date().getMinutes();
@@ -243,6 +216,7 @@ export class BillerAutoWeighterPage implements OnInit {
     this.updateTime = this.myDate + ' ' + hours + ":" + minutes + ":" + seconds
     this.CheckGenerateBillButton = false;
     this.generateId();
+    var totalcostroundoff = this.cost * this.recivedWeightValue;
     const data = {
       category: this.category,
       id: this.user,
@@ -253,11 +227,8 @@ export class BillerAutoWeighterPage implements OnInit {
       isDeleted: "0",
       purchaseddate: this.updateTime,
       cost: this.cost,
-      totalcost: this.cost * this.recivedWeightValue
+      totalcost: Math.round(totalcostroundoff * 100) / 100
     }
-
-
-
     this.SetBillerAddItem.push(data);
     var SetBillerAddItem = (JSON.stringify(this.SetBillerAddItem));
     localStorage.setItem('SetBillerAddItem', SetBillerAddItem);
@@ -310,29 +281,15 @@ export class BillerAutoWeighterPage implements OnInit {
   deleteID = [];
   DisplayAfterDelete = [];
   delete(id) {
-
     this.deleteID = JSON.parse(localStorage.getItem("SetBillerAddItem"));
-
-
     for (var i = 0; i <= this.deleteID.length; i++) {
-
       if (this.deleteID[i].id == id) {
-
         this.deleteID.splice(this.deleteID.findIndex(a => this.deleteID[i] === id), 1)
-
         localStorage.removeItem("SetBillerAddItem");
         var SetBillerAddItem = (JSON.stringify(this.deleteID));
         localStorage.setItem('SetBillerAddItem', SetBillerAddItem);
         this.SetBillerAddItem = this.deleteID;
       }
-
     }
-
   }
-
-
-
-
-
-
 }
