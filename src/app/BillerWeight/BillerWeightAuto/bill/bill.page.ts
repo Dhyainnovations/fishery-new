@@ -167,6 +167,7 @@ export class BillPage implements OnInit {
 
 
   printText(receipt) {
+    alert(receipt)
     this.bluetoothSerial.write(receipt);
   }
 
@@ -200,12 +201,12 @@ export class BillPage implements OnInit {
       var localquality = DecodeBillerData[i].quality;
       var localuserid = DecodeBillerData[i].userid;
       var localweight = DecodeBillerData[i].weight;
-
+      var totalcostroundoff = localprice * localweight;
       const printData = {
         quality: localquality,
         weight: localweight,
         price: localprice,
-        totalcost: localprice * localweight,
+        totalcost: Math.round(totalcostroundoff * 100) / 100,
         purchaseddate: localpurchaseddate,
       }
 

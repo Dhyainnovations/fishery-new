@@ -162,6 +162,7 @@ export class BillerWeightManualBillPage implements OnInit {
 
 
   printText(receipt) {
+    alert(receipt)
     this.bluetoothSerial.write(receipt);
   }
 
@@ -182,7 +183,6 @@ export class BillerWeightManualBillPage implements OnInit {
 
   GetBillDataFromLocalStorage() {
     var GetBillerAddItem = localStorage.getItem("SetBillerAddItem");
-
     var DecodeBillerData = (JSON.parse((GetBillerAddItem)));
 
     for (var i = 0; i < DecodeBillerData.length; i++) {
@@ -195,12 +195,12 @@ export class BillerWeightManualBillPage implements OnInit {
       var localquality = DecodeBillerData[i].quality;
       var localuserid = DecodeBillerData[i].userid;
       var localweight = DecodeBillerData[i].weight;
-
+      var totalcostroundoff = localprice * localweight;
       const printData = {
         quality: localquality,
         weight: localweight,
         price: localprice,
-        totalcost: localprice * localweight,
+        totalcost: Math.round(totalcostroundoff * 100) / 100,
         purchaseddate: localpurchaseddate,
       }
 
@@ -248,15 +248,9 @@ export class BillerWeightManualBillPage implements OnInit {
       this.purchaseddate = SendData.purchaseddate;
       this.counter = SendData.counter;
       this.passBillItems.push(SendPushData);
-
       this.jsonData.push(printData);
-
-
       this.GetBillDataFromLocalStorageData.push(SendData);
-
     }
-
-
   }
 
 
