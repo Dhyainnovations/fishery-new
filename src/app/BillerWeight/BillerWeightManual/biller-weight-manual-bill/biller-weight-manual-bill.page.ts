@@ -171,7 +171,7 @@ export class BillerWeightManualBillPage implements OnInit {
 
   jsonData = [];
 
-  onSuccess() {
+  onSuccess() { 
     alert("Successfully Printed");
   }
 
