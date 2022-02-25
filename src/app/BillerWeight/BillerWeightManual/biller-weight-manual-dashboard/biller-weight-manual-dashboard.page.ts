@@ -190,7 +190,7 @@ export class BillerWeightManualDashboardPage implements OnInit {
       category: this.category,
       id: this.user,
       quality: this.type,
-      weight: this.weight,
+      weight: Math.round(this.weight * 100) / 100,
       counter: this.counter,
       userid: this.ID,
       isDeleted: "0",

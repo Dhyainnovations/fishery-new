@@ -107,9 +107,6 @@ export class BillerAutoRecordPage implements OnInit {
     this.http.get('/list_manual_bill',).subscribe((response: any) => {
       this.lastEntryisVisible = true
       this.displayCardDetails = response.records
-
-
-
     }, (error: any) => {
       console.log(error);
       this.lastEntryisVisible = false
@@ -179,7 +176,6 @@ export class BillerAutoRecordPage implements OnInit {
     }
 
     this.http.post('/delete_manual_bill', data).subscribe((response: any) => {
-
       if (response.success == "true") {
         const Toast = Swal.mixin({
           toast: true,
@@ -198,8 +194,10 @@ export class BillerAutoRecordPage implements OnInit {
           title: 'Deleted successfully.'
         })
 
-        this.list_manual_bill()
-
+        this.list_manual_bill();
+        this.tableRecords();
+        this.totalWeight();
+        this.totalAmount();
       } else {
         const Toast = Swal.mixin({
           toast: true,

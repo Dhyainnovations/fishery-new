@@ -160,7 +160,10 @@ export class BillerWeightManualRecordPage implements OnInit {
           icon: 'success',
           title: 'Deleted successfully.'
         })
-        this.list_manual_bill()
+        this.list_manual_bill();
+        this.tableRecords();
+        this.totalWeight();
+        this.totalAmount();
       } else {
         const Toast = Swal.mixin({
           toast: true,

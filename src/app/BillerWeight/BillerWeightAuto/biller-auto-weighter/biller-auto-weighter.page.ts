@@ -6,7 +6,7 @@ import Swal from 'sweetalert2';
 import { Network } from '@awesome-cordova-plugins/network/ngx';
 import { DatePipe } from '@angular/common';
 import { BluetoothSerial } from '@awesome-cordova-plugins/bluetooth-serial/ngx';
-
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-biller-auto-weighter',
@@ -15,7 +15,7 @@ import { BluetoothSerial } from '@awesome-cordova-plugins/bluetooth-serial/ngx';
 })
 export class BillerAutoWeighterPage implements OnInit {
 
-  constructor(public datepipe: DatePipe, private router: Router, private activatedRoute: ActivatedRoute, private http: HttpService, route: ActivatedRoute, private network: Network, private bluetoothSerial: BluetoothSerial,) {
+  constructor(public datepipe: DatePipe, private router: Router, private activatedRoute: ActivatedRoute, private http: HttpService, route: ActivatedRoute, private network: Network, private bluetoothSerial: BluetoothSerial, private cdr: ChangeDetectorRef,) {
     route.params.subscribe(val => {
       this.bluetoothSerial.disconnect();
       this.currentDateTime = this.datepipe.transform((new Date), 'yyyy-MM-dd hh:mm:ss');
@@ -102,6 +102,7 @@ export class BillerAutoWeighterPage implements OnInit {
     this.bluetoothSerial.subscribeRawData().subscribe((dt) => {
       this.bluetoothSerial.read().then((dd) => {
         this.onDataReceive(dd);
+        this.cdr.detectChanges(); // either here
       });
     });
   }
@@ -117,7 +118,11 @@ export class BillerAutoWeighterPage implements OnInit {
   onDataReceive(val) {
     var data = JSON.stringify(val)
     this.recivedWeightValue = Math.round(val * 100) / 100;
-    }
+    setTimeout(() => {
+      this.cdr.detectChanges();
+    }, 5000);
+
+  }
 
   recivedWeightValue: any;
 
@@ -221,7 +226,7 @@ export class BillerAutoWeighterPage implements OnInit {
       category: this.category,
       id: this.user,
       quality: this.type,
-      weight: this.recivedWeightValue,
+      weight: Math.round(this.recivedWeightValue * 100) / 100,
       counter: this.counter,
       userid: this.ID,
       isDeleted: "0",

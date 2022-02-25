@@ -171,7 +171,7 @@ export class BillerWeightManualBillPage implements OnInit {
 
   jsonData = [];
 
-  onSuccess() { 
+  onSuccess() {
     alert("Successfully Printed");
   }
 
@@ -195,12 +195,12 @@ export class BillerWeightManualBillPage implements OnInit {
       var localquality = DecodeBillerData[i].quality;
       var localuserid = DecodeBillerData[i].userid;
       var localweight = DecodeBillerData[i].weight;
-      var totalcostroundoff = localprice * localweight;
+      var localTotalCost = DecodeBillerData[i].totalcost;
       const printData = {
         quality: localquality,
         weight: localweight,
         price: localprice,
-        totalcost: Math.round(totalcostroundoff * 100) / 100,
+        totalcost: localTotalCost,
         purchaseddate: localpurchaseddate,
       }
 
@@ -214,7 +214,7 @@ export class BillerWeightManualBillPage implements OnInit {
         quality: localquality,
         userid: localuserid,
         weight: localweight,
-        totalcost: localprice * localweight,
+        totalcost: localTotalCost,
       }
       const SendPushData = {
         id: localuserid,
@@ -228,7 +228,7 @@ export class BillerWeightManualBillPage implements OnInit {
         price: localprice,
         weight: localweight,
         quality: localquality,
-        totalamount: localprice * localweight,
+        totalamount: localTotalCost,
         counter: localcounter,
         userid: localid,
         isDeleted: localisDeleted,

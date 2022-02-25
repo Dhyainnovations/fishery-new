@@ -172,6 +172,9 @@ export class BillerAutoDashboardPage implements OnInit {
     );
   }
 
+  backToPrivios(){
+    this.router.navigate(['/biller-auto-record'])
+  }
 
   logout() {
     localStorage.removeItem("orgid",)

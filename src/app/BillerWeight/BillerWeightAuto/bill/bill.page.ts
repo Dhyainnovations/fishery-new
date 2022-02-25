@@ -201,12 +201,12 @@ export class BillPage implements OnInit {
       var localquality = DecodeBillerData[i].quality;
       var localuserid = DecodeBillerData[i].userid;
       var localweight = DecodeBillerData[i].weight;
-      var totalcostroundoff = localprice * localweight;
+      var localTotalCost = DecodeBillerData[i].totalcost;
       const printData = {
         quality: localquality,
         weight: localweight,
         price: localprice,
-        totalcost: Math.round(totalcostroundoff * 100) / 100,
+        totalcost: localTotalCost,
         purchaseddate: localpurchaseddate,
       }
 
@@ -220,7 +220,7 @@ export class BillPage implements OnInit {
         quality: localquality,
         userid: localid,
         weight: localweight,
-        totalcost: localprice * localweight,
+        totalcost: localTotalCost,
       }
       const SendPushData = {
         id: localuserid,
@@ -234,7 +234,7 @@ export class BillPage implements OnInit {
         price: localprice,
         weight: localweight,
         quality: localquality,
-        totalamount: localprice * localweight,
+        totalamount: localTotalCost,
         counter: localcounter,
         userid: localid,
         isDeleted: localisDeleted,
