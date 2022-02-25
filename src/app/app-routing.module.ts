@@ -5,7 +5,7 @@ const routes: Routes = [
 
   {
     path: '',
-    redirectTo: 'BillerAutoweighter',
+    redirectTo: 'loginpage',
     pathMatch: 'full'
   },
 

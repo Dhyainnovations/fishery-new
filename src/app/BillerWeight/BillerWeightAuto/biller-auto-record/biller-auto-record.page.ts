@@ -6,6 +6,8 @@ import Swal from 'sweetalert2';
 import { NavController } from '@ionic/angular';
 import { DatePipe } from '@angular/common';
 import { BluetoothSerial } from '@awesome-cordova-plugins/bluetooth-serial/ngx';
+import { commands } from '../../../providers/printcommand/printcommand'
+import { vsprintf } from 'sprintf-js'
 
 @Component({
   selector: 'app-biller-auto-record',
@@ -14,9 +16,9 @@ import { BluetoothSerial } from '@awesome-cordova-plugins/bluetooth-serial/ngx';
 })
 export class BillerAutoRecordPage implements OnInit {
 
-  constructor(public datepipe: DatePipe, public navCtrl: NavController,private bluetoothSerial: BluetoothSerial, private router: Router, private activatedRoute: ActivatedRoute, private http: HttpService, route: ActivatedRoute) {
+  constructor(public datepipe: DatePipe, public navCtrl: NavController, private bluetoothSerial: BluetoothSerial, private router: Router, private activatedRoute: ActivatedRoute, private http: HttpService, route: ActivatedRoute) {
     route.params.subscribe(val => {
-
+      this.printerBluetoothId = localStorage.getItem("printerBluetoothId",);
       this.totalWeight()
       this.totalAmount()
       this.records();
@@ -33,6 +35,7 @@ export class BillerAutoRecordPage implements OnInit {
   ngOnInit() {
 
   }
+  printerBluetoothId: any;
   user: any;
   currentDateTime: any;
   buttonDisabled: boolean;
@@ -45,6 +48,9 @@ export class BillerAutoRecordPage implements OnInit {
   lastEntryisVisible: any = false
   totalCost: any;
   displayCardDetails = [];
+  jsonData = [];
+  price: any = [];
+  totalsum: any;
 
   logout() {
     localStorage.removeItem("orgid",)
@@ -62,6 +68,90 @@ export class BillerAutoRecordPage implements OnInit {
       event.target.complete();
 
     }, 1500);
+  }
+
+
+  onSuccess() { }
+
+  onError() { }
+
+
+  print() {
+    this.bluetoothSerial.connect(this.printerBluetoothId).subscribe(this.onSuccess, this.onError);
+    const items = item => ({
+      quality: item.quality,
+      weight: item.weight,
+      price: item.price,
+      totalcost: item.totalcost,
+    })
+    let product = this.jsonData.map(items)
+
+    //Calculate the total price of the items in an object
+    let totalPrice = this.totalsum
+
+    let company = "Sakthi & Co"
+    let biller = this.user
+    let time = this.currentDateTime;
+    let receipt = ""
+    receipt += commands.TEXT_FORMAT.TXT_WIDTH[2]
+    receipt += "\x1b\x45\x01 \x00" + company + "\x1b\x45\x00"
+    receipt += "\x1b\x45\x01 \x00" + "Today's Sales" + "\x1b\x45\x00"
+    receipt += '\n'
+    receipt += "\x00" + time + "\x00"
+
+    receipt += '\n'
+    receipt += commands.TEXT_FORMAT.TXT_4SQUARE
+    receipt += commands.HORIZONTAL_LINE.HR_58MM
+    receipt += '\n'
+    receipt += commands.TEXT_FORMAT.TXT_4SQUARE
+    receipt += '\x1B' + '\x61' + '\x30'// left align
+    receipt += vsprintf("%-17s %3s %10s\n", ["Biller", "", biller])
+    receipt += commands.TEXT_FORMAT.TXT_ALIGN_RT
+    receipt += commands.TEXT_FORMAT.TXT_4SQUARE
+    receipt += commands.HORIZONTAL_LINE.HR2_58MM
+    receipt += '\n'
+    receipt += commands.TEXT_FORMAT.TXT_ALIGN_LT
+    receipt += '\x1b\x45\x01' + vsprintf("%-17s %3s %10s \n", ["Item", "", "Price(Rs.)"])
+
+    for (var pro in product) {
+      if (product.hasOwnProperty(pro)) {
+        var item = product[pro]
+        var itemquality = item.quality
+        var itemweight = item.weight
+        var itemperkg = item.price
+        var itemtotal = item.totalcost
+        receipt += vsprintf("%-17s %3s %10.2f\n", [this.formatTextWrap(itemquality, 16), "", itemtotal])
+        receipt += '\x1b\x61\x00' + "-" + " " + itemweight + " Kgs"
+        receipt += '\n'
+        receipt += '\x1b\x61\x00' + "-" + " " + "Rs." + itemperkg + " /kg"
+        receipt += '\n'
+
+      }
+      receipt += '\n'
+    }
+    // receipt += commands.TEXT_FORMAT.TXT_ALIGN_LT
+    // receipt += commands.TEXT_FORMAT.TXT_FONT_A
+    // receipt += commands.HORIZONTAL_LINE.HR2_58MM
+    // receipt += vsprintf("%-17s %3s %10.2f\n", ["Total Price", "", totalPrice])
+    receipt += '\n'
+    receipt += commands.TEXT_FORMAT.TXT_4SQUARE
+    receipt += '\x1B' + '\x61' + '\x30'// left align
+    receipt += commands.HORIZONTAL_LINE.HR2_58MM
+    receipt += '\n'
+    receipt += '\x1b\x45\x01' + vsprintf("%-17s %3s %10s\n", ["Total Amount(Rs)", "", totalPrice])
+    receipt += commands.TEXT_FORMAT.TXT_ALIGN_RT
+    receipt += '\n'
+    receipt += commands.TEXT_FORMAT.TXT_FONT_A
+    receipt += commands.HORIZONTAL_LINE.HR2_58MM
+    receipt += '\n'
+    receipt += commands.TEXT_FORMAT.TXT_FONT_B
+    receipt += '\x1b\x61\x01' + 'Thank you, visit again!' + '\x0a\x0a\x0a\x0a' //The unicode symbols are for centering the text
+    this.printText(receipt)
+  }
+
+  printText(receipt) {
+    alert(receipt)
+    this.bluetoothSerial.write(receipt);
   }
 
 
@@ -134,6 +224,31 @@ export class BillerAutoRecordPage implements OnInit {
     this.http.post('/list_localsale_date_manual_bill', data).subscribe((response: any) => {
       this.tableRec = response.records;
       console.log(response);
+      for (var i = 0; i < response.records.length; i++) {
+
+        var localquality = response.records[i].quality;
+        var localweight = response.records[i].weight;
+        var localTotalCost = response.records[i].totalamount;
+        var pricekg = response.records[i].pricekg;
+
+        const printData = {
+          quality: localquality,
+          weight: localweight,
+          price: pricekg,
+          totalcost: localTotalCost,
+        }
+
+
+
+
+        this.price.push(printData.totalcost);
+        var sum = this.price.reduce((a, b) => {
+          return a + b;
+        });
+        this.totalsum = sum;
+        this.jsonData.push(printData);
+
+      }
     }, (error: any) => {
       console.log(error);
     }
@@ -143,8 +258,6 @@ export class BillerAutoRecordPage implements OnInit {
   records() {
     this.http.get('/list_manual_weight',).subscribe((response: any) => {
       this.cardRecords = response.records;
-
-
     }, (error: any) => {
       console.log(error);
     }
@@ -215,6 +328,23 @@ export class BillerAutoRecordPage implements OnInit {
       console.log(error);
     }
     );
+  }
+
+
+  formatTextWrap(text, maxLineLength) {
+    const words = text.replace(/[\r\n]+/g, ' ').split(' ');
+    let lineLength = 0;
+
+    // use functional reduce, instead of for loop 
+    return words.reduce((result, word) => {
+      if (lineLength + word.length >= maxLineLength) {
+        lineLength = word.length;
+        return result + `\n${word}`; // don't add spaces upfront
+      } else {
+        lineLength += word.length + (result ? 1 : 0);
+        return result ? result + ` ${word}` : `${word}`; // add space only when needed
+      }
+    }, '');
   }
 
 }

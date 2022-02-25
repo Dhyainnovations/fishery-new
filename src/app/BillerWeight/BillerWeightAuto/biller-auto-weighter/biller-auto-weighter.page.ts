@@ -81,7 +81,7 @@ export class BillerAutoWeighterPage implements OnInit {
   printerBluetoothId: any;
   listQualityCategory = [];
   printerAvailable: any = false;
-  recivedWeightValue: any = "0";
+  recivedWeightValue: any;
   deleteID = [];
   DisplayAfterDelete = [];
   WeightValue: any;
