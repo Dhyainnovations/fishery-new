@@ -209,7 +209,7 @@ export class BillerAutoWeighterPage implements OnInit {
 
 
   addItem() {
-    this.showWeight = 0;
+    
     let hours = new Date().getHours();
     let minutes = new Date().getMinutes();
     let seconds = new Date().getSeconds();
@@ -254,7 +254,7 @@ export class BillerAutoWeighterPage implements OnInit {
       title: 'Item Added Successfully'
     })
 
-    this.weight = ''
+    this.showWeight = 0;
 
   }
 
