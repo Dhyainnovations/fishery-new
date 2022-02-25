@@ -68,7 +68,7 @@ export class BillPage implements OnInit {
     let product = this.jsonData.map(items)
 
     //Calculate the total price of the items in an object
-    let totalPrice = this.totalsum
+    let totalPrice = Math.round(this.totalsum * 100) / 100
 
     let company = "Sakthi & Co"
     let counter = this.billWeightData.counter
@@ -177,7 +177,7 @@ export class BillPage implements OnInit {
   jsonData = [];
 
   onSuccess() {
-    alert("Successfully Printed");
+    
   }
 
   onError(error) {
