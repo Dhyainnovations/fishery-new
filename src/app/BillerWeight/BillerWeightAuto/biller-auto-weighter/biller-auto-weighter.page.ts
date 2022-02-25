@@ -209,6 +209,7 @@ export class BillerAutoWeighterPage implements OnInit {
 
 
   addItem() {
+    this.showWeight = 0;
     let hours = new Date().getHours();
     let minutes = new Date().getMinutes();
     let seconds = new Date().getSeconds();
@@ -217,12 +218,12 @@ export class BillerAutoWeighterPage implements OnInit {
     this.updateTime = this.myDate + ' ' + hours + ":" + minutes + ":" + seconds
     this.CheckGenerateBillButton = false;
     this.generateId();
-    var totalcostroundoff = this.cost * this.recivedWeightValue;
+    var totalcostroundoff = this.cost * this.showWeight;
     const data = {
       category: this.category,
       id: this.user,
       quality: this.type,
-      weight: Math.round(this.recivedWeightValue * 100) / 100,
+      weight: Math.round(this.showWeight * 100) / 100,
       counter: this.counter,
       userid: this.ID,
       isDeleted: "0",

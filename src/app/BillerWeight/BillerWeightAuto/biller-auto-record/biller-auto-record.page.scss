@@ -124,3 +124,11 @@ section {
     
 
   
+button:disabled,
+button[disabled]{
+  background-color: #918ed1
+}
+
+button{
+  background-color: #6863CC;
+}

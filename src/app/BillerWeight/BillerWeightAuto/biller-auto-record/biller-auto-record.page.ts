@@ -29,6 +29,7 @@ export class BillerAutoRecordPage implements OnInit {
       this.currentDateTime = this.datepipe.transform((new Date), 'yyyy-MM-dd hh:mm:ss');
       this.todayBillList()
       this.tableRecords()
+      this.CheckPrinterAvailabilty();
     });
   }
 
@@ -51,7 +52,7 @@ export class BillerAutoRecordPage implements OnInit {
   jsonData = [];
   price: any = [];
   totalsum: any;
-
+  printerAvailable: any = false;
   logout() {
     localStorage.clear();
     this.bluetoothSerial.disconnect();
@@ -177,7 +178,13 @@ export class BillerAutoRecordPage implements OnInit {
     );
   }
 
-
+  CheckPrinterAvailabilty() {
+    if (this.printerBluetoothId != null) {
+      this.printerAvailable = false;
+    } else {
+      this.printerAvailable = true;
+    }
+  }
 
 
   navigateToSettings() {
@@ -232,6 +239,7 @@ export class BillerAutoRecordPage implements OnInit {
 
 
   printData() {
+    this.jsonData = [];
     for (var i = 0; i < this.tableRec.length; i++) {
       var localquality = this.tableRec[i].quality;
       var localweight = this.tableRec[i].weight;

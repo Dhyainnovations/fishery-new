@@ -31,10 +31,12 @@ export class BillerWeightManualRecordPage implements OnInit {
       this.currentDateTime = this.datepipe.transform((new Date), 'yyyy-MM-dd hh:mm:ss');
       this.todayBillList()
       this.tableRecords()
+      this.CheckPrinterAvailabilty();
     });
   }
 
   ngOnInit() { }
+  printerAvailable: any;
   printerBluetoothId: any;
   user: any;
   currentDateTime: any;
@@ -176,7 +178,13 @@ export class BillerWeightManualRecordPage implements OnInit {
     );
   }
 
-
+  CheckPrinterAvailabilty() {
+    if (this.printerBluetoothId != null) {
+      this.printerAvailable = false;
+    } else {
+      this.printerAvailable = true;
+    }
+  }
 
 
   navigateToSettings() {
@@ -186,14 +194,14 @@ export class BillerWeightManualRecordPage implements OnInit {
   list_manual_bill() {
     this.http.get('/list_manual_bill',).subscribe((response: any) => {
       console.log(response.message);
-      
+
       this.lastEntryisVisible = true
       this.displayCardDetails = response.records;
       console.log(response.records.length);
- 
-        this.lastEntryisVisible = true
-        this.isVisible = false
-    
+
+      this.lastEntryisVisible = true
+      this.isVisible = false
+
 
     }, (error: any) => {
       console.log(error);
@@ -237,6 +245,7 @@ export class BillerWeightManualRecordPage implements OnInit {
 
 
   printData() {
+    this.jsonData = [];
     for (var i = 0; i < this.tableRec.length; i++) {
       var localquality = this.tableRec[i].quality;
       var localweight = this.tableRec[i].weight;

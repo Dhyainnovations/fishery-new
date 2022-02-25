@@ -84,7 +84,8 @@
     <div class="button-wrapper p-2">
       <div class="container">
         <div class="row">
-          <button (click)="print()" class="submit-button px-1 py-1" style="font-size: 13px;background-color: #6863CC;">
+          <button (click)="print()" class="submit-button px-1 py-1" style="font-size: 13px;"
+            [disabled]=printerAvailable>
             PRINT
           </button>
         </div>
