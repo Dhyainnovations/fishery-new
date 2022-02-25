@@ -204,18 +204,17 @@ export class BillerWeightManualBillPage implements OnInit {
         totalcost: localTotalCost,
         purchaseddate: localpurchaseddate,
       }
-
       const SendData = {
         category: localcategory,
         counter: localcounter,
-        id: localid,
+        id: localuserid,
         isDeleted: localisDeleted,
         purchaseddate: localpurchaseddate,
-        price: localprice,
+        price:  Math.round(localprice * 100) / 100,
         quality: localquality,
-        userid: localuserid,
-        weight: localweight,
-        totalcost: localTotalCost,
+        userid: localid,
+        weight:  Math.round(localweight * 100) / 100,
+        totalcost:  Math.round(localTotalCost * 100) / 100,
       }
       const SendPushData = {
         id: localuserid,

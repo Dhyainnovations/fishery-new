@@ -18,32 +18,29 @@ import { vsprintf } from 'sprintf-js'
 })
 export class BillerWeightManualRecordPage implements OnInit {
 
-  constructor(private network: Network, private bluetoothSerial: BluetoothSerial, public datepipe: DatePipe, public navCtrl: NavController, private router: Router, private activatedRoute: ActivatedRoute, private http: HttpService, route: ActivatedRoute) {
+  constructor(public datepipe: DatePipe, public navCtrl: NavController, private bluetoothSerial: BluetoothSerial, private router: Router, private activatedRoute: ActivatedRoute, private http: HttpService, route: ActivatedRoute) {
     route.params.subscribe(val => {
+      this.printerBluetoothId = localStorage.getItem("printerBluetoothId",);
       this.totalWeight()
       this.totalAmount()
       this.records();
       this.list_manual_bill();
-      this.tableRecords();
-      this.bluetoothSerial.disconnect();
+      this.connectedBluetoothID = localStorage.getItem('connectedBluetoothID',);
       this.user = localStorage.getItem("Fishery-username",)
       console.log(this.user);
       this.currentDateTime = this.datepipe.transform((new Date), 'yyyy-MM-dd hh:mm:ss');
-      this.currentDate = this.datepipe.transform((new Date), 'yyyy-MM-dd');
       this.todayBillList()
-      this.printerBluetoothId = localStorage.getItem("printerBluetoothId",);
+      this.tableRecords()
     });
   }
 
-  ngOnInit() {
-
-  }
+  ngOnInit() { }
   printerBluetoothId: any;
-  manualBillList: any = []
   user: any;
-  currentDate;
   currentDateTime: any;
   buttonDisabled: boolean;
+  currentDate: any;
+  connectedBluetoothID: any;
   totalweight: any = '';
   tableRecodrs: any = []
   cardRecords: any = []
@@ -51,13 +48,106 @@ export class BillerWeightManualRecordPage implements OnInit {
   lastEntryisVisible: any = false
   totalCost: any;
   displayCardDetails = [];
+  jsonData = [];
+  price: any = [];
+  totalsum: any;
 
-  navigateToNextPage() {
-    this.router.navigate(['/BillerManualdashboard'])
+  logout() {
+    localStorage.clear();
+    this.bluetoothSerial.disconnect();
+    this.router.navigate(['/loginpage'])
   }
 
-  navigateToSettings() {
-    this.router.navigate(['/settings'])
+  dosomething(event) {
+    setTimeout(() => {
+      event.target.complete();
+
+    }, 1500);
+  }
+
+
+  onSuccess() { }
+
+  onError() { }
+
+
+  print() {
+    this.printData();
+    this.bluetoothSerial.connect(this.printerBluetoothId).subscribe(this.onSuccess, this.onError);
+    const items = item => ({
+      quality: item.quality,
+      weight: item.weight,
+      price: item.price,
+      totalcost: item.totalcost,
+    })
+    let product = this.jsonData.map(items)
+
+    //Calculate the total price of the items in an object
+    let totalPrice = this.totalCost
+
+    let company = "Sakthi & Co"
+    let biller = this.user
+    let time = this.currentDateTime;
+    let receipt = ""
+    receipt += commands.TEXT_FORMAT.TXT_WIDTH[2]
+    receipt += "\x1b\x45\x01 \x00" + company + "\x1b\x45\x00"
+    receipt += "\x1b\x45\x01 \x00" + "Today's Sales" + "\x1b\x45\x00"
+    receipt += '\n'
+    receipt += "\x00" + time + "\x00"
+
+    receipt += '\n'
+    receipt += commands.TEXT_FORMAT.TXT_4SQUARE
+    receipt += commands.HORIZONTAL_LINE.HR_58MM
+    receipt += '\n'
+    receipt += commands.TEXT_FORMAT.TXT_4SQUARE
+    receipt += '\x1B' + '\x61' + '\x30'// left align
+    receipt += vsprintf("%-17s %3s %10s\n", ["Biller", "", biller])
+    receipt += commands.TEXT_FORMAT.TXT_ALIGN_RT
+    receipt += commands.TEXT_FORMAT.TXT_4SQUARE
+    receipt += commands.HORIZONTAL_LINE.HR2_58MM
+    receipt += '\n'
+    receipt += commands.TEXT_FORMAT.TXT_ALIGN_LT
+    receipt += '\x1b\x45\x01' + vsprintf("%-17s %3s %10s \n", ["Item", "", "Price(Rs.)"])
+
+    for (var pro in product) {
+      if (product.hasOwnProperty(pro)) {
+        var item = product[pro]
+        var itemquality = item.quality
+        var itemweight = item.weight
+        var itemperkg = item.price
+        var itemtotal = item.totalcost
+        receipt += vsprintf("%-17s %3s %10.2f\n", [this.formatTextWrap(itemquality, 16), "", itemtotal])
+        receipt += '\x1b\x61\x00' + "-" + " " + itemweight + " Kgs"
+        receipt += '\n'
+        receipt += '\x1b\x61\x00' + "-" + " " + "Rs." + itemperkg + " /kg"
+        receipt += '\n'
+
+      }
+      receipt += '\n'
+    }
+    // receipt += commands.TEXT_FORMAT.TXT_ALIGN_LT
+    // receipt += commands.TEXT_FORMAT.TXT_FONT_A
+    // receipt += commands.HORIZONTAL_LINE.HR2_58MM
+    // receipt += vsprintf("%-17s %3s %10.2f\n", ["Total Price", "", totalPrice])
+    receipt += '\n'
+    receipt += commands.TEXT_FORMAT.TXT_4SQUARE
+    receipt += '\x1B' + '\x61' + '\x30'// left align
+    receipt += commands.HORIZONTAL_LINE.HR2_58MM
+    receipt += '\n'
+    receipt += '\x1b\x45\x01' + vsprintf("%-17s %3s %10s\n", ["Total Amount(Rs)", "", totalPrice])
+    receipt += commands.TEXT_FORMAT.TXT_ALIGN_RT
+    receipt += '\n'
+    receipt += commands.TEXT_FORMAT.TXT_FONT_A
+    receipt += commands.HORIZONTAL_LINE.HR2_58MM
+    receipt += '\n'
+    receipt += commands.TEXT_FORMAT.TXT_FONT_B
+    receipt += '\x1b\x61\x01' + 'Thank you, visit again!' + '\x0a\x0a\x0a\x0a' //The unicode symbols are for centering the text
+    this.printText(receipt)
+  }
+
+  printText(receipt) {
+    alert(receipt)
+    this.bluetoothSerial.write(receipt);
   }
 
 
@@ -89,24 +179,56 @@ export class BillerWeightManualRecordPage implements OnInit {
 
 
 
+  navigateToSettings() {
+    this.router.navigate(['/settings'])
+  }
 
   list_manual_bill() {
     this.http.get('/list_manual_bill',).subscribe((response: any) => {
+      console.log(response.message);
+      
       this.lastEntryisVisible = true
-      this.displayCardDetails = response.records
+      this.displayCardDetails = response.records;
+      console.log(response.records.length);
+ 
+        this.lastEntryisVisible = true
+        this.isVisible = false
+    
+
     }, (error: any) => {
       console.log(error);
-      this.lastEntryisVisible = false
-      this.isVisible = true
+      this.lastEntryisVisible = false;
+      this.isVisible = true;
     }
     );
   }
 
-
+  manualBillList: any = []
 
   todayBillList() {
     this.http.get('/total_quality_bill_weight',).subscribe((response: any) => {
       this.manualBillList = response.records;
+
+
+    }, (error: any) => {
+      console.log(error);
+    }
+    );
+  }
+
+  tableRec = []
+
+  tableRecords() {
+    this.currentDate = this.datepipe.transform((new Date), 'yyyy-MM-dd');
+    const data = {
+      "from_date": this.currentDate,
+      "to_date": this.currentDate
+    }
+    console.log(data);
+    this.http.post('/list_localsale_date_manual_bill', data).subscribe((response: any) => {
+      this.tableRec = response.records;
+      console.log(response);
+
     }, (error: any) => {
       console.log(error);
     }
@@ -114,6 +236,21 @@ export class BillerWeightManualRecordPage implements OnInit {
   }
 
 
+  printData() {
+    for (var i = 0; i < this.tableRec.length; i++) {
+      var localquality = this.tableRec[i].quality;
+      var localweight = this.tableRec[i].weight;
+      var localTotalCost = this.tableRec[i].totalamount;
+      var pricekg = this.tableRec[i].pricekg;
+      const printData = {
+        quality: localquality,
+        weight: localweight,
+        price: pricekg,
+        totalcost: localTotalCost,
+      }
+      this.jsonData.push(printData);
+    }
+  }
 
   records() {
     this.http.get('/list_manual_weight',).subscribe((response: any) => {
@@ -125,24 +262,9 @@ export class BillerWeightManualRecordPage implements OnInit {
   }
 
 
-  tableRec: any = [];
-  tableRecords() {
-    this.currentDate = this.datepipe.transform((new Date), 'yyyy-MM-dd');
-    const data = {
-      "from_date": this.currentDate,
-      "to_date": this.currentDate
-    }
-    console.log(data);
-    this.http.post('/list_localsale_date_manual_bill', data).subscribe((response: any) => {
-      this.tableRec = response.records;
-      console.log(response.records);
-      console.log(response);
-    }, (error: any) => {
-      console.log(error);
-    }
-    );
+  navigateToNextPage() {
+    this.router.navigate(['/BillerManualdashboard'])
   }
-
 
 
   delete(id) {
@@ -150,6 +272,7 @@ export class BillerWeightManualRecordPage implements OnInit {
       bilid: id,
       isDeleted: "1"
     }
+
     this.http.post('/delete_manual_bill', data).subscribe((response: any) => {
       if (response.success == "true") {
         const Toast = Swal.mixin({
@@ -163,10 +286,12 @@ export class BillerWeightManualRecordPage implements OnInit {
             toast.addEventListener('mouseleave', Swal.resumeTimer)
           }
         })
+
         Toast.fire({
           icon: 'success',
           title: 'Deleted successfully.'
         })
+
         this.list_manual_bill();
         this.tableRecords();
         this.totalWeight();
@@ -183,11 +308,13 @@ export class BillerWeightManualRecordPage implements OnInit {
             toast.addEventListener('mouseleave', Swal.resumeTimer)
           }
         })
+
         Toast.fire({
           icon: 'error',
           title: 'Something went Wrong.'
         })
       }
+
     }, (error: any) => {
       console.log(error);
     }
@@ -195,23 +322,20 @@ export class BillerWeightManualRecordPage implements OnInit {
   }
 
 
+  formatTextWrap(text, maxLineLength) {
+    const words = text.replace(/[\r\n]+/g, ' ').split(' ');
+    let lineLength = 0;
 
-  onSuccess() { }
-
-  onError() { }
-
-
-
-
-
-
-  logout() {
-    localStorage.removeItem("orgid",)
-    localStorage.removeItem("Fishery-username",)
-    localStorage.removeItem("logintype",)
-    localStorage.removeItem("permission",)
-    this.router.navigate(['/loginpage'])
-    localStorage.removeItem("printerBluetoothId",)
-    this.bluetoothSerial.disconnect();
+    // use functional reduce, instead of for loop 
+    return words.reduce((result, word) => {
+      if (lineLength + word.length >= maxLineLength) {
+        lineLength = word.length;
+        return result + `\n${word}`; // don't add spaces upfront
+      } else {
+        lineLength += word.length + (result ? 1 : 0);
+        return result ? result + ` ${word}` : `${word}`; // add space only when needed
+      }
+    }, '');
   }
+
 }

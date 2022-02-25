@@ -44,28 +44,20 @@
     <div class="col-12 ion-text-center mt-1">
       <h1
         style="border: 0.5px solid rgba(0, 0, 0, 0.164);  box-shadow: 1px 1px 8px 1px #6863CC;width: 85%;margin: auto;">
-        {{recivedWeightValue}} <span style="font-size: 17px;">Kg</span></h1>
+        {{showWeight}} <span style="font-size: 17px;">Kg</span></h1>
     </div>
   </div>
 
-  <!-- <div class="button-wrapper p-4">
-    <div class="container">
-      <div class="row">
-        <button (click)="displayweight()" class="submit-button px-2 py-2" color="transparent" style="font-size: 13px;">
-          Weight
-        </button>
-      </div>
-    </div>
-  </div> -->
-
-  <!-- <p> weight is <b>267.70</b> kgs</p> -->
+  <div (click)="reciveWeight()" class="col-12 ion-text-center mt-3">
+    <button class="btn btn-primary" style="width: 70%;background-color: #6863CC;"> Capture Weight</button>
+  </div>
 
 
-  <div class="container weighter-details-wrapper">
+  <div class="container weighter-details-wrapper mt-4">
     <div class="row">
 
 
-      <div class="col-12 display-date">
+      <div class="col-12 display-date mt-3">
         <form (change)="SelectCounter(Selectcounter.value)" #Selectcounter="ngForm">
           <div class="row" style="margin-top: -20px;">
             <div class="col-8">

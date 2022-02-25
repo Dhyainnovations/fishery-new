@@ -84,6 +84,8 @@ export class BillerAutoWeighterPage implements OnInit {
   recivedWeightValue: any;
   deleteID = [];
   DisplayAfterDelete = [];
+  showWeight: any = 0;
+
 
   backToPrivios() {
     this.router.navigate(['/biller-auto-record'])
@@ -101,9 +103,6 @@ export class BillerAutoWeighterPage implements OnInit {
     this.bluetoothSerial.subscribeRawData().subscribe((dt) => {
       this.bluetoothSerial.read().then((dd) => {
         this.onDataReceive(dd);
-
-        this.cdr.detectChanges();
-
       });
     });
   }
@@ -119,12 +118,11 @@ export class BillerAutoWeighterPage implements OnInit {
   onDataReceive(val) {
     var data = JSON.stringify(val)
     this.recivedWeightValue = Math.round(val * 100) / 100;
-
-    this.cdr.detectChanges();
-
-
   }
 
+  reciveWeight() {
+    this.showWeight = this.recivedWeightValue
+  }
 
   SelectCounter(data) {
     const formdata = new FormData();
@@ -202,6 +200,7 @@ export class BillerAutoWeighterPage implements OnInit {
 
 
   navigateToNextPage() {
+    this.bluetoothSerial.disconnect();
     this.router.navigate(['/settings'])
   }
 
@@ -228,7 +227,7 @@ export class BillerAutoWeighterPage implements OnInit {
       userid: this.ID,
       isDeleted: "0",
       purchaseddate: this.updateTime,
-      cost: this.cost,
+      cost: Math.round(this.cost * 100) / 100,
       totalcost: Math.round(totalcostroundoff * 100) / 100
     }
     this.SetBillerAddItem.push(data);
@@ -270,14 +269,9 @@ export class BillerAutoWeighterPage implements OnInit {
   }
 
   logout() {
-    localStorage.removeItem("orgid",)
-    localStorage.removeItem("Fishery-username",)
-    localStorage.removeItem("logintype",)
-    localStorage.removeItem("permission",)
-    this.router.navigate(['/loginpage'])
-    localStorage.removeItem("printerBluetoothId",)
-    localStorage.removeItem("connectedBluetoothID",)
+    localStorage.clear();
     this.bluetoothSerial.disconnect();
+    this.router.navigate(['/loginpage'])
   }
 
 

@@ -15,11 +15,9 @@ export class SettingsPage implements OnInit {
 
   constructor(private router: Router, private bluetoothSerial: BluetoothSerial, private alertController: AlertController, private cdr: ChangeDetectorRef, route: ActivatedRoute,) {
     route.params.subscribe(val => {
-
       this.user = localStorage.getItem("Fishery-username",)
       console.log(this.user);
       this.bluetoothSerial.disconnect();
-
     });
     this.CheckBluetoothIsConnected();
     this.Locallogintype = localStorage.getItem("logintype",)
@@ -211,13 +209,9 @@ export class SettingsPage implements OnInit {
   user: any = "";
 
   logout() {
-    localStorage.removeItem("orgid",)
-    localStorage.removeItem("Fishery-username",)
-    localStorage.removeItem("logintype",)
-    localStorage.removeItem("permission",)
-    this.router.navigate(['/loginpage'])
+    localStorage.clear();
     this.bluetoothSerial.disconnect();
-    localStorage.removeItem("printerBluetoothId",)
+    this.router.navigate(['/loginpage'])
   }
 
 

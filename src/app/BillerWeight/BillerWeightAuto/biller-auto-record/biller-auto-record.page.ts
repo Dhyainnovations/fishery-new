@@ -53,14 +53,10 @@ export class BillerAutoRecordPage implements OnInit {
   totalsum: any;
 
   logout() {
-    localStorage.removeItem("orgid",)
-    localStorage.removeItem("Fishery-username",)
-    localStorage.removeItem("logintype",)
-    localStorage.removeItem("permission",)
-    this.router.navigate(['/loginpage'])
-    localStorage.removeItem("printerBluetoothId",)
-    localStorage.removeItem("connectedBluetoothID",)
+    localStorage.clear();
     this.bluetoothSerial.disconnect();
+    this.router.navigate(['/loginpage'])
+
   }
 
   dosomething(event) {
@@ -77,6 +73,7 @@ export class BillerAutoRecordPage implements OnInit {
 
 
   print() {
+    this.printData();
     this.bluetoothSerial.connect(this.printerBluetoothId).subscribe(this.onSuccess, this.onError);
     const items = item => ({
       quality: item.quality,
@@ -87,7 +84,7 @@ export class BillerAutoRecordPage implements OnInit {
     let product = this.jsonData.map(items)
 
     //Calculate the total price of the items in an object
-    let totalPrice = this.totalsum
+    let totalPrice = this.totalCost
 
     let company = "Sakthi & Co"
     let biller = this.user
@@ -184,18 +181,22 @@ export class BillerAutoRecordPage implements OnInit {
 
 
   navigateToSettings() {
+    this.bluetoothSerial.disconnect();
     this.router.navigate(['/settings'])
   }
 
   list_manual_bill() {
     this.http.get('/list_manual_bill',).subscribe((response: any) => {
+      console.log(response.message);
       this.lastEntryisVisible = true
-      this.displayCardDetails = response.records
+      this.displayCardDetails = response.records;
+      console.log(response.records.length);
+      this.lastEntryisVisible = true
+      this.isVisible = false
     }, (error: any) => {
       console.log(error);
-      this.lastEntryisVisible = false
-      this.isVisible = true
-
+      this.lastEntryisVisible = false;
+      this.isVisible = true;
     }
     );
   }
@@ -223,36 +224,27 @@ export class BillerAutoRecordPage implements OnInit {
     console.log(data);
     this.http.post('/list_localsale_date_manual_bill', data).subscribe((response: any) => {
       this.tableRec = response.records;
-      console.log(response);
-      for (var i = 0; i < response.records.length; i++) {
-
-        var localquality = response.records[i].quality;
-        var localweight = response.records[i].weight;
-        var localTotalCost = response.records[i].totalamount;
-        var pricekg = response.records[i].pricekg;
-
-        const printData = {
-          quality: localquality,
-          weight: localweight,
-          price: pricekg,
-          totalcost: localTotalCost,
-        }
-
-
-
-
-        this.price.push(printData.totalcost);
-        var sum = this.price.reduce((a, b) => {
-          return a + b;
-        });
-        this.totalsum = sum;
-        this.jsonData.push(printData);
-
-      }
     }, (error: any) => {
       console.log(error);
     }
     );
+  }
+
+
+  printData() {
+    for (var i = 0; i < this.tableRec.length; i++) {
+      var localquality = this.tableRec[i].quality;
+      var localweight = this.tableRec[i].weight;
+      var localTotalCost = this.tableRec[i].totalamount;
+      var pricekg = this.tableRec[i].pricekg;
+      const printData = {
+        quality: localquality,
+        weight: localweight,
+        price: pricekg,
+        totalcost: localTotalCost,
+      }
+      this.jsonData.push(printData);
+    }
   }
 
   records() {

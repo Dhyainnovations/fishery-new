@@ -195,7 +195,7 @@ export class BillerWeightManualDashboardPage implements OnInit {
       userid: this.ID,
       isDeleted: "0",
       purchaseddate: this.updateTime,
-      cost: this.cost,
+      cost: Math.round(this.cost * 100) / 100,
       totalcost: Math.round(totalcostroundoff * 100) / 100
     }
     this.SetBillerAddItem.push(data);
@@ -223,13 +223,9 @@ export class BillerWeightManualDashboardPage implements OnInit {
 
   //Logout
   logout() {
-    localStorage.removeItem("orgid",)
-    localStorage.removeItem("Fishery-username",)
-    localStorage.removeItem("logintype",)
-    localStorage.removeItem("permission",)
-    this.router.navigate(['/loginpage'])
-    localStorage.removeItem("printerBluetoothId",)
+    localStorage.clear();
     this.bluetoothSerial.disconnect();
+    this.router.navigate(['/loginpage'])
   }
 
   //DeleteSeparateItem

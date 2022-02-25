@@ -177,12 +177,8 @@ export class BillerAutoDashboardPage implements OnInit {
   }
 
   logout() {
-    localStorage.removeItem("orgid",)
-    localStorage.removeItem("Fishery-username",)
-    localStorage.removeItem("logintype",)
-    localStorage.removeItem("permission",)
-    localStorage.removeItem("connectedBluetoothID",)
-    this.router.navigate(['/loginpage'])
+    localStorage.clear();
     this.bluetoothSerial.disconnect();
+    this.router.navigate(['/loginpage'])
   }
 }

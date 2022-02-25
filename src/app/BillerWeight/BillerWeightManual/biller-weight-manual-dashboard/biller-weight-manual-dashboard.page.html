@@ -151,12 +151,12 @@
     <div class="container">
       <div class="row">
         <button (click)="generateBill()" class="submit-button px-2 py-2" color="transparent" style="font-size: 13px;"
-          [disabled]="SetBillerAddItem.length<=0 ">
+          [disabled]="SetBillerAddItem.length<=0 || printerAvailable">
           GENERATE BILL
         </button>
       </div>
     </div>
   </div>
-  || printerAvailable
+ 
 <p class="text-center" *ngIf="printerAvailable">Kindly Connect Printer</p>
 </ion-content>

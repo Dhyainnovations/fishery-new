@@ -82,7 +82,7 @@
       </tbody>
 
     </table>
-    <div class="button-wrapper p-4">
+    <div class="button-wrapper p-2">
       <div class="container">
         <div class="row">
           <button (click)="print()" class="submit-button px-2 py-2" style="font-size: 13px;background-color: #6863CC;">
@@ -92,10 +92,8 @@
       </div>
     </div>
     <div class="row">
-      <div *ngIf="isVisible" class=" col-12 ion-text-center mt-3 ">
-        <lottie-player src="https://assets8.lottiefiles.com/datafiles/vhvOcuUkH41HdrL/data.json"
-          background="transparent" speed="1.5" style="width:65%;margin:auto" loop autoplay></lottie-player>
-        <h4 class="ion-text-center">No Records</h4>
+      <div *ngIf="isVisible" class=" col-12 ion-text-center mt-3 ">       
+        <h4 class="ion-text-center pb-4">No Records</h4>
       </div>
     </div>
   </div>
@@ -104,42 +102,41 @@
 
   <!-----card----->
 
-  <h4 *ngIf="lastEntryisVisible" class="mx-3">Last Entry:</h4>
+  <div *ngIf="lastEntryisVisible">
+    <h4 class="mx-3">Last Entry:</h4>
 
-  <div style="font-size: 11px;">
-    <div class="row mb-5">
-      <div class="col-12">
-        <div class="card mt-3" *ngFor="let record of displayCardDetails">
-          <div class="row">
-            <div class="col-5">
-              <b style="color: #6863CC;"> Date </b> : {{record.date }}<br>
-              <b style="color: #6863CC;"> Time </b> : {{record.time }}<br>
+    <div style="font-size: 11px;">
+      <div class="row mb-5">
+        <div class="col-12">
+          <div class="card mt-3" *ngFor="let record of displayCardDetails">
+            <div class="row">
+              <div class="col-5">
+                <b style="color: #6863CC;"> Date </b> : {{record.date }}<br>
+                <b style="color: #6863CC;"> Time </b> : {{record.time }}<br>
 
-            </div>
+              </div>
 
-            <div class="col-5">
-              <b style="color: #6863CC;">Bill No </b> : {{record.bilid}}<br>
-              <b style="color: #6863CC;">Total Amount</b> : <br> <span style="color: #6863CC;">Rs.</span>
-              {{record.totalamount}} /-
-            </div>
-            <div class="col-2">
-              <div class="dot mt-3">
-                <svg (click)="delete(record.bilid)" [value]="record.bilid" style="margin: 10px;"
-                  xmlns="http://www.w3.org/2000/svg" width="16" height="18" fill="#fff" class="bi bi-trash3"
-                  viewBox="0 0 16 16">
-                  <path fill-rule="evenodd"
-                    d="M6.5 1a.5.5 0 0 0-.5.5v1h4v-1a.5.5 0 0 0-.5-.5h-3ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1H3.042l.846 10.58a1 1 0 0 0 .997.92h6.23a1 1 0 0 0 .997-.92l.846-10.58Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z" />
-                </svg>
+              <div class="col-5">
+                <b style="color: #6863CC;">Bill No </b> : {{record.bilid}}<br>
+                <b style="color: #6863CC;">Total Amount</b> : <br> <span style="color: #6863CC;">Rs.</span>
+                {{record.totalamount}} /-
+              </div>
+              <div class="col-2">
+                <div class="dot mt-3">
+                  <svg (click)="delete(record.bilid)" [value]="record.bilid" style="margin: 10px;"
+                    xmlns="http://www.w3.org/2000/svg" width="16" height="18" fill="#fff" class="bi bi-trash3"
+                    viewBox="0 0 16 16">
+                    <path fill-rule="evenodd"
+                      d="M6.5 1a.5.5 0 0 0-.5.5v1h4v-1a.5.5 0 0 0-.5-.5h-3ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1H3.042l.846 10.58a1 1 0 0 0 .997.92h6.23a1 1 0 0 0 .997-.92l.846-10.58Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z" />
+                  </svg>
+                </div>
               </div>
             </div>
           </div>
         </div>
-
       </div>
     </div>
-
   </div>
-
 
 
 
