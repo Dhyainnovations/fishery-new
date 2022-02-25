@@ -17,7 +17,7 @@ import { vsprintf } from 'sprintf-js'
 })
 export class BillPage implements OnInit {
 
- 
+
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private http: HttpService, route: ActivatedRoute, private alertController: AlertController, private bluetoothSerial: BluetoothSerial, public datepipe: DatePipe) {
     route.params.subscribe(val => {
@@ -128,7 +128,7 @@ export class BillPage implements OnInit {
     receipt += '\n'
     receipt += commands.TEXT_FORMAT.TXT_FONT_B
     receipt += '\x1b\x61\x01' + 'Thank you, visit again!' + '\x0a\x0a\x0a\x0a' //The unicode symbols are for centering the text
-     this.printText(receipt)
+    this.printText(receipt)
 
 
     let hours = new Date().getHours();
@@ -150,7 +150,7 @@ export class BillPage implements OnInit {
     }
 
     this.http.post('/manual_bill', data).subscribe((response: any) => {
- 
+
       if (response.success == "true") {
         localStorage.removeItem("SetBillerAddItem");
         this.bluetoothSerial.disconnect();
@@ -245,31 +245,20 @@ export class BillPage implements OnInit {
       var sum = this.price.reduce((a, b) => {
         return a + b;
       });
-
-
-
-
       this.totalsum = sum;
       this.userid = SendData.id;
       this.purchaseddate = SendData.purchaseddate;
       this.counter = SendData.counter;
       this.passBillItems.push(SendPushData);
-
       this.jsonData.push(printData);
-
-
       this.GetBillDataFromLocalStorageData.push(SendData);
-
     }
-
-
   }
 
 
   billWeightData: any = {}
   billWeight() {
     this.http.post('/bill_weight', this.billWeightData).subscribe((response: any) => {
- 
 
     }, (error: any) => {
       console.log(error);

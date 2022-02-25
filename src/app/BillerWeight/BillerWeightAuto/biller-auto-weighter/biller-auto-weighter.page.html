@@ -45,7 +45,16 @@
       <h1
         style="border: 0.5px solid rgba(0, 0, 0, 0.164);  box-shadow: 1px 1px 8px 1px #6863CC;width: 85%;margin: auto;">
         {{recivedWeightValue}} <span style="font-size: 17px;">Kg</span></h1>
+    </div>
+  </div>
 
+  <div class="button-wrapper p-3">
+    <div class="container">
+      <div class="row">
+        <button (click)="displayweight()" class="submit-button px-2 py-1" color="transparent" style="font-size: 13px;">
+          Weight
+        </button>
+      </div>
     </div>
   </div>
 
@@ -57,11 +66,9 @@
 
 
       <div class="col-12 display-date">
-
         <form (change)="SelectCounter(Selectcounter.value)" #Selectcounter="ngForm">
-
-          <div class="row">
-            <div class="col-4 offset-3">
+          <div class="row" style="margin-top: -20px;">
+            <div class="col-8">
               <p class="select-category"><b><u>Select Counter: </u></b></p>
             </div>
             <!-----  select counter----->
@@ -74,13 +81,8 @@
                 <option value="3">3</option>
               </select>
             </div>
-
-
           </div>
-
-
         </form>
-
       </div>
 
 

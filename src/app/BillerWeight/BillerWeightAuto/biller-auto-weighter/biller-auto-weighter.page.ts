@@ -6,7 +6,7 @@ import Swal from 'sweetalert2';
 import { Network } from '@awesome-cordova-plugins/network/ngx';
 import { DatePipe } from '@angular/common';
 import { BluetoothSerial } from '@awesome-cordova-plugins/bluetooth-serial/ngx';
-import { ChangeDetectorRef } from '@angular/core';
+
 
 @Component({
   selector: 'app-biller-auto-weighter',
@@ -15,7 +15,7 @@ import { ChangeDetectorRef } from '@angular/core';
 })
 export class BillerAutoWeighterPage implements OnInit {
 
-  constructor(public datepipe: DatePipe, private router: Router, private activatedRoute: ActivatedRoute, private http: HttpService, route: ActivatedRoute, private network: Network, private bluetoothSerial: BluetoothSerial, private cdr: ChangeDetectorRef,) {
+  constructor(public datepipe: DatePipe, private router: Router, private activatedRoute: ActivatedRoute, private http: HttpService, route: ActivatedRoute, private network: Network, private bluetoothSerial: BluetoothSerial,) {
     route.params.subscribe(val => {
       this.bluetoothSerial.disconnect();
       this.currentDateTime = this.datepipe.transform((new Date), 'yyyy-MM-dd hh:mm:ss');
@@ -81,9 +81,10 @@ export class BillerAutoWeighterPage implements OnInit {
   printerBluetoothId: any;
   listQualityCategory = [];
   printerAvailable: any = false;
-  recivedWeightValue: any;
+  recivedWeightValue: any = "0";
   deleteID = [];
   DisplayAfterDelete = [];
+  WeightValue: any;
 
   backToPrivios() {
     this.router.navigate(['/biller-auto-record'])
@@ -97,14 +98,10 @@ export class BillerAutoWeighterPage implements OnInit {
   };
 
   deviceConnected() {
-
     this.bluetoothSerial.connect(this.connectedBluetoothID).subscribe(this.onSuccess, this.onError);
     this.bluetoothSerial.subscribeRawData().subscribe((dt) => {
       this.bluetoothSerial.read().then((dd) => {
         this.onDataReceive(dd);
-        setTimeout(() => {
-          this.cdr.detectChanges();
-        }, 5000);
       });
     });
   }
@@ -119,14 +116,13 @@ export class BillerAutoWeighterPage implements OnInit {
 
   onDataReceive(val) {
     var data = JSON.stringify(val)
-    this.recivedWeightValue = Math.round(val * 100) / 100;
-    setTimeout(() => {
-      this.cdr.detectChanges();
-    }, 5000);
-
+    this.WeightValue = Math.round(val * 100) / 100;
   }
 
- 
+  displayweight() {
+    this.recivedWeightValue = this.WeightValue
+  }
+
   SelectCounter(data) {
     const formdata = new FormData();
     formdata.append("price", data.price);
@@ -181,7 +177,7 @@ export class BillerAutoWeighterPage implements OnInit {
 
 
 
-  
+
   getList() {
     this.http.get('/list_price').subscribe((response: any) => {
       this.listQualityCategory = response.records;
@@ -282,7 +278,7 @@ export class BillerAutoWeighterPage implements OnInit {
   }
 
 
- 
+
   delete(id) {
     this.deleteID = JSON.parse(localStorage.getItem("SetBillerAddItem"));
     for (var i = 0; i <= this.deleteID.length; i++) {
