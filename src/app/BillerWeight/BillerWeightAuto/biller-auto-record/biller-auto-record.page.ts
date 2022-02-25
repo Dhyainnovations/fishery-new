@@ -4,9 +4,8 @@ import { HttpService } from '../weighter/./../../../shared/http.service';
 import { Router } from '@angular/router'
 import Swal from 'sweetalert2';
 import { NavController } from '@ionic/angular';
-import { Network } from '@awesome-cordova-plugins/network/ngx';
 import { DatePipe } from '@angular/common';
-
+import { BluetoothSerial } from '@awesome-cordova-plugins/bluetooth-serial/ngx';
 
 @Component({
   selector: 'app-biller-auto-record',
@@ -15,7 +14,7 @@ import { DatePipe } from '@angular/common';
 })
 export class BillerAutoRecordPage implements OnInit {
 
-  constructor(private network: Network, public datepipe: DatePipe, public navCtrl: NavController, private router: Router, private activatedRoute: ActivatedRoute, private http: HttpService, route: ActivatedRoute) {
+  constructor(public datepipe: DatePipe, public navCtrl: NavController,private bluetoothSerial: BluetoothSerial, private router: Router, private activatedRoute: ActivatedRoute, private http: HttpService, route: ActivatedRoute) {
     route.params.subscribe(val => {
 
       this.totalWeight()
@@ -36,16 +35,16 @@ export class BillerAutoRecordPage implements OnInit {
   }
   user: any;
   currentDateTime: any;
-
   buttonDisabled: boolean;
   currentDate: any;
   connectedBluetoothID: any;
   totalweight: any = '';
   tableRecodrs: any = []
   cardRecords: any = []
-
   isVisible: any = false
   lastEntryisVisible: any = false
+  totalCost: any;
+  displayCardDetails = [];
 
   logout() {
     localStorage.removeItem("orgid",)
@@ -55,6 +54,7 @@ export class BillerAutoRecordPage implements OnInit {
     this.router.navigate(['/loginpage'])
     localStorage.removeItem("printerBluetoothId",)
     localStorage.removeItem("connectedBluetoothID",)
+    this.bluetoothSerial.disconnect();
   }
 
   dosomething(event) {
@@ -68,28 +68,22 @@ export class BillerAutoRecordPage implements OnInit {
   totalWeight() {
     this.http.get('/list_total_bill_weight',).subscribe((response: any) => {
       this.totalweight = response.records.total_weight;
-
       if (response.records.total_weight == null) {
         this.totalweight = 0;
       }
-
-
     }, (error: any) => {
       console.log(error);
     }
     );
   }
 
-  totalCost: any;
+
   totalAmount() {
     this.http.get('/bill_total_amount',).subscribe((response: any) => {
       this.totalCost = response.records.total_amount;
-
       if (response.records.total_amount == null) {
         this.totalCost = 0;
       }
-
-
     }, (error: any) => {
       console.log(error);
     }
@@ -97,7 +91,7 @@ export class BillerAutoRecordPage implements OnInit {
   }
 
 
-  displayCardDetails = [];
+
 
   navigateToSettings() {
     this.router.navigate(['/settings'])

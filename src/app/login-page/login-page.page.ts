@@ -4,6 +4,7 @@ import { HttpService } from '../shared/http.service';
 import Swal from 'sweetalert2';
 import { ActivatedRoute } from '@angular/router';
 import { MenuController, Platform, ToastController } from '@ionic/angular';
+import { BluetoothSerial } from '@awesome-cordova-plugins/bluetooth-serial/ngx';
 
 @Component({
   selector: 'app-login-page',
@@ -12,7 +13,7 @@ import { MenuController, Platform, ToastController } from '@ionic/angular';
 })
 export class LoginPagePage implements OnInit {
 
-  constructor(private platform: Platform, private router: Router, private activatedRoute: ActivatedRoute, private http: HttpService, route: ActivatedRoute,) {
+  constructor(private platform: Platform, private router: Router, private activatedRoute: ActivatedRoute, private http: HttpService, route: ActivatedRoute,private bluetoothSerial: BluetoothSerial,) {
     route.params.subscribe(val => {
       this.Locallogintype = localStorage.getItem("logintype",)
       this.Localpermission = localStorage.getItem("permission",)
@@ -23,11 +24,9 @@ export class LoginPagePage implements OnInit {
         else if (this.Locallogintype == null) {
           this.router.navigate(['/loginpage'])
         }
-
       }, 2500)
-
     });
-
+    this.bluetoothSerial.disconnect();
   }
 
   ngOnInit() {
@@ -94,7 +93,7 @@ export class LoginPagePage implements OnInit {
           this.Locallogintype = (localStorage.getItem("logintype"));
           this.Localpermission = (localStorage.getItem("permission"));
           console.log(this.Locallogintype);
-          console.log(this.Localpermission);  
+          console.log(this.Localpermission);
           this.checkToNavigate();
         }
 
@@ -123,7 +122,7 @@ export class LoginPagePage implements OnInit {
   }
 
 
-  
+
   ngAfterViewInit() {
     this.backButtonSubscription = this.platform.backButton.subscribe(() => {
       navigator['app'].exitApp();

@@ -183,5 +183,6 @@ export class BillerAutoDashboardPage implements OnInit {
     localStorage.removeItem("permission",)
     localStorage.removeItem("connectedBluetoothID",)
     this.router.navigate(['/loginpage'])
+    this.bluetoothSerial.disconnect();
   }
 }

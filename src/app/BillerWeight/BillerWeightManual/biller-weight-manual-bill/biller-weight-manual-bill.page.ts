@@ -57,6 +57,7 @@ export class BillerWeightManualBillPage implements OnInit {
   myDate: any;
 
   printBill() {
+     
     this.bluetoothSerial.connect(this.printerBluetoothId).subscribe(this.onSuccess, this.onError);
     const items = item => ({
       quality: item.quality,

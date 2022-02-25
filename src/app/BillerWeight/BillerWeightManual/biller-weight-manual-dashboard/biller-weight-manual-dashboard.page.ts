@@ -5,7 +5,7 @@ import { Router } from '@angular/router'
 import Swal from 'sweetalert2';
 import { Network } from '@awesome-cordova-plugins/network/ngx';
 import { DatePipe } from '@angular/common';
-
+import { BluetoothSerial } from '@awesome-cordova-plugins/bluetooth-serial/ngx';
 @Component({
   selector: 'app-biller-weight-manual-dashboard',
   templateUrl: './biller-weight-manual-dashboard.page.html',
@@ -14,7 +14,7 @@ import { DatePipe } from '@angular/common';
 export class BillerWeightManualDashboardPage implements OnInit {
 
 
-  constructor(public datepipe: DatePipe, private router: Router, private activatedRoute: ActivatedRoute, private http: HttpService, route: ActivatedRoute, private network: Network,) {
+  constructor(public datepipe: DatePipe,private bluetoothSerial: BluetoothSerial, private router: Router, private activatedRoute: ActivatedRoute, private http: HttpService, route: ActivatedRoute, private network: Network,) {
     route.params.subscribe(val => {
       this.myDate = new Date();
       this.myDate = this.datepipe.transform(this.myDate, 'yyyy-MM-dd');
@@ -229,6 +229,7 @@ export class BillerWeightManualDashboardPage implements OnInit {
     localStorage.removeItem("permission",)
     this.router.navigate(['/loginpage'])
     localStorage.removeItem("printerBluetoothId",)
+    this.bluetoothSerial.disconnect();
   }
 
   //DeleteSeparateItem

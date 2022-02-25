@@ -6,6 +6,9 @@ import Swal from 'sweetalert2';
 import { NavController } from '@ionic/angular';
 import { Network } from '@awesome-cordova-plugins/network/ngx';
 import { DatePipe } from '@angular/common';
+import { BluetoothSerial } from '@awesome-cordova-plugins/bluetooth-serial/ngx';
+import { commands } from '../../../providers/printcommand/printcommand'
+import { vsprintf } from 'sprintf-js'
 
 
 @Component({
@@ -15,24 +18,27 @@ import { DatePipe } from '@angular/common';
 })
 export class BillerWeightManualRecordPage implements OnInit {
 
-  constructor(private network: Network, public datepipe: DatePipe, public navCtrl: NavController, private router: Router, private activatedRoute: ActivatedRoute, private http: HttpService, route: ActivatedRoute) {
+  constructor(private network: Network, private bluetoothSerial: BluetoothSerial, public datepipe: DatePipe, public navCtrl: NavController, private router: Router, private activatedRoute: ActivatedRoute, private http: HttpService, route: ActivatedRoute) {
     route.params.subscribe(val => {
       this.totalWeight()
       this.totalAmount()
       this.records();
       this.list_manual_bill();
       this.tableRecords();
+      this.bluetoothSerial.disconnect();
       this.user = localStorage.getItem("Fishery-username",)
       console.log(this.user);
       this.currentDateTime = this.datepipe.transform((new Date), 'yyyy-MM-dd hh:mm:ss');
       this.currentDate = this.datepipe.transform((new Date), 'yyyy-MM-dd');
       this.todayBillList()
+      this.printerBluetoothId = localStorage.getItem("printerBluetoothId",);
     });
   }
 
   ngOnInit() {
 
   }
+  printerBluetoothId: any;
   manualBillList: any = []
   user: any;
   currentDate;
@@ -119,7 +125,7 @@ export class BillerWeightManualRecordPage implements OnInit {
   }
 
 
-  tableRec = []
+  tableRec: any = [];
   tableRecords() {
     this.currentDate = this.datepipe.transform((new Date), 'yyyy-MM-dd');
     const data = {
@@ -129,6 +135,7 @@ export class BillerWeightManualRecordPage implements OnInit {
     console.log(data);
     this.http.post('/list_localsale_date_manual_bill', data).subscribe((response: any) => {
       this.tableRec = response.records;
+      console.log(response.records);
       console.log(response);
     }, (error: any) => {
       console.log(error);
@@ -187,6 +194,17 @@ export class BillerWeightManualRecordPage implements OnInit {
     );
   }
 
+
+
+  onSuccess() { }
+
+  onError() { }
+
+
+
+
+
+
   logout() {
     localStorage.removeItem("orgid",)
     localStorage.removeItem("Fishery-username",)
@@ -194,5 +212,6 @@ export class BillerWeightManualRecordPage implements OnInit {
     localStorage.removeItem("permission",)
     this.router.navigate(['/loginpage'])
     localStorage.removeItem("printerBluetoothId",)
+    this.bluetoothSerial.disconnect();
   }
 }

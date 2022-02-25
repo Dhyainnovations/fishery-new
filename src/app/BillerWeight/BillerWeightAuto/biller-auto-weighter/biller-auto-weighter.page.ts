@@ -69,7 +69,6 @@ export class BillerAutoWeighterPage implements OnInit {
   ID: any;
   counterNo: any
   type: any;
-  mdy: any;
   value: any;
   StoreTypeBasedOnCategory = [];
   StoreTypeData = [];
@@ -77,13 +76,14 @@ export class BillerAutoWeighterPage implements OnInit {
   qualityList = [];
   tableRecodrs: any = []
   buttonDisabled: boolean;
-  onlineAlart: any = true;
-  offlineAlart: any = false
   dropdownVisible: any = false
   cost: any = "";
   printerBluetoothId: any;
+  listQualityCategory = [];
   printerAvailable: any = false;
-
+  recivedWeightValue: any;
+  deleteID = [];
+  DisplayAfterDelete = [];
 
   backToPrivios() {
     this.router.navigate(['/biller-auto-record'])
@@ -102,7 +102,9 @@ export class BillerAutoWeighterPage implements OnInit {
     this.bluetoothSerial.subscribeRawData().subscribe((dt) => {
       this.bluetoothSerial.read().then((dd) => {
         this.onDataReceive(dd);
-        this.cdr.detectChanges(); // either here
+        setTimeout(() => {
+          this.cdr.detectChanges();
+        }, 5000);
       });
     });
   }
@@ -124,11 +126,7 @@ export class BillerAutoWeighterPage implements OnInit {
 
   }
 
-  recivedWeightValue: any;
-
-
-
-
+ 
   SelectCounter(data) {
     const formdata = new FormData();
     formdata.append("price", data.price);
@@ -183,7 +181,7 @@ export class BillerAutoWeighterPage implements OnInit {
 
 
 
-  listQualityCategory = [];
+  
   getList() {
     this.http.get('/list_price').subscribe((response: any) => {
       this.listQualityCategory = response.records;
@@ -280,11 +278,11 @@ export class BillerAutoWeighterPage implements OnInit {
     this.router.navigate(['/loginpage'])
     localStorage.removeItem("printerBluetoothId",)
     localStorage.removeItem("connectedBluetoothID",)
+    this.bluetoothSerial.disconnect();
   }
 
 
-  deleteID = [];
-  DisplayAfterDelete = [];
+ 
   delete(id) {
     this.deleteID = JSON.parse(localStorage.getItem("SetBillerAddItem"));
     for (var i = 0; i <= this.deleteID.length; i++) {

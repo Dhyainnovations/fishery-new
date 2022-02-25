@@ -18,16 +18,8 @@ export class SettingsPage implements OnInit {
 
       this.user = localStorage.getItem("Fishery-username",)
       console.log(this.user);
-      window.addEventListener('offline', () => {
-        this.checkoffline = true;
-        this.offlineAlart = true
-        this.onlineAlart = false;
-      });
-      window.addEventListener('online', () => {
-        this.onlineAlart = true;
-        this.offlineAlart = false
-        this.checkonline = true;
-      });
+      this.bluetoothSerial.disconnect();
+
     });
     this.CheckBluetoothIsConnected();
     this.Locallogintype = localStorage.getItem("logintype",)
