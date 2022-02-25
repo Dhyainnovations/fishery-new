@@ -121,7 +121,10 @@ export class BillerAutoWeighterPage implements OnInit {
   }
 
   reciveWeight() {
-    this.showWeight = this.recivedWeightValue
+    if (this.recivedWeightValue != 0) {
+      this.showWeight = this.recivedWeightValue
+    }
+
   }
 
   SelectCounter(data) {
@@ -209,7 +212,7 @@ export class BillerAutoWeighterPage implements OnInit {
 
 
   addItem() {
-    
+
     let hours = new Date().getHours();
     let minutes = new Date().getMinutes();
     let seconds = new Date().getSeconds();
