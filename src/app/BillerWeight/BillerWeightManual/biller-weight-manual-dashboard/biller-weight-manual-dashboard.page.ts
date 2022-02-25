@@ -16,15 +16,14 @@ export class BillerWeightManualDashboardPage implements OnInit {
 
   constructor(public datepipe: DatePipe, private router: Router, private activatedRoute: ActivatedRoute, private http: HttpService, route: ActivatedRoute, private network: Network,) {
     route.params.subscribe(val => {
-
       this.myDate = new Date();
       this.myDate = this.datepipe.transform(this.myDate, 'yyyy-MM-dd');
+      this.todaysDate = this.datepipe.transform(this.myDate, 'dd-MM-yyyy');
       this.dropdownVisible = false
       this.generateId();
       this.printerBluetoothId = localStorage.getItem("printerBluetoothId",);
       this.CheckPrinterAvailabilty();
     });
-
   }
 
 
@@ -32,7 +31,6 @@ export class BillerWeightManualDashboardPage implements OnInit {
     this.userId = localStorage.getItem("orgid",)
     this.user = localStorage.getItem("Fishery-username",)
     this.http.get('/list_type_manual').subscribe((response: any) => {
-
       if (response.success == "true") {
       }
     }, (error: any) => {
@@ -84,7 +82,7 @@ export class BillerWeightManualDashboardPage implements OnInit {
   SetBillerAddItem = [];
   printerBluetoothId: any;
   printerAvailable: boolean;
-
+  todaysDate: any;
 
   //Navigation
   backToPrivios() {

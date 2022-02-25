@@ -37,17 +37,14 @@ export class LoginPagePage implements OnInit {
 
   username: any;
   password: any;
-
   orgid: any;
   userName: any;
   logintype: any;
   permission: any;
-
   LocalOrgid: any;
   LocaluserName: any;
   Locallogintype: any;
   Localpermission: any;
-
   backButtonSubscription: any;
 
   login() {
@@ -60,29 +57,20 @@ export class LoginPagePage implements OnInit {
 
     this.http.post('/login', Data).subscribe((response: any) => {
       console.log(response);
-
       if (response.success == "true") {
-
-
-
         this.orgid = response.orgid,
           this.username = response.id,
           this.logintype = response.loginType,
           this.permission = response.permission,
-
           console.log(this.orgid, this.logintype);
-
-
         localStorage.setItem("orgid", this.orgid)
         localStorage.setItem("Fishery-username", this.username)
         localStorage.setItem("logintype", this.logintype)
         localStorage.setItem("permission", this.permission)
 
         if (response.success == "true") {
-
           this.username = ""
           this.password = ""
-
           const Toast = Swal.mixin({
             toast: true,
             position: 'top-end',
@@ -105,17 +93,8 @@ export class LoginPagePage implements OnInit {
           this.LocaluserName = (localStorage.getItem("Fishery-username"));
           this.Locallogintype = (localStorage.getItem("logintype"));
           this.Localpermission = (localStorage.getItem("permission"));
-
           console.log(this.Locallogintype);
-          console.log(this.Localpermission);
-
-          //----------- Category Local Storage --------------//
-     
-
-
-          //----------- Set Type Based On Category Local Storage --------------//
-
-     
+          console.log(this.Localpermission);  
           this.checkToNavigate();
         }
 
@@ -132,7 +111,6 @@ export class LoginPagePage implements OnInit {
             toast.addEventListener('mouseleave', Swal.resumeTimer)
           }
         })
-
         Toast.fire({
           icon: 'error',
           title: 'Please enter a valid email (or) password'
@@ -142,10 +120,10 @@ export class LoginPagePage implements OnInit {
       console.log(error);
     }
     );
-
-
   }
 
+
+  
   ngAfterViewInit() {
     this.backButtonSubscription = this.platform.backButton.subscribe(() => {
       navigator['app'].exitApp();
@@ -155,11 +133,6 @@ export class LoginPagePage implements OnInit {
 
 
   checkToNavigate() {
-    //-------center login check----------//
-
-
-
-
     //-------biller login check----------//
 
     if (this.Locallogintype == "ROLE_LOCALSALE") {
@@ -174,15 +147,6 @@ export class LoginPagePage implements OnInit {
         this.router.navigate(['/biller-auto-record'])
       }
     }
-
-    //-------admin login check----------//
-
-  
-
-
-
-
-
 
   }
 
