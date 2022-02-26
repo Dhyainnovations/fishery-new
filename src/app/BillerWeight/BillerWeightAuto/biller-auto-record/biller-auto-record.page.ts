@@ -226,7 +226,8 @@ export class BillerAutoRecordPage implements OnInit {
     this.currentDate = this.datepipe.transform((new Date), 'yyyy-MM-dd');
     const data = {
       "from_date": this.currentDate,
-      "to_date": this.currentDate
+      "to_date": this.currentDate,
+      "userid" :this.user
     }
     console.log(data);
     this.http.post('/list_localsale_date_manual_bill', data).subscribe((response: any) => {
