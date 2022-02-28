@@ -29,10 +29,7 @@ export class SettingsPage implements OnInit {
   }
 
 
-  onlineAlart: any = true;
-  checkonline: any;
-  offlineAlart: any = false;
-  checkoffline: any;
+
   Locallogintype: any;
   Localpermission: any;
   printerBluetoothId: any;

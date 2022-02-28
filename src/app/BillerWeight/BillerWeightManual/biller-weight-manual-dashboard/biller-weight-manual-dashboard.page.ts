@@ -226,6 +226,7 @@ export class BillerWeightManualDashboardPage implements OnInit {
       title: 'Item Added Successfully'
     })
     this.weight = ''
+    
   }
 
 
@@ -239,8 +240,11 @@ export class BillerWeightManualDashboardPage implements OnInit {
   //DeleteSeparateItem
   delete(id) {
     this.deleteID = JSON.parse(localStorage.getItem("SetBillerAddItem"));
-    for (var i = 0; i <= this.deleteID.length; i++) {
-      if (this.deleteID[i].id == id) {
+    console.log( this.deleteID);
+    console.log(id);
+    
+    for (var i = 0; i < this.deleteID.length; i++) {
+      if (this.deleteID[i].userid == id) {
         this.deleteID.splice(this.deleteID.findIndex(a => this.deleteID[i] === id), 1)
         localStorage.removeItem("SetBillerAddItem");
         var SetBillerAddItem = (JSON.stringify(this.deleteID));

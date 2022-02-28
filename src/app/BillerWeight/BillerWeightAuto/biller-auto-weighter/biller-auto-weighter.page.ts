@@ -117,15 +117,13 @@ export class BillerAutoWeighterPage implements OnInit {
   }
 
   onDataReceive(val) {
-    var data = JSON.stringify(val)
     this.recivedWeightValue = Math.round(val * 100) / 100;
   }
 
   reciveWeight() {
-    if (this.recivedWeightValue != 0) {
+    if (this.recivedWeightValue >= 0) {
       this.showWeight = this.recivedWeightValue
     }
-
   }
 
   SelectCounter(data) {
@@ -287,8 +285,8 @@ export class BillerAutoWeighterPage implements OnInit {
 
   delete(id) {
     this.deleteID = JSON.parse(localStorage.getItem("SetBillerAddItem"));
-    for (var i = 0; i <= this.deleteID.length; i++) {
-      if (this.deleteID[i].id == id) {
+    for (var i = 0; i < this.deleteID.length; i++) {
+      if (this.deleteID[i].userid == id) {
         this.deleteID.splice(this.deleteID.findIndex(a => this.deleteID[i] === id), 1)
         localStorage.removeItem("SetBillerAddItem");
         var SetBillerAddItem = (JSON.stringify(this.deleteID));
@@ -297,6 +295,7 @@ export class BillerAutoWeighterPage implements OnInit {
       }
     }
   }
+  
   async deleterecord(id: any) {
 
     const alert = await this.alertController.create({
