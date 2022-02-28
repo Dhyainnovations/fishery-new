@@ -124,7 +124,7 @@ export class BillerAutoDashboardPage implements OnInit {
   connectedId: any = "";
   success = (data) => {
     localStorage.setItem('connectedBluetoothID', this.connectedId);
-    this.router.navigate(['/BillerAutoweighter'])
+    this.router.navigate(['/biller-auto-record'])
     this.bluetoothSerial.disconnect();
   }
   fail = (error) => {

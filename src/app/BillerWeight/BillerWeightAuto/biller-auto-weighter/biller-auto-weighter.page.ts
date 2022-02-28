@@ -222,6 +222,19 @@ export class BillerAutoWeighterPage implements OnInit {
     } else {
       this.updateTime = this.myDate + ' ' + hours + ":" + minutes + ":" + seconds
     }
+
+    if (seconds < 10) {
+      this.updateTime = this.myDate + ' ' + hours + ":" + minutes + ":" + ("0" + seconds)
+    } else {
+      this.updateTime = this.myDate + ' ' + hours + ":" + minutes + ":" + seconds
+    }
+
+    if (minutes < 10) {
+      this.updateTime = this.myDate + ' ' + hours + ":" + ("0" + minutes) + ":" + ("0" + seconds)
+    } else {
+      this.updateTime = this.myDate + ' ' + hours + ":" + minutes + ":" + seconds
+    }
+
     this.CheckGenerateBillButton = false;
     this.generateId();
     var totalcostroundoff = this.cost * this.showWeight;

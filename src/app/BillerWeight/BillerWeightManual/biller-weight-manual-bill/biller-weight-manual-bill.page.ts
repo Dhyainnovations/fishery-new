@@ -141,6 +141,17 @@ export class BillerWeightManualBillPage implements OnInit {
       this.updateTime = this.myDate + ' ' + hours + ":" + minutes + ":" + seconds
     }
 
+    if (seconds < 10) {
+      this.updateTime = this.myDate + ' ' + hours + ":" + minutes + ":" + ("0" + seconds)
+    } else {
+      this.updateTime = this.myDate + ' ' + hours + ":" + minutes + ":" + seconds
+    }
+
+    if (minutes < 10) {
+      this.updateTime = this.myDate + ' ' + hours + ":" + ("0" + minutes) + ":" + ("0" + seconds)
+    } else {
+      this.updateTime = this.myDate + ' ' + hours + ":" + minutes + ":" + seconds
+    }
 
     const data = {
       billitems: this.passBillItems,
@@ -196,6 +207,18 @@ export class BillerWeightManualBillPage implements OnInit {
     this.myDate = this.datepipe.transform(this.myDate, 'yyyy-MM-dd');
     if (hours < 10) {
       this.updateTime = this.myDate + ' ' + ("0" + hours) + ":" + minutes + ":" + seconds
+    } else {
+      this.updateTime = this.myDate + ' ' + hours + ":" + minutes + ":" + seconds
+    }
+
+    if (seconds < 10) {
+      this.updateTime = this.myDate + ' ' + hours + ":" + minutes + ":" + ("0" + seconds)
+    } else {
+      this.updateTime = this.myDate + ' ' + hours + ":" + minutes + ":" + seconds
+    }
+
+    if (minutes < 10) {
+      this.updateTime = this.myDate + ' ' + hours + ":" + ("0" + minutes) + ":" + ("0" + seconds)
     } else {
       this.updateTime = this.myDate + ' ' + hours + ":" + minutes + ":" + seconds
     }
