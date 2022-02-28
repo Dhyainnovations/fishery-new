@@ -134,32 +134,37 @@ export class BillPage implements OnInit {
     let hours = new Date().getHours();
     let minutes = new Date().getMinutes();
     let seconds = new Date().getSeconds();
-    this.hr = hours + 12;
 
+    this.hr = hours + 12;
+    let checkhours;
+    let checkmins;
+    let checksec;
     if (hours < 10) {
-      this.updateTime = this.myDate + ' ' + ("0" + hours) + ":" + minutes + ":" + seconds
+      checkhours = ("0" + hours)
     } else {
-      this.updateTime = this.myDate + ' ' + hours + ":" + minutes + ":" + seconds
+      checkhours = hours
     }
 
     if (seconds < 10) {
-      this.updateTime = this.myDate + ' ' + hours + ":" + minutes + ":" + ("0" + seconds)
+      checksec = ("0" + seconds)
     } else {
-      this.updateTime = this.myDate + ' ' + hours + ":" + minutes + ":" + seconds
+      checksec = seconds
     }
 
     if (minutes < 10) {
-      this.updateTime = this.myDate + ' ' + hours + ":" + ("0" + minutes) + ":" + ("0" + seconds)
+      checkmins = ("0" + minutes)
     } else {
-      this.updateTime = this.myDate + ' ' + hours + ":" + minutes + ":" + seconds
+      checkmins = minutes
     }
+
+    this.updateTime = this.myDate + ' ' + checkhours + ":" + checkmins + ":" + checksec;
 
   
     const data = {
       billitems: this.passBillItems,
       totalamount: this.totalsum,
       counter: this.counter,
-      userid: this.userid,
+      userid: this.name,
       isDeleted: "0",
       purchaseddate: this.updateTime,
     }

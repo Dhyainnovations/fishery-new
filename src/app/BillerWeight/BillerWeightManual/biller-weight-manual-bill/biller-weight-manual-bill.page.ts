@@ -130,28 +130,38 @@ export class BillerWeightManualBillPage implements OnInit {
     this.printText(receipt)
 
 
+    // let hours = new Date().getHours();
+    // let minutes = new Date().getMinutes();
+    // let seconds = new Date().getSeconds();
+    
     let hours = new Date().getHours();
     let minutes = new Date().getMinutes();
     let seconds = new Date().getSeconds();
-    this.hr = hours + 12;
 
+    this.hr = hours + 12;
+    let checkhours;
+    let checkmins;
+    let checksec;
     if (hours < 10) {
-      this.updateTime = this.myDate + ' ' + ("0" + hours) + ":" + minutes + ":" + seconds
+      checkhours = ("0" + hours)
     } else {
-      this.updateTime = this.myDate + ' ' + hours + ":" + minutes + ":" + seconds
+      checkhours = hours
     }
 
     if (seconds < 10) {
-      this.updateTime = this.myDate + ' ' + hours + ":" + minutes + ":" + ("0" + seconds)
+      checksec = ("0" + seconds)
     } else {
-      this.updateTime = this.myDate + ' ' + hours + ":" + minutes + ":" + seconds
+      checksec = seconds
     }
 
     if (minutes < 10) {
-      this.updateTime = this.myDate + ' ' + hours + ":" + ("0" + minutes) + ":" + ("0" + seconds)
+      checkmins = ("0" + minutes)
     } else {
-      this.updateTime = this.myDate + ' ' + hours + ":" + minutes + ":" + seconds
+      checkmins = minutes
     }
+
+    this.updateTime = this.myDate + ' ' + checkhours + ":" + checkmins + ":" + checksec;
+    console.log(this.updateTime);
 
     const data = {
       billitems: this.passBillItems,
@@ -202,26 +212,30 @@ export class BillerWeightManualBillPage implements OnInit {
     let hours = new Date().getHours();
     let minutes = new Date().getMinutes();
     let seconds = new Date().getSeconds();
+
     this.hr = hours + 12;
-    this.myDate = new Date();
-    this.myDate = this.datepipe.transform(this.myDate, 'yyyy-MM-dd');
+    let checkhours;
+    let checkmins;
+    let checksec;
     if (hours < 10) {
-      this.updateTime = this.myDate + ' ' + ("0" + hours) + ":" + minutes + ":" + seconds
+      checkhours = ("0" + hours)
     } else {
-      this.updateTime = this.myDate + ' ' + hours + ":" + minutes + ":" + seconds
+      checkhours = hours
     }
 
     if (seconds < 10) {
-      this.updateTime = this.myDate + ' ' + hours + ":" + minutes + ":" + ("0" + seconds)
+      checksec = ("0" + seconds)
     } else {
-      this.updateTime = this.myDate + ' ' + hours + ":" + minutes + ":" + seconds
+      checksec = seconds
     }
 
     if (minutes < 10) {
-      this.updateTime = this.myDate + ' ' + hours + ":" + ("0" + minutes) + ":" + ("0" + seconds)
+      checkmins = ("0" + minutes)
     } else {
-      this.updateTime = this.myDate + ' ' + hours + ":" + minutes + ":" + seconds
+      checkmins = minutes
     }
+
+    this.updateTime = this.myDate + ' ' + checkhours + ":" + checkmins + ":" + checksec;
 
     var GetBillerAddItem = localStorage.getItem("SetBillerAddItem");
     var DecodeBillerData = (JSON.parse((GetBillerAddItem)));
@@ -276,7 +290,7 @@ export class BillerWeightManualBillPage implements OnInit {
       this.passBillItems.push(SendPushData);
       this.jsonData.push(printData);
       this.GetBillDataFromLocalStorageData.push(SendData);
-  
+
     }
   }
 
