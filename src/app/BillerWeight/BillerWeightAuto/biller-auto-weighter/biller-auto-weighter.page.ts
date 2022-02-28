@@ -7,6 +7,7 @@ import { Network } from '@awesome-cordova-plugins/network/ngx';
 import { DatePipe } from '@angular/common';
 import { BluetoothSerial } from '@awesome-cordova-plugins/bluetooth-serial/ngx';
 import { ChangeDetectorRef } from '@angular/core';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-biller-auto-weighter',
@@ -15,7 +16,7 @@ import { ChangeDetectorRef } from '@angular/core';
 })
 export class BillerAutoWeighterPage implements OnInit {
 
-  constructor(public datepipe: DatePipe, private router: Router, private activatedRoute: ActivatedRoute, private http: HttpService, route: ActivatedRoute, private network: Network, private bluetoothSerial: BluetoothSerial, private cdr: ChangeDetectorRef,) {
+  constructor(public datepipe: DatePipe, private router: Router, private activatedRoute: ActivatedRoute, private http: HttpService, route: ActivatedRoute, private network: Network, private bluetoothSerial: BluetoothSerial, private cdr: ChangeDetectorRef,private alertController: AlertController,) {
     route.params.subscribe(val => {
       this.bluetoothSerial.disconnect();
       this.currentDateTime = this.datepipe.transform((new Date), 'yyyy-MM-dd hh:mm:ss');
@@ -65,7 +66,7 @@ export class BillerAutoWeighterPage implements OnInit {
   quality: any;
   price: any;
   weight: any;
-  counter: any;
+  counter: any = "1";
   ID: any;
   counterNo: any
   type: any;
@@ -218,7 +219,11 @@ export class BillerAutoWeighterPage implements OnInit {
     let seconds = new Date().getSeconds();
     this.hr = hours + 12;
     this.currentDate = this.myDate;
-    this.updateTime = this.myDate + ' ' + hours + ":" + minutes + ":" + seconds
+    if (hours < 10) {
+      this.updateTime = this.myDate + ' ' + ("0" + hours) + ":" + minutes + ":" + seconds
+    } else {
+      this.updateTime = this.myDate + ' ' + hours + ":" + minutes + ":" + seconds
+    }
     this.CheckGenerateBillButton = false;
     this.generateId();
     var totalcostroundoff = this.cost * this.showWeight;
@@ -291,5 +296,28 @@ export class BillerAutoWeighterPage implements OnInit {
         this.SetBillerAddItem = this.deleteID;
       }
     }
+  }
+  async deleterecord(id: any) {
+
+    const alert = await this.alertController.create({
+      header: 'Delete',
+      message: 'Are You Sure Want To Delete It?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
+          }
+        },
+        {
+          text: 'Delete',
+          handler: () => {
+            this.delete(id);
+          }
+        }
+      ]
+    });
+    await alert.present();
   }
 }

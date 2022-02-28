@@ -71,7 +71,7 @@ export class BillPage implements OnInit {
     let totalPrice = Math.round(this.totalsum * 100) / 100
 
     let company = "Sakthi & Co"
-    let counter = this.billWeightData.counter
+    let counter = this.counter
     let biller = this.name
     let time = this.purchaseddate;
     let receipt = ""
@@ -136,10 +136,13 @@ export class BillPage implements OnInit {
     let seconds = new Date().getSeconds();
     this.hr = hours + 12;
 
-    this.updateTime = this.myDate + ' ' + hours + ":" + minutes + ":" + seconds
+    if (hours < 10) {
+      this.updateTime = this.myDate + ' ' + ("0" + hours) + ":" + minutes + ":" + seconds
+    } else {
+      this.updateTime = this.myDate + ' ' + hours + ":" + minutes + ":" + seconds
+    }
 
-
-    this.billWeight();
+  
     const data = {
       billitems: this.passBillItems,
       totalamount: this.totalsum,
@@ -229,17 +232,7 @@ export class BillPage implements OnInit {
         weight: localweight,
       }
 
-      this.billWeightData = {
-        id: localid,
-        price: localprice,
-        weight: localweight,
-        quality: localquality,
-        totalamount: localTotalCost,
-        counter: localcounter,
-        userid: localid,
-        isDeleted: localisDeleted,
-        purchaseddate: localpurchaseddate,
-      }
+
 
       this.price.push(SendData.totalcost);
       var sum = this.price.reduce((a, b) => {
@@ -256,15 +249,7 @@ export class BillPage implements OnInit {
   }
 
 
-  billWeightData: any = {}
-  billWeight() {
-    this.http.post('/bill_weight', this.billWeightData).subscribe((response: any) => {
 
-    }, (error: any) => {
-      console.log(error);
-    }
-    );
-  }
 
 
   //PrintFunction

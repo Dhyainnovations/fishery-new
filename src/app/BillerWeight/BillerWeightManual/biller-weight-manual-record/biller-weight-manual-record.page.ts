@@ -9,7 +9,7 @@ import { DatePipe } from '@angular/common';
 import { BluetoothSerial } from '@awesome-cordova-plugins/bluetooth-serial/ngx';
 import { commands } from '../../../providers/printcommand/printcommand'
 import { vsprintf } from 'sprintf-js'
-
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-biller-weight-manual-record',
@@ -18,10 +18,10 @@ import { vsprintf } from 'sprintf-js'
 })
 export class BillerWeightManualRecordPage implements OnInit {
 
-  constructor(public datepipe: DatePipe, public navCtrl: NavController, private bluetoothSerial: BluetoothSerial, private router: Router, private activatedRoute: ActivatedRoute, private http: HttpService, route: ActivatedRoute) {
+  constructor(public datepipe: DatePipe, public navCtrl: NavController, private alertController: AlertController, private bluetoothSerial: BluetoothSerial, private router: Router, private activatedRoute: ActivatedRoute, private http: HttpService, route: ActivatedRoute) {
     route.params.subscribe(val => {
       this.printerBluetoothId = localStorage.getItem("printerBluetoothId",);
-      this.totalWeight()
+
       this.totalAmount()
       this.records();
       this.list_manual_bill();
@@ -193,8 +193,6 @@ export class BillerWeightManualRecordPage implements OnInit {
 
   list_manual_bill() {
     this.http.get('/list_manual_bill',).subscribe((response: any) => {
-      console.log(response.message);
-
       this.lastEntryisVisible = true
       this.displayCardDetails = response.records;
       console.log(response.records.length);
@@ -216,8 +214,6 @@ export class BillerWeightManualRecordPage implements OnInit {
   todayBillList() {
     this.http.get('/total_quality_bill_weight',).subscribe((response: any) => {
       this.manualBillList = response.records;
-
-
     }, (error: any) => {
       console.log(error);
     }
@@ -231,17 +227,47 @@ export class BillerWeightManualRecordPage implements OnInit {
     const data = {
       "from_date": this.currentDate,
       "to_date": this.currentDate,
-      "userid" : this.user
+      "userid": this.user
     }
     console.log(data);
     this.http.post('/list_localsale_date_manual_bill', data).subscribe((response: any) => {
       this.tableRec = response.records;
       console.log(response);
+      for (var i = 0; i < response.records[i]; i++) {
+        this.totalweight = response.records[i].weight;
+      }
+      console.log(this.totalweight);
 
     }, (error: any) => {
       console.log(error);
+      this.tableRec = [];
     }
     );
+  }
+
+
+  async deleterecord(id: any) {
+
+    const alert = await this.alertController.create({
+      header: 'Delete',
+      message: 'Are You Sure Want To Delete It?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
+          }
+        },
+        {
+          text: 'Delete',
+          handler: () => {
+            this.delete(id);
+          }
+        }
+      ]
+    });
+    await alert.present();
   }
 
 
@@ -278,6 +304,7 @@ export class BillerWeightManualRecordPage implements OnInit {
 
 
   delete(id) {
+
     const data = {
       bilid: id,
       isDeleted: "1"
@@ -304,7 +331,6 @@ export class BillerWeightManualRecordPage implements OnInit {
 
         this.list_manual_bill();
         this.tableRecords();
-        this.totalWeight();
         this.totalAmount();
       } else {
         const Toast = Swal.mixin({
@@ -329,6 +355,7 @@ export class BillerWeightManualRecordPage implements OnInit {
       console.log(error);
     }
     );
+
   }
 
 

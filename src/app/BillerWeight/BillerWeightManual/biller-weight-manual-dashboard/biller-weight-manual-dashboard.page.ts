@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 import { Network } from '@awesome-cordova-plugins/network/ngx';
 import { DatePipe } from '@angular/common';
 import { BluetoothSerial } from '@awesome-cordova-plugins/bluetooth-serial/ngx';
+import { AlertController } from '@ionic/angular';
 @Component({
   selector: 'app-biller-weight-manual-dashboard',
   templateUrl: './biller-weight-manual-dashboard.page.html',
@@ -14,7 +15,7 @@ import { BluetoothSerial } from '@awesome-cordova-plugins/bluetooth-serial/ngx';
 export class BillerWeightManualDashboardPage implements OnInit {
 
 
-  constructor(public datepipe: DatePipe,private bluetoothSerial: BluetoothSerial, private router: Router, private activatedRoute: ActivatedRoute, private http: HttpService, route: ActivatedRoute, private network: Network,) {
+  constructor(public datepipe: DatePipe, private bluetoothSerial: BluetoothSerial, private router: Router, private activatedRoute: ActivatedRoute, private http: HttpService, route: ActivatedRoute, private network: Network, private alertController: AlertController,) {
     route.params.subscribe(val => {
       this.myDate = new Date();
       this.myDate = this.datepipe.transform(this.myDate, 'yyyy-MM-dd');
@@ -60,7 +61,7 @@ export class BillerWeightManualDashboardPage implements OnInit {
   quality: any;
   price: any;
   weight: any;
-  counter: any;
+  counter: any = "1";
   ID: any;
   counterNo: any
   type: any;
@@ -181,7 +182,13 @@ export class BillerWeightManualDashboardPage implements OnInit {
     let seconds = new Date().getSeconds();
     this.hr = hours + 12;
     this.currentDate = this.myDate;
-    this.updateTime = this.myDate + ' ' + hours + ":" + minutes + ":" + seconds
+    if (hours < 10) {
+      this.updateTime = this.myDate + ' ' + ("0" + hours) + ":" + minutes + ":" + seconds
+    } else {
+      this.updateTime = this.myDate + ' ' + hours + ":" + minutes + ":" + seconds
+    }
+    console.log(this.updateTime);
+
     this.CheckGenerateBillButton = false;
     var totalcostroundoff = this.cost * this.weight;
     this.generateId();
@@ -198,6 +205,7 @@ export class BillerWeightManualDashboardPage implements OnInit {
       cost: Math.round(this.cost * 100) / 100,
       totalcost: Math.round(totalcostroundoff * 100) / 100
     }
+
     this.SetBillerAddItem.push(data);
     var SetBillerAddItem = (JSON.stringify(this.SetBillerAddItem));
     localStorage.setItem('SetBillerAddItem', SetBillerAddItem);
@@ -240,5 +248,28 @@ export class BillerWeightManualDashboardPage implements OnInit {
         this.SetBillerAddItem = this.deleteID;
       }
     }
+  }
+  async deleterecord(id: any) {
+
+    const alert = await this.alertController.create({
+      header: 'Delete',
+      message: 'Are You Sure Want To Delete It?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
+          }
+        },
+        {
+          text: 'Delete',
+          handler: () => {
+            this.delete(id);
+          }
+        }
+      ]
+    });
+    await alert.present();
   }
 }

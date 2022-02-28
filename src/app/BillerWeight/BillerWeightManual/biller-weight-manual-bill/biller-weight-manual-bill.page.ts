@@ -57,7 +57,6 @@ export class BillerWeightManualBillPage implements OnInit {
   myDate: any;
 
   printBill() {
-     
     this.bluetoothSerial.connect(this.printerBluetoothId).subscribe(this.onSuccess, this.onError);
     const items = item => ({
       quality: item.quality,
@@ -71,7 +70,7 @@ export class BillerWeightManualBillPage implements OnInit {
     let totalPrice = Math.round(this.totalsum * 100) / 100
 
     let company = "Sakthi & Co"
-    let counter = this.billWeightData.counter
+    let counter = this.counter
     let biller = this.name
     let time = this.purchaseddate;
     let receipt = ""
@@ -128,7 +127,7 @@ export class BillerWeightManualBillPage implements OnInit {
     receipt += '\n'
     receipt += commands.TEXT_FORMAT.TXT_FONT_B
     receipt += '\x1b\x61\x01' + 'Thank you, visit again!' + '\x0a\x0a\x0a\x0a' //The unicode symbols are for centering the text
-     this.printText(receipt)
+    this.printText(receipt)
 
 
     let hours = new Date().getHours();
@@ -136,20 +135,25 @@ export class BillerWeightManualBillPage implements OnInit {
     let seconds = new Date().getSeconds();
     this.hr = hours + 12;
 
-    this.updateTime = this.myDate + ' ' + hours + ":" + minutes + ":" + seconds
+    if (hours < 10) {
+      this.updateTime = this.myDate + ' ' + ("0" + hours) + ":" + minutes + ":" + seconds
+    } else {
+      this.updateTime = this.myDate + ' ' + hours + ":" + minutes + ":" + seconds
+    }
 
 
-    this.billWeight();
     const data = {
       billitems: this.passBillItems,
       totalamount: this.totalsum,
       counter: this.counter,
-      userid: this.userid,
+      userid: this.name,
       isDeleted: "0",
       purchaseddate: this.updateTime,
     }
 
-    this.http.post('/manual_bill', data).subscribe((response: any) => { 
+
+
+    this.http.post('/manual_bill', data).subscribe((response: any) => {
       if (response.success == "true") {
         localStorage.removeItem("SetBillerAddItem");
         this.router.navigate(['/biller-weight-manual-record'])
@@ -173,7 +177,7 @@ export class BillerWeightManualBillPage implements OnInit {
   jsonData = [];
 
   onSuccess() {
-    
+
   }
 
   onError(error) {
@@ -183,6 +187,19 @@ export class BillerWeightManualBillPage implements OnInit {
   GetBillDataFromLocalStorageData: any = [];
 
   GetBillDataFromLocalStorage() {
+
+    let hours = new Date().getHours();
+    let minutes = new Date().getMinutes();
+    let seconds = new Date().getSeconds();
+    this.hr = hours + 12;
+    this.myDate = new Date();
+    this.myDate = this.datepipe.transform(this.myDate, 'yyyy-MM-dd');
+    if (hours < 10) {
+      this.updateTime = this.myDate + ' ' + ("0" + hours) + ":" + minutes + ":" + seconds
+    } else {
+      this.updateTime = this.myDate + ' ' + hours + ":" + minutes + ":" + seconds
+    }
+
     var GetBillerAddItem = localStorage.getItem("SetBillerAddItem");
     var DecodeBillerData = (JSON.parse((GetBillerAddItem)));
 
@@ -210,11 +227,11 @@ export class BillerWeightManualBillPage implements OnInit {
         id: localuserid,
         isDeleted: localisDeleted,
         purchaseddate: localpurchaseddate,
-        price:  Math.round(localprice * 100) / 100,
+        price: Math.round(localprice * 100) / 100,
         quality: localquality,
         userid: localid,
-        weight:  Math.round(localweight * 100) / 100,
-        totalcost:  Math.round(localTotalCost * 100) / 100,
+        weight: Math.round(localweight * 100) / 100,
+        totalcost: Math.round(localTotalCost * 100) / 100,
       }
       const SendPushData = {
         id: localuserid,
@@ -223,26 +240,12 @@ export class BillerWeightManualBillPage implements OnInit {
         weight: localweight,
       }
 
-      this.billWeightData = {
-        id: localuserid,
-        price: localprice,
-        weight: localweight,
-        quality: localquality,
-        totalamount: localTotalCost,
-        counter: localcounter,
-        userid: localid,
-        isDeleted: localisDeleted,
-        purchaseddate: this.updateTime,
-      }
+
 
       this.price.push(SendData.totalcost);
       var sum = this.price.reduce((a, b) => {
         return a + b;
       });
-
-
-
-
       this.totalsum = sum;
       this.userid = SendData.id;
       this.purchaseddate = SendData.purchaseddate;
@@ -250,20 +253,11 @@ export class BillerWeightManualBillPage implements OnInit {
       this.passBillItems.push(SendPushData);
       this.jsonData.push(printData);
       this.GetBillDataFromLocalStorageData.push(SendData);
+  
     }
   }
 
 
-  billWeightData: any = {}
-  billWeight() {
-    this.http.post('/bill_weight', this.billWeightData).subscribe((response: any) => {
- 
-
-    }, (error: any) => {
-      console.log(error);
-    }
-    );
-  }
 
 
   //PrintFunction

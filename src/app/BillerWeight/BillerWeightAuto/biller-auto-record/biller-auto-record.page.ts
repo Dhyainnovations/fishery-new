@@ -8,6 +8,7 @@ import { DatePipe } from '@angular/common';
 import { BluetoothSerial } from '@awesome-cordova-plugins/bluetooth-serial/ngx';
 import { commands } from '../../../providers/printcommand/printcommand'
 import { vsprintf } from 'sprintf-js'
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-biller-auto-record',
@@ -16,7 +17,7 @@ import { vsprintf } from 'sprintf-js'
 })
 export class BillerAutoRecordPage implements OnInit {
 
-  constructor(public datepipe: DatePipe, public navCtrl: NavController, private bluetoothSerial: BluetoothSerial, private router: Router, private activatedRoute: ActivatedRoute, private http: HttpService, route: ActivatedRoute) {
+  constructor(public datepipe: DatePipe, public navCtrl: NavController, private alertController: AlertController, private bluetoothSerial: BluetoothSerial, private router: Router, private activatedRoute: ActivatedRoute, private http: HttpService, route: ActivatedRoute) {
     route.params.subscribe(val => {
       this.printerBluetoothId = localStorage.getItem("printerBluetoothId",);
       this.totalWeight()
@@ -227,7 +228,7 @@ export class BillerAutoRecordPage implements OnInit {
     const data = {
       "from_date": this.currentDate,
       "to_date": this.currentDate,
-      "userid" :this.user
+      "userid": this.user
     }
     console.log(data);
     this.http.post('/list_localsale_date_manual_bill', data).subscribe((response: any) => {
@@ -238,6 +239,29 @@ export class BillerAutoRecordPage implements OnInit {
     );
   }
 
+  async deleterecord(id: any) {
+
+    const alert = await this.alertController.create({
+      header: 'Connect',
+      message: 'Are You Sure Want To Delete It?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
+          }
+        },
+        {
+          text: 'Delete',
+          handler: () => {
+            this.delete(id);
+          }
+        }
+      ]
+    });
+    await alert.present();
+  }
 
   printData() {
     this.jsonData = [];

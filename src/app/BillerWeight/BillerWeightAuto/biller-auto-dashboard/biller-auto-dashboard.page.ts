@@ -19,28 +19,12 @@ export class BillerAutoDashboardPage implements OnInit {
 
   constructor(private router: Router, private bluetoothSerial: BluetoothSerial, private alertController: AlertController, private cdr: ChangeDetectorRef, private network: Network, public datepipe: DatePipe, public navCtrl: NavController, private route: ActivatedRoute, private http: HttpService,) {
     route.params.subscribe(val => {
-
-
-      window.addEventListener('offline', () => {
-        this.checkoffline = true;
-        this.offlineAlart = true
-        this.onlineAlart = false;
-
-      });
-      window.addEventListener('online', () => {
-
-        this.onlineAlart = true;
-        this.offlineAlart = false
-        this.checkonline = true;
-
-      });
     });
     this.user = localStorage.getItem("Fishery-username",)
   }
   user: any;
   disableSts: any = false;
-  checkoffline: any;
-  checkonline: any;
+
   buttonDisabled: boolean;
   onlineAlart: any = true;
   offlineAlart: any = false
