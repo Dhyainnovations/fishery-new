@@ -222,7 +222,8 @@ export class BillerAutoRecordPage implements OnInit {
     );
   }
 
-  tableRec = []
+  tableRec = [];
+  printBtn: any;
   tableRecords() {
     this.currentDate = this.datepipe.transform((new Date), 'yyyy-MM-dd');
     const data = {
@@ -233,6 +234,11 @@ export class BillerAutoRecordPage implements OnInit {
     console.log(data);
     this.http.post('/list_localsale_date_manual_bill', data).subscribe((response: any) => {
       this.tableRec = response.records;
+      if (this.tableRec.length < 0) {
+        this.printBtn = true;
+      } else {
+        this.printBtn = false;
+      }
     }, (error: any) => {
       console.log(error);
     }

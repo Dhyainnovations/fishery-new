@@ -221,7 +221,7 @@ export class BillerWeightManualRecordPage implements OnInit {
   }
 
   tableRec = []
-
+  printBtn: any;
   tableRecords() {
     this.currentDate = this.datepipe.transform((new Date), 'yyyy-MM-dd');
     const data = {
@@ -232,6 +232,14 @@ export class BillerWeightManualRecordPage implements OnInit {
     console.log(data);
     this.http.post('/list_localsale_date_manual_bill', data).subscribe((response: any) => {
       this.tableRec = response.records;
+      console.log(response);
+      const totalProps =  this.tableRec.reduce((a, obj) => a + Object.keys(obj).length, 0);
+      console.log(totalProps);
+      if (this.tableRec.length > 0) {
+        this.printBtn = false;
+      } else {
+        this.printBtn = true;
+      }
       console.log(response);
       for (var i = 0; i < response.records[i]; i++) {
         this.totalweight = response.records[i].weight;
