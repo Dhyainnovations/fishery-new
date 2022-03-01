@@ -283,7 +283,7 @@ export class BillerWeightManualBillPage implements OnInit {
       var sum = this.price.reduce((a, b) => {
         return a + b;
       });
-      this.totalsum = sum;
+      this.totalsum = Math.round(sum * 100) / 100;
       this.userid = SendData.id;
       this.purchaseddate = SendData.purchaseddate;
       this.counter = SendData.counter;

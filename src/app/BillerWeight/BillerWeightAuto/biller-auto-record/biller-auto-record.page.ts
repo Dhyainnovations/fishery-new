@@ -20,7 +20,7 @@ export class BillerAutoRecordPage implements OnInit {
   constructor(public datepipe: DatePipe, public navCtrl: NavController, private alertController: AlertController, private bluetoothSerial: BluetoothSerial, private router: Router, private activatedRoute: ActivatedRoute, private http: HttpService, route: ActivatedRoute) {
     route.params.subscribe(val => {
       this.printerBluetoothId = localStorage.getItem("printerBluetoothId",);
-      this.totalWeight()
+
       this.totalAmount()
       this.records();
       this.list_manual_bill();
@@ -43,7 +43,7 @@ export class BillerAutoRecordPage implements OnInit {
   buttonDisabled: boolean;
   currentDate: any;
   connectedBluetoothID: any;
-  totalweight: any = '';
+  totalweight: number = 0;
   tableRecodrs: any = []
   cardRecords: any = []
   isVisible: any = false
@@ -154,17 +154,7 @@ export class BillerAutoRecordPage implements OnInit {
   }
 
 
-  totalWeight() {
-    this.http.get('/list_total_bill_weight',).subscribe((response: any) => {
-      this.totalweight = response.records.total_weight;
-      if (response.records.total_weight == null) {
-        this.totalweight = 0;
-      }
-    }, (error: any) => {
-      console.log(error);
-    }
-    );
-  }
+
 
 
   totalAmount() {
@@ -231,9 +221,16 @@ export class BillerAutoRecordPage implements OnInit {
       "to_date": this.currentDate,
       "userid": this.user
     }
+
     console.log(data);
     this.http.post('/list_localsale_date_manual_bill', data).subscribe((response: any) => {
       this.tableRec = response.records;
+      console.log(response.records);
+
+      for (var i = 0; i <= response.records.length; i++) {
+        console.log(response.records[i].weight);
+        this.totalweight += parseInt(response.records[i].weight);
+      }
       if (this.tableRec.length < 0) {
         this.printBtn = true;
       } else {
@@ -275,7 +272,7 @@ export class BillerAutoRecordPage implements OnInit {
       var localquality = this.tableRec[i].quality;
       var localweight = this.tableRec[i].weight;
       var localTotalCost = this.tableRec[i].totalamount;
-      var pricekg = this.tableRec[i].pricekg;
+      var pricekg = this.tableRec[i].price;
       const printData = {
         quality: localquality,
         weight: localweight,
@@ -286,6 +283,29 @@ export class BillerAutoRecordPage implements OnInit {
     }
   }
 
+  async printConfirmation() {
+
+    const alert = await this.alertController.create({
+      header: 'Print',
+      message: 'Are You Sure Want To Print It?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
+          }
+        },
+        {
+          text: 'Print',
+          handler: () => {
+            this.printData();
+          }
+        }
+      ]
+    });
+    await alert.present();
+  }
   records() {
     this.http.get('/list_manual_weight',).subscribe((response: any) => {
       this.cardRecords = response.records;
@@ -334,7 +354,6 @@ export class BillerAutoRecordPage implements OnInit {
 
         this.list_manual_bill();
         this.tableRecords();
-        this.totalWeight();
         this.totalAmount();
       } else {
         const Toast = Swal.mixin({

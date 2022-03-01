@@ -43,7 +43,7 @@ export class BillerWeightManualRecordPage implements OnInit {
   buttonDisabled: boolean;
   currentDate: any;
   connectedBluetoothID: any;
-  totalweight: any = '';
+  totalweight: number = 0;
   tableRecodrs: any = []
   cardRecords: any = []
   isVisible: any = false
@@ -153,17 +153,7 @@ export class BillerWeightManualRecordPage implements OnInit {
   }
 
 
-  totalWeight() {
-    this.http.get('/list_total_bill_weight',).subscribe((response: any) => {
-      this.totalweight = response.records.total_weight;
-      if (response.records.total_weight == null) {
-        this.totalweight = 0;
-      }
-    }, (error: any) => {
-      console.log(error);
-    }
-    );
-  }
+
 
 
   totalAmount() {
@@ -233,6 +223,9 @@ export class BillerWeightManualRecordPage implements OnInit {
     this.http.post('/list_localsale_date_manual_bill', data).subscribe((response: any) => {
       this.tableRec = response.records;
       console.log(response);
+      for (var i = 0; i <= response.records.length; i++) {
+        this.totalweight += parseInt(response.records[i].weight);
+      }
       const totalProps =  this.tableRec.reduce((a, obj) => a + Object.keys(obj).length, 0);
       console.log(totalProps);
       if (this.tableRec.length > 0) {
@@ -278,6 +271,29 @@ export class BillerWeightManualRecordPage implements OnInit {
     await alert.present();
   }
 
+  async printConfirmation() {
+
+    const alert = await this.alertController.create({
+      header: 'Print',
+      message: 'Are You Sure Want To Print It?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
+          }
+        },
+        {
+          text: 'Print',
+          handler: () => {
+            this.printData();
+          }
+        }
+      ]
+    });
+    await alert.present();
+  }
 
   printData() {
     this.jsonData = [];
@@ -285,7 +301,7 @@ export class BillerWeightManualRecordPage implements OnInit {
       var localquality = this.tableRec[i].quality;
       var localweight = this.tableRec[i].weight;
       var localTotalCost = this.tableRec[i].totalamount;
-      var pricekg = this.tableRec[i].pricekg;
+      var pricekg = this.tableRec[i].price;
       const printData = {
         quality: localquality,
         weight: localweight,
