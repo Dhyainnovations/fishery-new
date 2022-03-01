@@ -300,7 +300,7 @@ export class BillerAutoRecordPage implements OnInit {
         {
           text: 'Print',
           handler: () => {
-            this.printData();
+            this.print();
           }
         }
       ]

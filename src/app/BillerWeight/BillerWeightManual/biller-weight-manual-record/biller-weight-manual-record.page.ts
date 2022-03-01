@@ -289,7 +289,7 @@ export class BillerWeightManualRecordPage implements OnInit {
         {
           text: 'Print',
           handler: () => {
-            this.printData();
+            this.print();
           }
         }
       ]
