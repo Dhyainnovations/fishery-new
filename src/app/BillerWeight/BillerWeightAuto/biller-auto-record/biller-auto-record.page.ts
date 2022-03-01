@@ -238,6 +238,7 @@ export class BillerAutoRecordPage implements OnInit {
       }
     }, (error: any) => {
       console.log(error);
+      this.tableRec = [];
     }
     );
   }
@@ -271,13 +272,13 @@ export class BillerAutoRecordPage implements OnInit {
     for (var i = 0; i < this.tableRec.length; i++) {
       var localquality = this.tableRec[i].quality;
       var localweight = this.tableRec[i].weight;
-      var localTotalCost = this.tableRec[i].totalamount;
+      var localTotalCost = localweight*pricekg;
       var pricekg = this.tableRec[i].price;
       const printData = {
         quality: localquality,
         weight: localweight,
         price: pricekg,
-        totalcost: localTotalCost,
+        totalcost: Math.round(localTotalCost * 100) / 100
       }
       this.jsonData.push(printData);
     }

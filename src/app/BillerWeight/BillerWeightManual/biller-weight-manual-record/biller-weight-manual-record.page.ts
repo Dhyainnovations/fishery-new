@@ -308,7 +308,7 @@ export class BillerWeightManualRecordPage implements OnInit {
         quality: localquality,
         weight: localweight,
         price: pricekg,
-        totalcost: localTotalCost,
+        totalcost: localweight,
       }
       this.jsonData.push(printData);
     }
