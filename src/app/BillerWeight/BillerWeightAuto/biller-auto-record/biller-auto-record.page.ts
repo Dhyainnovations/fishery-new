@@ -226,7 +226,7 @@ export class BillerAutoRecordPage implements OnInit {
     this.http.post('/list_localsale_date_manual_bill', data).subscribe((response: any) => {
       this.tableRec = response.records;
       console.log(response.records);
-
+      this.totalweight = 0;
       for (var i = 0; i <= response.records.length; i++) {
         console.log(response.records[i].weight);
         this.totalweight += parseInt(response.records[i].weight);
@@ -351,7 +351,7 @@ export class BillerAutoRecordPage implements OnInit {
           icon: 'success',
           title: 'Deleted successfully.'
         })
-
+        this.totalweight = 0;
         this.list_manual_bill();
         this.tableRecords();
         this.totalAmount();

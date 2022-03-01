@@ -223,10 +223,12 @@ export class BillerWeightManualRecordPage implements OnInit {
     this.http.post('/list_localsale_date_manual_bill', data).subscribe((response: any) => {
       this.tableRec = response.records;
       console.log(response);
-      for (var i = 0; i <= response.records.length; i++) {
-        this.totalweight += parseInt(response.records[i].weight);
+      this.totalweight = 0;
+      for (var i = 0; i <= this.tableRec.length; i++) {
+        this.totalweight += parseInt(this.tableRec[i].weight);
       }
-      const totalProps =  this.tableRec.reduce((a, obj) => a + Object.keys(obj).length, 0);
+
+      const totalProps = this.tableRec.reduce((a, obj) => a + Object.keys(obj).length, 0);
       console.log(totalProps);
       if (this.tableRec.length > 0) {
         this.printBtn = false;
@@ -352,7 +354,7 @@ export class BillerWeightManualRecordPage implements OnInit {
           icon: 'success',
           title: 'Deleted successfully.'
         })
-
+        this.totalweight = 0;
         this.list_manual_bill();
         this.tableRecords();
         this.totalAmount();
