@@ -73,84 +73,84 @@ export class BillerWeightManualRecordPage implements OnInit {
   onError() { }
 
 
-  print() {
-    this.printData();
-    this.bluetoothSerial.connect(this.printerBluetoothId).subscribe(this.onSuccess, this.onError);
-    const items = item => ({
-      quality: item.quality,
-      weight: item.weight,
-      price: item.price,
-      totalcost: item.totalcost,
-    })
-    let product = this.jsonData.map(items)
+  // print() {
+  //   this.printData();
+  //   this.bluetoothSerial.connect(this.printerBluetoothId).subscribe(this.onSuccess, this.onError);
+  //   const items = item => ({
+  //     quality: item.quality,
+  //     weight: item.weight,
+  //     price: item.price,
+  //     totalcost: item.totalcost,
+  //   })
+  //   let product = this.jsonData.map(items)
 
-    //Calculate the total price of the items in an object
-    let totalPrice = this.totalCost
+  //   //Calculate the total price of the items in an object
+  //   let totalPrice = this.totalCost
 
-    let company = "Sakthi & Co"
-    let biller = this.user
-    let time = this.currentDateTime;
-    let receipt = ""
-    receipt += commands.TEXT_FORMAT.TXT_WIDTH[2]
-    receipt += "\x1b\x45\x01 \x00" + company + "\x1b\x45\x00"
-    receipt += "\x1b\x45\x01 \x00" + "Today's Sales" + "\x1b\x45\x00"
-    receipt += '\n'
-    receipt += "\x00" + time + "\x00"
+  //   let company = "Sakthi & Co"
+  //   let biller = this.user
+  //   let time = this.currentDateTime;
+  //   let receipt = ""
+  //   receipt += commands.TEXT_FORMAT.TXT_WIDTH[2]
+  //   receipt += "\x1b\x45\x01 \x00" + company + "\x1b\x45\x00"
+  //   receipt += "\x1b\x45\x01 \x00" + "Today's Sales" + "\x1b\x45\x00"
+  //   receipt += '\n'
+  //   receipt += "\x00" + time + "\x00"
 
-    receipt += '\n'
-    receipt += commands.TEXT_FORMAT.TXT_4SQUARE
-    receipt += commands.HORIZONTAL_LINE.HR_58MM
-    receipt += '\n'
-    receipt += commands.TEXT_FORMAT.TXT_4SQUARE
-    receipt += '\x1B' + '\x61' + '\x30'// left align
-    receipt += vsprintf("%-17s %3s %10s\n", ["Biller", "", biller])
-    receipt += commands.TEXT_FORMAT.TXT_ALIGN_RT
-    receipt += commands.TEXT_FORMAT.TXT_4SQUARE
-    receipt += commands.HORIZONTAL_LINE.HR2_58MM
-    receipt += '\n'
-    receipt += commands.TEXT_FORMAT.TXT_ALIGN_LT
-    receipt += '\x1b\x45\x01' + vsprintf("%-17s %3s %10s \n", ["Item", "", "Price(Rs.)"])
+  //   receipt += '\n'
+  //   receipt += commands.TEXT_FORMAT.TXT_4SQUARE
+  //   receipt += commands.HORIZONTAL_LINE.HR_58MM
+  //   receipt += '\n'
+  //   receipt += commands.TEXT_FORMAT.TXT_4SQUARE
+  //   receipt += '\x1B' + '\x61' + '\x30'// left align
+  //   receipt += vsprintf("%-17s %3s %10s\n", ["Biller", "", biller])
+  //   receipt += commands.TEXT_FORMAT.TXT_ALIGN_RT
+  //   receipt += commands.TEXT_FORMAT.TXT_4SQUARE
+  //   receipt += commands.HORIZONTAL_LINE.HR2_58MM
+  //   receipt += '\n'
+  //   receipt += commands.TEXT_FORMAT.TXT_ALIGN_LT
+  //   receipt += '\x1b\x45\x01' + vsprintf("%-17s %3s %10s \n", ["Item", "", "Price(Rs.)"])
 
-    for (var pro in product) {
-      if (product.hasOwnProperty(pro)) {
-        var item = product[pro]
-        var itemquality = item.quality
-        var itemweight = item.weight
-        var itemperkg = item.price
-        var itemtotal = item.totalcost
-        receipt += vsprintf("%-17s %3s %10.2f\n", [this.formatTextWrap(itemquality, 16), "", itemtotal])
-        receipt += '\x1b\x61\x00' + "-" + " " + itemweight + " Kgs"
-        receipt += '\n'
-        receipt += '\x1b\x61\x00' + "-" + " " + "Rs." + itemperkg + " /kg"
-        receipt += '\n'
+  //   for (var pro in product) {
+  //     if (product.hasOwnProperty(pro)) {
+  //       var item = product[pro]
+  //       var itemquality = item.quality
+  //       var itemweight = item.weight
+  //       var itemperkg = item.price
+  //       var itemtotal = item.totalcost
+  //       receipt += vsprintf("%-17s %3s %10.2f\n", [this.formatTextWrap(itemquality, 16), "", itemtotal])
+  //       receipt += '\x1b\x61\x00' + "-" + " " + itemweight + " Kgs"
+  //       receipt += '\n'
+  //       receipt += '\x1b\x61\x00' + "-" + " " + "Rs." + itemperkg + " /kg"
+  //       receipt += '\n'
 
-      }
-      receipt += '\n'
-    }
-    // receipt += commands.TEXT_FORMAT.TXT_ALIGN_LT
-    // receipt += commands.TEXT_FORMAT.TXT_FONT_A
-    // receipt += commands.HORIZONTAL_LINE.HR2_58MM
-    // receipt += vsprintf("%-17s %3s %10.2f\n", ["Total Price", "", totalPrice])
-    receipt += '\n'
-    receipt += commands.TEXT_FORMAT.TXT_4SQUARE
-    receipt += '\x1B' + '\x61' + '\x30'// left align
-    receipt += commands.HORIZONTAL_LINE.HR2_58MM
-    receipt += '\n'
-    receipt += '\x1b\x45\x01' + vsprintf("%-17s %3s %10s\n", ["Total Amount(Rs)", "", totalPrice])
-    receipt += commands.TEXT_FORMAT.TXT_ALIGN_RT
-    receipt += '\n'
-    receipt += commands.TEXT_FORMAT.TXT_FONT_A
-    receipt += commands.HORIZONTAL_LINE.HR2_58MM
-    receipt += '\n'
-    receipt += commands.TEXT_FORMAT.TXT_FONT_B
-    receipt += '\x1b\x61\x01' + 'Thank you, visit again!' + '\x0a\x0a\x0a\x0a' //The unicode symbols are for centering the text
-    this.printText(receipt)
-  }
+  //     }
+  //     receipt += '\n'
+  //   }
+  //   // receipt += commands.TEXT_FORMAT.TXT_ALIGN_LT
+  //   // receipt += commands.TEXT_FORMAT.TXT_FONT_A
+  //   // receipt += commands.HORIZONTAL_LINE.HR2_58MM
+  //   // receipt += vsprintf("%-17s %3s %10.2f\n", ["Total Price", "", totalPrice])
+  //   receipt += '\n'
+  //   receipt += commands.TEXT_FORMAT.TXT_4SQUARE
+  //   receipt += '\x1B' + '\x61' + '\x30'// left align
+  //   receipt += commands.HORIZONTAL_LINE.HR2_58MM
+  //   receipt += '\n'
+  //   receipt += '\x1b\x45\x01' + vsprintf("%-17s %3s %10s\n", ["Total Amount(Rs)", "", totalPrice])
+  //   receipt += commands.TEXT_FORMAT.TXT_ALIGN_RT
+  //   receipt += '\n'
+  //   receipt += commands.TEXT_FORMAT.TXT_FONT_A
+  //   receipt += commands.HORIZONTAL_LINE.HR2_58MM
+  //   receipt += '\n'
+  //   receipt += commands.TEXT_FORMAT.TXT_FONT_B
+  //   receipt += '\x1b\x61\x01' + 'Thank you, visit again!' + '\x0a\x0a\x0a\x0a' //The unicode symbols are for centering the text
+  //   this.printText(receipt)
+  // }
 
-  printText(receipt) {
-    alert(receipt)
-    this.bluetoothSerial.write(receipt);
-  }
+  // printText(receipt) {
+  //   alert(receipt)
+  //   this.bluetoothSerial.write(receipt);
+  // }
 
 
 
@@ -273,46 +273,46 @@ export class BillerWeightManualRecordPage implements OnInit {
     await alert.present();
   }
 
-  async printConfirmation() {
+  // async printConfirmation() {
 
-    const alert = await this.alertController.create({
-      header: 'Print',
-      message: 'Are You Sure Want To Print It?',
-      buttons: [
-        {
-          text: 'Cancel',
-          role: 'cancel',
-          handler: () => {
-            console.log('Cancel clicked');
-          }
-        },
-        {
-          text: 'Print',
-          handler: () => {
-            this.print();
-          }
-        }
-      ]
-    });
-    await alert.present();
-  }
+  //   const alert = await this.alertController.create({
+  //     header: 'Print',
+  //     message: 'Are You Sure Want To Print It?',
+  //     buttons: [
+  //       {
+  //         text: 'Cancel',
+  //         role: 'cancel',
+  //         handler: () => {
+  //           console.log('Cancel clicked');
+  //         }
+  //       },
+  //       {
+  //         text: 'Print',
+  //         handler: () => {
+  //           this.print();
+  //         }
+  //       }
+  //     ]
+  //   });
+  //   await alert.present();
+  // }
 
-  printData() {
-    this.jsonData = [];
-    for (var i = 0; i < this.tableRec.length; i++) {
-      var localquality = this.tableRec[i].quality;
-      var localweight = this.tableRec[i].weight;
-      var localTotalCost = this.tableRec[i].totalamount;
-      var pricekg = this.tableRec[i].price;
-      const printData = {
-        quality: localquality,
-        weight: localweight,
-        price: pricekg,
-        totalcost: localweight,
-      }
-      this.jsonData.push(printData);
-    }
-  }
+  // printData() {
+  //   this.jsonData = [];
+  //   for (var i = 0; i < this.tableRec.length; i++) {
+  //     var localquality = this.tableRec[i].quality;
+  //     var localweight = this.tableRec[i].weight;
+  //     var localTotalCost = this.tableRec[i].totalamount;
+  //     var pricekg = this.tableRec[i].price;
+  //     const printData = {
+  //       quality: localquality,
+  //       weight: localweight,
+  //       price: pricekg,
+  //       totalcost: localweight,
+  //     }
+  //     this.jsonData.push(printData);
+  //   }
+  // }
 
   records() {
     this.http.get('/list_manual_weight',).subscribe((response: any) => {

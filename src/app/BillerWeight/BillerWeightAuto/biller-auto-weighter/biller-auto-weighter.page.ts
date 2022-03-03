@@ -304,16 +304,13 @@ export class BillerAutoWeighterPage implements OnInit {
   delete(id) {
     this.deleteID = JSON.parse(localStorage.getItem("SetBillerAddItem"));
     for (var i = 0; i < this.deleteID.length; i++) {
-      if (this.deleteID[i].userid == id) {
-        this.deleteID.splice(this.deleteID.findIndex(a => this.deleteID[i] === id), 1)
-        localStorage.removeItem("SetBillerAddItem");
-        var SetBillerAddItem = (JSON.stringify(this.deleteID));
-        localStorage.setItem('SetBillerAddItem', SetBillerAddItem);
-        this.SetBillerAddItem = this.deleteID;
-      }
+      let filteredArray = this.deleteID.filter(value => value.userid != id);
+      this.SetBillerAddItem = filteredArray;
     }
+    localStorage.removeItem("SetBillerAddItem");
+    var SetBillerAddItem = (JSON.stringify(this.SetBillerAddItem));
+    localStorage.setItem('SetBillerAddItem', SetBillerAddItem);
   }
-  
   async deleterecord(id: any) {
 
     const alert = await this.alertController.create({

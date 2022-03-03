@@ -231,7 +231,7 @@ export class BillerAutoRecordPage implements OnInit {
         console.log(response.records[i].weight);
         this.totalweight += parseInt(response.records[i].weight);
       }
-      if (this.tableRec.length < 0) {
+      if (this.tableRec.length <= 0) {
         this.printBtn = true;
       } else {
         this.printBtn = false;
@@ -239,6 +239,11 @@ export class BillerAutoRecordPage implements OnInit {
     }, (error: any) => {
       console.log(error);
       this.tableRec = [];
+      if (this.tableRec.length <= 0) {
+        this.printBtn = true;
+      } else {
+        this.printBtn = false;
+      }
     }
     );
   }
@@ -272,7 +277,7 @@ export class BillerAutoRecordPage implements OnInit {
     for (var i = 0; i < this.tableRec.length; i++) {
       var localquality = this.tableRec[i].quality;
       var localweight = this.tableRec[i].weight;
-      var localTotalCost = localweight*pricekg;
+      var localTotalCost = localweight * pricekg;
       var pricekg = this.tableRec[i].price;
       const printData = {
         quality: localquality,
@@ -318,13 +323,11 @@ export class BillerAutoRecordPage implements OnInit {
 
 
   navigateToNextPage() {
-
     if (this.connectedBluetoothID != null) {
       this.router.navigate(['/BillerAutoweighter'])
     } else {
       this.router.navigate(['/BillerAutodashboard'])
     }
-
   }
 
 

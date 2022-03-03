@@ -204,7 +204,7 @@ export class BillerWeightManualDashboardPage implements OnInit {
     }
 
     this.updateTime = this.myDate + ' ' + checkhours + ":" + checkmins + ":" + checksec;
-    
+
     console.log(this.updateTime);
 
     this.CheckGenerateBillButton = false;
@@ -244,7 +244,7 @@ export class BillerWeightManualDashboardPage implements OnInit {
       title: 'Item Added Successfully'
     })
     this.weight = ''
-    
+
   }
 
 
@@ -258,18 +258,13 @@ export class BillerWeightManualDashboardPage implements OnInit {
   //DeleteSeparateItem
   delete(id) {
     this.deleteID = JSON.parse(localStorage.getItem("SetBillerAddItem"));
-    console.log( this.deleteID);
-    console.log(id);
-    
     for (var i = 0; i < this.deleteID.length; i++) {
-      if (this.deleteID[i].userid == id) {
-        this.deleteID.splice(this.deleteID.findIndex(a => this.deleteID[i] === id), 1)
-        localStorage.removeItem("SetBillerAddItem");
-        var SetBillerAddItem = (JSON.stringify(this.deleteID));
-        localStorage.setItem('SetBillerAddItem', SetBillerAddItem);
-        this.SetBillerAddItem = this.deleteID;
-      }
+      let filteredArray = this.deleteID.filter(value => value.userid != id);
+      this.SetBillerAddItem = filteredArray;
     }
+    localStorage.removeItem("SetBillerAddItem");
+    var SetBillerAddItem = (JSON.stringify(this.SetBillerAddItem));
+    localStorage.setItem('SetBillerAddItem', SetBillerAddItem);
   }
   async deleterecord(id: any) {
 
