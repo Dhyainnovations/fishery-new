@@ -28,7 +28,7 @@
         <input id="t1" type="checkbox">
         <label for="t1">{{user}}</label>
         <ul>
-          <li><a (click)="navigateToSettings()">Settings</a></li>
+          <!-- <li><a (click)="navigateToSettings()">Settings</a></li> -->
           <li><a (click)="logout()">Logout</a></li>
         </ul>
       </div>
@@ -149,12 +149,12 @@
     <div class="container">
       <div class="row">
         <button (click)="generateBill()" class="submit-button px-2 py-3" color="transparent" style="font-size: 13px;"
-          [disabled]="SetBillerAddItem.length<=0 || printerAvailable">
+          [disabled]="SetBillerAddItem.length<=0">
           GENERATE BILL  
         </button>
       </div>
     </div>
   </div>
  
-<p class="text-center" *ngIf="printerAvailable">Kindly Connect Printer</p>
+<!-- <p class="text-center" *ngIf="printerAvailable">Kindly Connect Printer</p> -->
 </ion-content>

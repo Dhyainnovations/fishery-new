@@ -103,9 +103,9 @@ export class BillPage implements OnInit {
         var itemperkg = item.price
         var itemtotal = item.totalcost
         receipt += vsprintf("%-17s %3s %10.2f\n", [this.formatTextWrap(itemquality, 16), "", itemtotal])
-        receipt += '\x1b\x61\x00' + "-" + " " + itemweight + " Kgs"
+        receipt += '\x1b\x61\x00\x1b\x21\x10' + "-" + " " + itemweight + " Kgs" //Changed Place
         receipt += '\n'
-        receipt += '\x1b\x61\x00' + "-" + " " + "Rs." + itemperkg + " /kg"
+        receipt += '\x1b\x61\x00\x1b\x21\x10' + "-" + " " + "Rs." + itemperkg + " /kg" //Changed Place
         receipt += '\n'
 
       }
