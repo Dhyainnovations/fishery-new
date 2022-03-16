@@ -49,9 +49,10 @@
     </div>
     <div class="col-6">
       <div>
-        <button (click)="printBill()" class="btn btn-sm text-white"
-        style="background-color:#6863CC ;">Submit</button> 
-        
+        <button  class="btn btn-sm text-white"
+        style="background-color:#6863CC ;" *ngIf="ifPrinterNotAvailable" (click)="submit()">Submit</button> 
+        <button  class="btn btn-sm text-white"
+        style="background-color:#6863CC ;" *ngIf="ifPrinterAvailable" (click)="print()">Print</button> 
       </div>
     </div>
   </div>

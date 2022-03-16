@@ -70,7 +70,7 @@ export class BillPage implements OnInit {
     //Calculate the total price of the items in an object
     let totalPrice = Math.round(this.totalsum * 100) / 100
 
-    let company = "Sakthi & Co"
+    let company = "DHYA F.A.R.M.S"
     let counter = this.counter
     let biller = this.name
     let time = this.purchaseddate;
